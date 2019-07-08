@@ -1,0 +1,6 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "asuramagica:block/water_mana_ore"
+    }
+}

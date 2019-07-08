@@ -1,0 +1,11 @@
+{
+    "variants": {
+	  "facing=north": { "model": "asuramagica:block/mana_stone" }, 
+	  "facing=south": { "model": "asuramagica:block/mana_stone", "y": 180 },
+	  "facing=west": { "model": "asuramagica:block/mana_stone", "y": 270 },
+	  "facing=east": { "model": "asuramagica:block/mana_stone", "y": 90}, 
+	  "facing=up": { "model": "asuramagica:block/mana_stone", "x": -90},
+	  "facing=down": { "model": "asuramagica:block/mana_stone", "x": 90}         
+       
+    }
+}

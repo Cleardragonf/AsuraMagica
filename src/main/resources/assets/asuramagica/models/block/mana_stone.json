@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "particle": "asuramagica:block/mana_stone",
+        "down": "asuramagica:block/mana_stone",
+        "up": "asuramagica:block/mana_stone",
+        "east": "asuramagica:block/mana_stone",
+        "west": "asuramagica:block/mana_stone",
+        "north": "asuramagica:block/mana_stone_front",
+        "south": "asuramagica:block/mana_stone"
+    }
+}

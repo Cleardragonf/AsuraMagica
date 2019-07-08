@@ -1,0 +1,30 @@
+{
+	"item.asuramagica.mana": "Mana",
+	
+	"item.asuramagica.mana_axe": "Mana Tier 1 Axe",
+	"item.asuramagica.mana_pickaxe": "Mana Tier 1 PickAxe",
+	
+	"item.asuramagica.ritual_dagger": "Ritual Dagger",
+	
+	"item.asuramagica.mana_helmet": "Mana Tier 1 Helmet",
+	"item.asuramagica.mana_chestplate": "Mana Tier 1 Chestplate",
+	"item.asuramagica.mana_leggings": "Mana Tier 1 Leggings",
+	"item.asuramagica.mana_boots": "Mana Tier 1 Boots",
+	
+	
+	"block.asuramagica.mana_stone": "Ward Stone",
+	
+	"block.asuramagica.fire_mana_ore": "Entombed Fire Mana",
+	"block.asuramagica.water_mana_ore": "Entombed Water Mana",
+	
+	"itemGroup.asuramagica": "Asura Magica",
+	
+	"item.asuramagica.tomato": "Tomato",
+	"item.asuramagica.lettuce": "Lettuce",
+	"item.asuramagica.rice": "Rice",
+	"item.asuramagica.cauliflour": "Cauliflour",
+	"item.asuramagica.rice_bowl": "Bowl of Rice",
+	"item.asuramagica.pizza": "Pizza"
+	
+	
+}

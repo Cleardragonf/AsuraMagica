@@ -1,0 +1,67 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "name": "pool1",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+                    "functions": [
+            {
+              "function": "minecraft:copy_name",
+              "source": "block_entity"
+            },
+            {
+              "function": "minecraft:copy_nbt",
+              "source": "block_entity",
+              "ops": [
+                {
+                  "source": "inv",
+                  "target": "BlockEntityTag.inv",
+                  "op": "replace"
+                },
+                {
+                  "source": "essence1",
+                  "target": "BlockEntityTag.essence1",
+                  "op": "replace"
+                },
+                {
+                  "source": "essence2",
+                  "target": "BlockEntityTag.essence2",
+                  "op": "replace"
+                },
+                {
+                  "source": "essence3",
+                  "target": "BlockEntityTag.essence3",
+                  "op": "replace"
+                },
+                {
+                  "source": "essence4",
+                  "target": "BlockEntityTag.essence4",
+                  "op": "replace"
+                }                                                
+              ]
+            },
+            {
+              "function": "minecraft:set_contents",
+              "entries": [
+                {
+                  "type": "minecraft:dynamic",
+                  "name": "minecraft:contents"
+                }
+              ]
+            }
+          ],
+          "name": "asuramagica:mana_stone"
+          
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
+    }
+  ]
+}

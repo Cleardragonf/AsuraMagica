@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#x#",
+    "###"
+  ],
+  "key": {
+    "x": {
+      "item": "asuramagica:mana"
+    },
+    "#": {
+      "item": "minecraft:granite"
+    }
+  },
+  "result": {
+    "item": "asuramagica:mana_stone"
+  }
+}
