@@ -20,7 +20,7 @@ public class CustomEnergyStorage extends EnergyStorage  implements INBTSerializa
 		this.energy = energy;
 	}
 	
-	public void addEarthEssence(int energy) {
+	public void addFireEssence(int energy) {
 		this.energy += energy;
 		if(this.energy > getMaxEnergyStored()) {
 			this.energy = getEnergyStored();

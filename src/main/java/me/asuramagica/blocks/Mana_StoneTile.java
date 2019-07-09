@@ -1,6 +1,7 @@
 package me.asuramagica.blocks;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -32,6 +33,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import me.asuramagica.lists.BlockList;
 import me.asuramagica.lists.ItemList;
 import me.asuramagica.tools.CustomEnergyStorage;
 
@@ -41,18 +43,22 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 	}
 	
 	private LazyOptional<IItemHandler> handler = LazyOptional.of(this::createHandler).cast();
-	private LazyOptional<IEnergyStorage> energy = LazyOptional.of(this::createEnergy).cast();
-	//private int counter = 0;
+	private LazyOptional<IEnergyStorage> fireSource = LazyOptional.of(this::createEnergy).cast();
+	private int fireEntityList;
+	
 	
 	@SuppressWarnings("unused")
 	@Override
 	public void tick() {
+		fireEntityList = 0;
 		
-		energy.ifPresent(h -> {
+		fireSource.ifPresent(h -> {
 			List<Block> testing = new LinkedList<>();
+			
 			if(h.getEnergyStored() >= 100000) {
 				
 			}else {
+				
 				//TODO:: Add A Block Identifier to look all around this entity for...the more blocks...the larger the amount...the faster it creates more		
 				for (int x = -5; x < 10; x++) {
 	                for (int y = -5; y < 10; y++) {
@@ -77,46 +83,23 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 
 	            }	                
 				
-				//create a list of all Fire, Water, air or ground around the block...
-				int fireEntityList = 0;
-				int waterEntityList = 0;
-				int airEntityList = 0;
-				int earthEntityList = 0;
 				
-				
+				//numbering all Fire Entities to gain Mana from
+				//numbering All Fire Foci to multiply mana for
 				for(Block e : testing) {
-					if(e.getBlock().getNameTextComponent().getFormattedText().toString().equalsIgnoreCase("Fire")) {
+					if(e == Blocks.FIRE) {
 						fireEntityList += 1;
-					}else if(e.getBlock().getNameTextComponent().getFormattedText().toString().equalsIgnoreCase("Entombed Fire Mana")){
+					}else if(e == BlockList.fire_mana_ore){
 						fireEntityList += 1;
-					}else if(e.getBlock().getNameTextComponent().getFormattedText().toString().equalsIgnoreCase("Entombed Water Mana")){
-						waterEntityList += 1;
 					}else {
 						
 					}
-					//System.out.println(e.getBlock().getNameTextComponent().getFormattedText().toString());
                 	
                 }
 				
 				
-				/*lockState state = this.getBlockState();
-					//TileEntity te = world.getTileEntity(pos.offset(direction));
-					
-					System.out.println(world.co)
-						
-							System.out.println(this.getBlockState().getExtendedState(world, pos.offset(direction, 1)).getBlock().toString());
-						
-					*/
-				if(this.getWorld().getBiome(pos).getCategory().toString() == "RIVER") {
-					energy.ifPresent(e -> ((CustomEnergyStorage)e).addEarthEssence(10));
+					fireSource.ifPresent(e -> ((CustomEnergyStorage)e).addFireEssence(fireEntityList));
 					markDirty();
-				}else if(this.getWorld().getBiome(pos).getCategory().toString() == "PLAINS") {
-					energy.ifPresent(e -> ((CustomEnergyStorage)e).addEarthEssence(100));
-					markDirty();
-				}else if(this.getWorld().getBiome(pos).getCategory().toString() == "THE_END") {
-					energy.ifPresent(e -> ((CustomEnergyStorage)e).addEarthEssence(100000));
-					markDirty();
-				}
 				
 			}
 		});
@@ -154,7 +137,7 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 	}
 	
 	private void sendOutPower() {
-		energy.ifPresent(energy ->{
+		fireSource.ifPresent(energy ->{
 			AtomicInteger capacity = new AtomicInteger(energy.getEnergyStored());
 			if (capacity.get() > 0) {
 				for(Direction direction: Direction.values()) {
@@ -183,8 +166,8 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 	public void read(CompoundNBT tag) {
 		CompoundNBT invTag = tag.getCompound("inv");
 		handler.ifPresent(h -> ((INBTSerializable<CompoundNBT>)h).deserializeNBT(invTag));
-		CompoundNBT essence1Tag = tag.getCompound("essence1");
-		energy.ifPresent(h -> ((INBTSerializable<CompoundNBT>)h).deserializeNBT(essence1Tag));
+		CompoundNBT essence1Tag = tag.getCompound("FireEnergy");
+		fireSource.ifPresent(h -> ((INBTSerializable<CompoundNBT>)h).deserializeNBT(essence1Tag));
 		super.read(tag);
 	}
 	
@@ -195,9 +178,9 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 			CompoundNBT compound = ((INBTSerializable<CompoundNBT>)h).serializeNBT();
 			tag.put("inv", compound);
 		});
-		energy.ifPresent(h -> {
+		fireSource.ifPresent(h -> {
 			CompoundNBT compound = ((INBTSerializable<CompoundNBT>)h).serializeNBT();
-			tag.put("essence1", compound);
+			tag.put("FireEnergy", compound);
 		});
 		
 		return super.write(tag);
@@ -239,7 +222,7 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 			return handler.cast();
 		}
 		if(cap == CapabilityEnergy.ENERGY) {
-			return energy.cast();
+			return fireSource.cast();
 		}
 		return super.getCapability(cap, side);
 	}
