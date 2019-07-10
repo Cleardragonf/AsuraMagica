@@ -57,6 +57,8 @@ public class ManaStoneContainer extends Container{
 		});
 	}
 	
+	private void func_216958_a(IntReferenceHolder intReferenceHolder) {}
+
 	public int getEnergy() {
 		return tileEntity.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0);
 	}
