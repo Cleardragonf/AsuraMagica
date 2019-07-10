@@ -1,0 +1,138 @@
+{
+    "__comment": "Model generated using MrCrayfish's Model Creator (https://mrcrayfish.com/tools?id=mc)",
+    "textures": {
+        "mana_foci_crystal": "asuramagica:block/mana_foci_crystal"
+    },
+    "display": {
+        "gui": {
+            "rotation": [ 30, 45, 0 ],
+            "translation": [ 0, 0, 0 ],
+            "scale": [ 0.625, 0.625, 0.625 ]
+        },
+        "ground": {
+            "rotation": [ 0, 0, 0 ],
+            "translation": [ 0, 3, 0 ],
+            "scale": [ 0.25, 0.25, 0.25 ]
+        },
+        "fixed": {
+            "rotation": [ 0, 180, 0 ],
+            "translation": [ 0, 0, 0 ],
+            "scale": [ 1, 1, 1 ]
+        },
+        "head": {
+            "rotation": [ 0, 180, 0 ],
+            "translation": [ 0, 0, 0 ],
+            "scale": [ 1, 1, 1 ]
+        },
+        "firstperson_righthand": {
+            "rotation": [ 0, 315, 0 ],
+            "translation": [ 0, 2.5, 0 ],
+            "scale": [ 0.4, 0.4, 0.4 ]
+        },
+        "thirdperson_righthand": {
+            "rotation": [ 75, 315, 0 ],
+            "translation": [ 0, 2.5, 0 ],
+            "scale": [ 0.375, 0.375, 0.375 ]
+        }
+    },
+    "elements": [
+        {
+            "name": "A",
+            "from": [ 7, 0, 7 ], 
+            "to": [ 9, 8, 9 ], 
+            "faces": {
+                "north": { "texture": "#mana_foci_crystal", "uv": [ 1, 3, 3, 11 ] },
+                "east": { "texture": "#mana_foci_crystal", "uv": [ 0, 5, 2, 13 ] },
+                "south": { "texture": "#mana_foci_crystal", "uv": [ 7, 2, 9, 10 ] },
+                "west": { "texture": "#mana_foci_crystal", "uv": [ 11, 3, 13, 11 ] },
+                "up": { "texture": "#mana_foci_crystal", "uv": [ 3, 7, 6, 9 ] },
+                "down": { "texture": "#mana_foci_crystal", "uv": [ 0, 1, 2, 3 ] }
+            }
+        },
+        {
+            "name": "A Point A",
+            "from": [ 7.3, 7.7, 7 ], 
+            "to": [ 8.7, 8.7, 9 ], 
+            "shade": false,
+            "rotation": { "origin": [ 8, 8, 8 ], "axis": "z", "angle": 45.0 },
+            "faces": {
+                "north": { "texture": "#mana_foci_crystal", "uv": [ 4, 7, 5.4, 8 ] },
+                "east": { "texture": "#mana_foci_crystal", "uv": [ 5, 7, 7, 8 ] },
+                "south": { "texture": "#mana_foci_crystal", "uv": [ 4, 9, 6.4, 12 ] },
+                "west": { "texture": "#mana_foci_crystal", "uv": [ 10, 7, 12, 8 ] },
+                "up": { "texture": "#mana_foci_crystal", "uv": [ 6, 5, 8.4, 7 ] },
+                "down": { "texture": "#mana_foci_crystal", "uv": [ 4, 4, 5.4, 7 ] }
+            }
+        },
+        {
+            "name": "A Point B",
+            "from": [ 7.3, 7.7, 7 ], 
+            "to": [ 8.7, 8.7, 9 ], 
+            "rotation": { "origin": [ 8, 8, 8 ], "axis": "z", "angle": -45.0 },
+            "faces": {
+                "north": { "texture": "#mana_foci_crystal", "uv": [ 4, 8, 5.4, 9 ] },
+                "east": { "texture": "#mana_foci_crystal", "uv": [ 5, 12, 7, 13 ] },
+                "south": { "texture": "#mana_foci_crystal", "uv": [ 0, 11, 1.4, 12 ] },
+                "west": { "texture": "#mana_foci_crystal", "uv": [ 5, 10, 7, 11 ] },
+                "up": { "texture": "#mana_foci_crystal", "uv": [ 5, 9, 6.4, 11 ] },
+                "down": { "texture": "#mana_foci_crystal", "uv": [ 7, 9, 8.4, 11 ] }
+            }
+        },
+        {
+            "name": "A",
+            "from": [ 7, 0, 7 ], 
+            "to": [ 9, 7, 9 ], 
+            "rotation": { "origin": [ 8, 0, 8 ], "axis": "x", "angle": 22.5 },
+            "faces": {
+                "north": { "texture": "#mana_foci_crystal", "uv": [ 0, 0, 2, 7 ] },
+                "east": { "texture": "#mana_foci_crystal", "uv": [ 5, 4, 7, 11 ] },
+                "south": { "texture": "#mana_foci_crystal", "uv": [ 4, 6, 6, 13 ] },
+                "west": { "texture": "#mana_foci_crystal", "uv": [ 0, 0, 2, 7 ] },
+                "up": { "texture": "#mana_foci_crystal", "uv": [ 0, 0, 2, 2 ] },
+                "down": { "texture": "#mana_foci_crystal", "uv": [ 0, 0, 2, 2 ] }
+            }
+        },
+        {
+            "name": "A",
+            "from": [ 7, 0, 7 ], 
+            "to": [ 9, 6.8, 9 ], 
+            "rotation": { "origin": [ 8, 0, 8 ], "axis": "x", "angle": -22.5 },
+            "faces": {
+                "north": { "texture": "#mana_foci_crystal", "uv": [ 0, 0, 2, 6.8 ] },
+                "east": { "texture": "#mana_foci_crystal", "uv": [ 0, 0, 2, 6.8 ] },
+                "south": { "texture": "#mana_foci_crystal", "uv": [ 0, 0, 2, 6.8 ] },
+                "west": { "texture": "#mana_foci_crystal", "uv": [ 0, 0, 2, 6.8 ] },
+                "up": { "texture": "#mana_foci_crystal", "uv": [ 0, 0, 2, 2 ] },
+                "down": { "texture": "#mana_foci_crystal", "uv": [ 0, 0, 2, 2 ] }
+            }
+        },
+        {
+            "name": "A",
+            "from": [ 7, 0, 7 ], 
+            "to": [ 9, 6, 9 ], 
+            "rotation": { "origin": [ 8, 0, 8 ], "axis": "z", "angle": -22.5 },
+            "faces": {
+                "north": { "texture": "#mana_foci_crystal", "uv": [ 4, 5, 6, 11 ] },
+                "east": { "texture": "#mana_foci_crystal", "uv": [ 8, 1, 10, 7 ] },
+                "south": { "texture": "#mana_foci_crystal", "uv": [ 7, 4, 9, 10 ], "rotation": 270 },
+                "west": { "texture": "#mana_foci_crystal", "uv": [ 4, 8, 6, 14 ], "rotation": 180 },
+                "up": { "texture": "#mana_foci_crystal", "uv": [ 0, 0, 2, 2 ] },
+                "down": { "texture": "#mana_foci_crystal", "uv": [ 9, 5, 11, 7 ] }
+            }
+        },
+        {
+            "name": "A",
+            "from": [ 7, 0, 7 ], 
+            "to": [ 9, 7.2, 9 ], 
+            "rotation": { "origin": [ 8, 0, 8 ], "axis": "z", "angle": 22.5 },
+            "faces": {
+                "north": { "texture": "#mana_foci_crystal", "uv": [ 7, 3, 9, 10.2 ] },
+                "east": { "texture": "#mana_foci_crystal", "uv": [ 6, 3, 8, 10.2 ] },
+                "south": { "texture": "#mana_foci_crystal", "uv": [ 6, 4, 8, 11.2 ] },
+                "west": { "texture": "#mana_foci_crystal", "uv": [ 4, 3, 6, 10.2 ] },
+                "up": { "texture": "#mana_foci_crystal", "uv": [ 6, 5, 8, 7 ] },
+                "down": { "texture": "#mana_foci_crystal", "uv": [ 0, 0, 2, 2 ] }
+            }
+        }
+    ]
+}

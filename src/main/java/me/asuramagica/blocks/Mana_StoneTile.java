@@ -44,13 +44,15 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 	
 	private LazyOptional<IItemHandler> handler = LazyOptional.of(this::createHandler).cast();
 	private LazyOptional<IEnergyStorage> fireSource = LazyOptional.of(this::createEnergy).cast();
-	private int fireEntityList;
+	private static int fireEntityList;
+	private static int multiplierList;
 	
 	
 	@SuppressWarnings("unused")
 	@Override
 	public void tick() {
 		fireEntityList = 0;
+		multiplierList = 1;
 		
 		fireSource.ifPresent(h -> {
 			List<Block> testing = new LinkedList<>();
@@ -91,19 +93,20 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 						fireEntityList += 1;
 					}else if(e == BlockList.fire_mana_ore){
 						fireEntityList += 1;
-					}else {
-						
+					}else if(e == BlockList.mana_foci_crystal){
+						multiplierList += 1;
 					}
                 	
                 }
 				
 				
-					fireSource.ifPresent(e -> ((CustomEnergyStorage)e).addFireEssence(fireEntityList));
+					fireSource.ifPresent(e -> ((CustomEnergyStorage)e).addFireEssence(fireEntityList * multiplierList));
 					markDirty();
 				
 			}
 		});
 		
+
 		sendOutPower();
 		
 		//energy.ifPresent(e -> ((CustomEnergyStorage)e).addEarthEssence(10));
@@ -134,6 +137,10 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 			});
 		}
 		*/
+	}
+	
+	public static int getSources() {
+		return fireEntityList;
 	}
 	
 	private void sendOutPower() {
@@ -235,6 +242,10 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 	@Override
 	public ITextComponent getDisplayName() {
 		return new StringTextComponent(getType().getRegistryName().getPath());
+	}
+
+	public static int getAmplifiers() {
+		return multiplierList;
 	}
 	
 

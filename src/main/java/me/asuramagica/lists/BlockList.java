@@ -9,6 +9,7 @@ public class BlockList {
 	public static Mana_Stone mana_stone;
 	public static Block water_mana_ore;
 	public static Block fire_mana_ore;
+	public static Block mana_foci_crystal;
 	
 	//Seeds
 	public static Block tomato_plant;

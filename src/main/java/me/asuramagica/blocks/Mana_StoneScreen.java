@@ -3,7 +3,6 @@ package me.asuramagica.blocks;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import me.asuramagica.AsuraMagicaMod;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
@@ -28,7 +27,9 @@ public class Mana_StoneScreen extends ContainerScreen<ManaStoneContainer>{
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		this.font.drawString("Mana Essence Collector", 8.0f, 6.0F, 4210752);
-		drawString(Minecraft.getInstance().fontRenderer, "Energy: " + container.getEnergy(), 10, 10, 0xfffff);
+		this.font.drawString("Energy: " + container.getEnergy(), 8, 115, 0xfffff);
+		this.font.drawString("Sources: " + Mana_StoneTile.getSources(), 8.0f, 20.0f, 0xffBff);
+		this.font.drawString("Amplifiers: " + Mana_StoneTile.getAmplifiers(), 8, 30, 0xfffff);
 		this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0f, 129.0f,4210752);
 		int relX = (this.width - this.xSize) /2;
 		int relY = (this.height - this.ySize) /2;

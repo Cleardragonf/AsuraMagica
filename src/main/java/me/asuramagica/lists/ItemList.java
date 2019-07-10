@@ -27,6 +27,7 @@ public class ItemList {
 	public static Item mana_stone;
 	public static Item water_mana_ore;
 	public static Item fire_mana_ore;
+	public static Item mana_foci_crystal;
 	
 	//Food
 	public static Item rice_bowl;
