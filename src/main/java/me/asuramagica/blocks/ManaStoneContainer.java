@@ -16,6 +16,7 @@ import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -61,6 +62,10 @@ public class ManaStoneContainer extends Container{
 
 	public int getEnergy() {
 		return tileEntity.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0);
+	}
+	
+	public int getWaterEnergy() {
+		return Mana_StoneTile.getWaterEnergy();
 	}
 	
 	public int getMaxEnergy() {

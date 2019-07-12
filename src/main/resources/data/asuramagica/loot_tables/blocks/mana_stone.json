@@ -22,13 +22,13 @@
                   "op": "replace"
                 },
                 {
-                  "source": "essence1",
-                  "target": "BlockEntityTag.essence1",
+                  "source": "essence",
+                  "target": "BlockEntityTag.essence",
                   "op": "replace"
                 },
                 {
-                  "source": "essence2",
-                  "target": "BlockEntityTag.essence2",
+                  "source": "essences",
+                  "target": "BlockEntityTag.essences",
                   "op": "replace"
                 },
                 {

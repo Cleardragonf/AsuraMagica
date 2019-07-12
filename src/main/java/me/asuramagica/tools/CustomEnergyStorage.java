@@ -30,7 +30,8 @@ public class CustomEnergyStorage extends EnergyStorage  implements INBTSerializa
 	@Override
 	public CompoundNBT serializeNBT() {
 		CompoundNBT tag = new CompoundNBT();
-		tag.putInt("essence1", getEnergyStored());
+		tag.putInt("essence", getEnergyStored());
+		tag.putInt("essences", getEnergyStored());
 		return tag;
 	}
 
@@ -43,7 +44,8 @@ public class CustomEnergyStorage extends EnergyStorage  implements INBTSerializa
     
 	@Override
 	public void deserializeNBT(CompoundNBT nbt) {
-		setEnergy(nbt.getInt("essence1"));
+		setEnergy(nbt.getInt("essence"));
+		setEnergy(nbt.getInt("essences"));
 		
 	}
 }

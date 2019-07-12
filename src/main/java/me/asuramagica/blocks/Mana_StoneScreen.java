@@ -28,6 +28,7 @@ public class Mana_StoneScreen extends ContainerScreen<ManaStoneContainer>{
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		this.font.drawString("Mana Essence Collector", 8.0f, 6.0F, 4210752);
 		this.font.drawString("Energy: " + container.getEnergy(), 8, 115, 0xfffff);
+		this.font.drawString("Water: " + container.getWaterEnergy(), 8, 100, 0xfffff);
 		this.font.drawString("Sources: " + Mana_StoneTile.getSources(), 8.0f, 20.0f, 0xffBff);
 		this.font.drawString("Amplifiers: " + Mana_StoneTile.getAmplifiers(), 8, 30, 0xfffff);
 		this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0f, 129.0f,4210752);

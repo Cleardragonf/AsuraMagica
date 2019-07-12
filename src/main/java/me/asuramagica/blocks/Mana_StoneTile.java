@@ -19,6 +19,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -44,47 +45,53 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 	
 	private LazyOptional<IItemHandler> handler = LazyOptional.of(this::createHandler).cast();
 	private LazyOptional<IEnergyStorage> fireSource = LazyOptional.of(this::createEnergy).cast();
-	private static int fireEntityList;
-	private static int multiplierList;
+	
+	private static IEnergyStorage waterEnergy = new CustomEnergyStorage(100000, 0);
+    private LazyOptional<IEnergyStorage> waterEnergyOptional = LazyOptional.of(() -> waterEnergy);
+    
+	private static  int fireEntityList;
+	private static  int multiplierList;
+	public List<Block> testing = new LinkedList<>();
+	private int waterEntityList;
 	
 	
 	@SuppressWarnings("unused")
 	@Override
 	public void tick() {
 		fireEntityList = 0;
+		waterEntityList = 0;
 		multiplierList = 1;
+		testing.clear();
 		
-		fireSource.ifPresent(h -> {
-			List<Block> testing = new LinkedList<>();
-			
+		for (int x = -5; x < 10; x++) {
+            for (int y = -5; y < 10; y++) {
+                for (int z = -5; z < 10; z++)
+                {
+                    
+                    Double newSpawnX = Double.valueOf(pos.getX() + x);
+                    Double newSpawnY = Double.valueOf(pos.getY() + y);
+                    Double newSpawnZ = Double.valueOf(pos.getZ() + z);
+                    if (Math.pow(newSpawnX.doubleValue() - pos.getX(), 2.0D) + Math.pow(newSpawnY.doubleValue() - pos.getY(), 2.0D) + Math.pow(newSpawnZ.doubleValue() - pos.getZ(), 2.0D) <= Math.pow(5,2.0D))
+                    {
+                        if (Math.pow(newSpawnX.doubleValue() - pos.getX(), 2.0D) + Math.pow(newSpawnY.doubleValue() - pos.getY(), 2.0D) + Math.pow(newSpawnZ.doubleValue() - pos.getZ(), 2.0D) >= Math.pow(1,2.0D)){
+                            World world = this.getWorld();
+                            BlockPos newSpawnLocation = new BlockPos(newSpawnX.doubleValue(), newSpawnY.doubleValue(), newSpawnZ.doubleValue());
+                            testing.add(world.getBlockState(newSpawnLocation).getBlock());
+                            
+                        }
+
+                    }
+                }
+            }
+
+        }	
+		
+		fireSource.ifPresent(h -> {			
 			if(h.getEnergyStored() >= 100000) {
 				
 			}else {
 				
 				//TODO:: Add A Block Identifier to look all around this entity for...the more blocks...the larger the amount...the faster it creates more		
-				for (int x = -5; x < 10; x++) {
-	                for (int y = -5; y < 10; y++) {
-	                    for (int z = -5; z < 10; z++)
-	                    {
-	                        
-	                        Double newSpawnX = Double.valueOf(pos.getX() + x);
-	                        Double newSpawnY = Double.valueOf(pos.getY() + y);
-	                        Double newSpawnZ = Double.valueOf(pos.getZ() + z);
-	                        if (Math.pow(newSpawnX.doubleValue() - pos.getX(), 2.0D) + Math.pow(newSpawnY.doubleValue() - pos.getY(), 2.0D) + Math.pow(newSpawnZ.doubleValue() - pos.getZ(), 2.0D) <= Math.pow(5,2.0D))
-	                        {
-	                            if (Math.pow(newSpawnX.doubleValue() - pos.getX(), 2.0D) + Math.pow(newSpawnY.doubleValue() - pos.getY(), 2.0D) + Math.pow(newSpawnZ.doubleValue() - pos.getZ(), 2.0D) >= Math.pow(1,2.0D)){
-	                                World world = this.getWorld();
-	                                BlockPos newSpawnLocation = new BlockPos(newSpawnX.doubleValue(), newSpawnY.doubleValue(), newSpawnZ.doubleValue());
-	                                testing.add(world.getBlockState(newSpawnLocation).getBlock());
-	                                
-	                            }
-
-	                        }
-	                    }
-	                }
-
-	            }	                
-				
 				
 				//numbering all Fire Entities to gain Mana from
 				//numbering All Fire Foci to multiply mana for
@@ -96,16 +103,31 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 					}else if(e == BlockList.mana_foci_crystal){
 						multiplierList += 1;
 					}
-                	
                 }
-				
-				
-					fireSource.ifPresent(e -> ((CustomEnergyStorage)e).addFireEssence(fireEntityList * multiplierList));
+					((CustomEnergyStorage)h).addFireEssence(fireEntityList);
 					markDirty();
-				
 			}
 		});
 		
+		//Create a Tick Ratio for Water Manna Collection
+		waterEnergyOptional.ifPresent(e -> {
+			if(e.getEnergyStored() >= 100000) {
+				
+			}else {
+				for(Block a : testing) {
+					if(a == Blocks.WATER) {
+						waterEntityList += 1;
+					}else if(a == BlockList.water_mana_ore){
+						waterEntityList += 1;
+					}else if(a == BlockList.mana_foci_crystal){
+						multiplierList += 1;
+					}
+                }
+				((CustomEnergyStorage)e).addFireEssence(waterEntityList);
+			}
+		
+		
+		});
 
 		sendOutPower();
 		
@@ -138,7 +160,7 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 		}
 		*/
 	}
-	
+
 	public static int getSources() {
 		return fireEntityList;
 	}
@@ -173,8 +195,12 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 	public void read(CompoundNBT tag) {
 		CompoundNBT invTag = tag.getCompound("inv");
 		handler.ifPresent(h -> ((INBTSerializable<CompoundNBT>)h).deserializeNBT(invTag));
-		CompoundNBT essence1Tag = tag.getCompound("FireEnergy");
+		
+		CompoundNBT essence1Tag = tag.getCompound("essence");
 		fireSource.ifPresent(h -> ((INBTSerializable<CompoundNBT>)h).deserializeNBT(essence1Tag));
+		
+		CompoundNBT essence2Tag = tag.getCompound("essences");
+		waterEnergyOptional.ifPresent(h -> ((INBTSerializable<CompoundNBT>)h).deserializeNBT(essence2Tag));
 		super.read(tag);
 	}
 	
@@ -187,7 +213,11 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 		});
 		fireSource.ifPresent(h -> {
 			CompoundNBT compound = ((INBTSerializable<CompoundNBT>)h).serializeNBT();
-			tag.put("FireEnergy", compound);
+			tag.put("essence", compound);
+		});
+		waterEnergyOptional.ifPresent(h -> {
+			CompoundNBT compound = ((INBTSerializable<CompoundNBT>)h).serializeNBT();
+			tag.put("essences", compound);
 		});
 		
 		return super.write(tag);
@@ -218,6 +248,10 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 
 	private IEnergyStorage createEnergy() {
 		return new CustomEnergyStorage(100000, 0);
+	}
+	
+	public static int getWaterEnergy() {
+		return waterEnergy.getEnergyStored();
 	}
 	
 	@Nonnull
