@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-                    "functions": [
+          "functions": [
             {
               "function": "minecraft:copy_name",
               "source": "block_entity"
@@ -22,25 +22,10 @@
                   "op": "replace"
                 },
                 {
-                  "source": "essence",
-                  "target": "BlockEntityTag.essence",
+                  "source": "energy",
+                  "target": "BlockEntityTag.energy",
                   "op": "replace"
-                },
-                {
-                  "source": "essences",
-                  "target": "BlockEntityTag.essences",
-                  "op": "replace"
-                },
-                {
-                  "source": "essence3",
-                  "target": "BlockEntityTag.essence3",
-                  "op": "replace"
-                },
-                {
-                  "source": "essence4",
-                  "target": "BlockEntityTag.essence4",
-                  "op": "replace"
-                }                                                
+                }
               ]
             },
             {
@@ -54,7 +39,6 @@
             }
           ],
           "name": "asuramagica:mana_stone"
-          
         }
       ],
       "conditions": [

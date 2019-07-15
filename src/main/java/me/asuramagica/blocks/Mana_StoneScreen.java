@@ -12,7 +12,10 @@ import net.minecraft.util.text.ITextComponent;
 public class Mana_StoneScreen extends ContainerScreen<ManaStoneContainer>{
 	
 	private ResourceLocation GUI = new ResourceLocation(AsuraMagicaMod.MODID, "textures/gui/manastonegui.png");
-	private ResourceLocation bar = new ResourceLocation(AsuraMagicaMod.MODID, "textures/gui/bar.png");
+	private ResourceLocation bar1 = new ResourceLocation(AsuraMagicaMod.MODID, "textures/gui/bar1.png");
+	private ResourceLocation bar2 = new ResourceLocation(AsuraMagicaMod.MODID, "textures/gui/bar2.png");
+	private ResourceLocation bar3 = new ResourceLocation(AsuraMagicaMod.MODID, "textures/gui/bar3.png");
+	private ResourceLocation bar4 = new ResourceLocation(AsuraMagicaMod.MODID, "textures/gui/bar4.png");
 	public Mana_StoneScreen(ManaStoneContainer container, PlayerInventory inv, ITextComponent name) {
 		super(container, inv, name);
 	}
@@ -50,16 +53,44 @@ public class Mana_StoneScreen extends ContainerScreen<ManaStoneContainer>{
 		//first part binds the texture that i'm going to 'display'
 		//second part takes the relative width and height and offsets the 'bar' by that much both vertically then horizonatally.  
 		//then it takes where in the imate the bar should start...and how it should...increase. then it says where they end.
-		this.minecraft.getTextureManager().bindTexture(bar);	
-		this.blit(relX + 112, relY + 30, 0,0+(int)getEnergyPercentage(),9,87);
+		this.minecraft.getTextureManager().bindTexture(bar1);	
+		this.blit(relX + 112, relY + 30, 0,0+(int)getEnergyPercentage1(),9,87);
+		
+		this.minecraft.getTextureManager().bindTexture(bar2);	
+		this.blit(relX + 125, relY + 30, 0,0+(int)getEnergyPercentage1(),9,87);
+		
+		this.minecraft.getTextureManager().bindTexture(bar3);	
+		this.blit(relX + 138, relY + 30, 0,0+(int)getEnergyPercentage1(),9,87);
+		
+		this.minecraft.getTextureManager().bindTexture(bar4);	
+		this.blit(relX + 151, relY + 30, 0,0+(int)getEnergyPercentage1(),9,87);
+		
 	}
 	
 	
 
 
-	protected double getEnergyPercentage() {
+	protected double getEnergyPercentage1() {
 
 		return ((double) this.container.getEnergy()/ (double) this.container.getMaxEnergy() * 100D);
+
+	}
+	
+	protected double getEnergyPercentage2() {
+
+		return ((double) this.container.getWaterEnergy()/ (double) this.container.getMaxEnergy() * 100D);
+
+	}
+	
+	protected double getEnergyPercentage3() {
+
+		return ((double) this.container.getEarthEnergy()/ (double) this.container.getMaxEnergy() * 100D);
+
+	}
+	
+	protected double getEnergyPercentage4() {
+
+		return ((double) this.container.getWindEnergy()/ (double) this.container.getMaxEnergy() * 100D);
 
 	}
 	

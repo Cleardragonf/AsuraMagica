@@ -29,6 +29,7 @@ public class ManaStoneContainer extends Container{
 	private TileEntity tileEntity;
 	private PlayerEntity playerEntity;
 	private IItemHandler playerInventory;
+	
 
 	public ManaStoneContainer(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player ) {
 		super(MANASTONECONTAINER, windowId);
@@ -41,6 +42,7 @@ public class ManaStoneContainer extends Container{
 			addSlot(new SlotItemHandler(h,0,65, 57));
 		});
 		layoutPlayerInventorySlots(8, 140);
+		System.out.println(Mana_StoneTile.getWaterEnergy());
 		
 		//energy storage
 		func_216958_a(new IntReferenceHolder() {
@@ -152,6 +154,16 @@ public class ManaStoneContainer extends Container{
 			return this.getEnergy() * pixels /i;
 		}
 		return this.getEnergy() * 0;
+	}
+
+	public double getEarthEnergy() {
+		// TODO Add EArth Energy to matrix
+		return 0;
+	}
+
+	public double getWindEnergy() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 }

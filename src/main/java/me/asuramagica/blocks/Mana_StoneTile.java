@@ -196,11 +196,9 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 		CompoundNBT invTag = tag.getCompound("inv");
 		handler.ifPresent(h -> ((INBTSerializable<CompoundNBT>)h).deserializeNBT(invTag));
 		
-		CompoundNBT essence1Tag = tag.getCompound("essence");
-		fireSource.ifPresent(h -> ((INBTSerializable<CompoundNBT>)h).deserializeNBT(essence1Tag));
+		CompoundNBT energyTag = tag.getCompound("energy");
+		fireSource.ifPresent(h -> ((INBTSerializable<CompoundNBT>)h).deserializeNBT(energyTag));
 		
-		CompoundNBT essence2Tag = tag.getCompound("essences");
-		waterEnergyOptional.ifPresent(h -> ((INBTSerializable<CompoundNBT>)h).deserializeNBT(essence2Tag));
 		super.read(tag);
 	}
 	
@@ -212,12 +210,8 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 			tag.put("inv", compound);
 		});
 		fireSource.ifPresent(h -> {
-			CompoundNBT compound = ((INBTSerializable<CompoundNBT>)h).serializeNBT();
-			tag.put("essence", compound);
-		});
-		waterEnergyOptional.ifPresent(h -> {
-			CompoundNBT compound = ((INBTSerializable<CompoundNBT>)h).serializeNBT();
-			tag.put("essences", compound);
+			CompoundNBT compound2 = ((INBTSerializable<CompoundNBT>)h).serializeNBT();
+			tag.put("energy", compound2);
 		});
 		
 		return super.write(tag);
