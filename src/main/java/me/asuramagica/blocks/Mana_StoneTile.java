@@ -21,24 +21,17 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-
 import static me.asuramagica.blocks.ModBlocks.MANASTONETILE;
-
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import me.asuramagica.lists.BlockList;
 import me.asuramagica.lists.ItemList;
 import me.asuramagica.tools.CustomEnergyStorage;
@@ -91,7 +84,7 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 		int findWateryBlocks= 0;
 		int findEarthyBlocks = 0;
 		int findWindyBlocks = 0;
-		int multiplierBlocksFound = 1;
+		int findMultiplierBlocks = 1;
 		
 		try (PooledMutableBlockPos pooledMutableBlockPos = PooledMutableBlockPos.retain()) {
 			final int posX = pos.getX();
@@ -123,7 +116,11 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 						) {
 							++findWateryBlocks;
 						} else if (block == BlockList.mana_foci_crystal) {
-							++multiplierBlocksFound;
+							++findMultiplierBlocks;
+						}else if(block == Blocks.GRASS) {
+							++findEarthyBlocks;
+						}else if(block == Blocks.AIR) {
+							++findWindyBlocks;
 						}
 					}
 				}
@@ -135,19 +132,14 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 		final int wateryBlocksFound = findWateryBlocks;
 		final int earthyBlocksFound = findEarthyBlocks;
 		final int windyBlocksFound = findWindyBlocks;
+		final int multiBlocksFound = findMultiplierBlocks;
 		boolean dirty = false;
 		
 		fireSource.ifPresent(h -> {			
 			if(h.getEnergyStored() >= 100000) {
 				
 			}else {
-				
-				//TODO:: Add A Block Identifier to look all around this entity for...the more blocks...the larger the amount...the faster it creates more		
-				
-				//numbering all Fire Entities to gain Mana from
-				//numbering All Fire Foci to multiply mana for
-				
-					((CustomEnergyStorage)fireEnergy).addFireEssence(fireryBlocksFound);
+					((CustomEnergyStorage)fireEnergy).addFireEssence(fireryBlocksFound * multiBlocksFound);
 					this.markDirty();
 			}
 		});
@@ -157,8 +149,7 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 			if(e.getEnergyStored() >= 100000) {
 				
 			}else {
-				
-				((CustomEnergyStorage)waterEnergy).addFireEssence(wateryBlocksFound);
+				((CustomEnergyStorage)waterEnergy).addFireEssence(wateryBlocksFound * multiBlocksFound);
 				this.markDirty();
 			}
 		
@@ -168,14 +159,8 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 		earthSource.ifPresent(h -> {			
 			if(h.getEnergyStored() >= 100000) {
 				
-			}else {
-				
-				//TODO:: Add A Block Identifier to look all around this entity for...the more blocks...the larger the amount...the faster it creates more		
-				
-				//numbering all Fire Entities to gain Mana from
-				//numbering All Fire Foci to multiply mana for
-				
-					((CustomEnergyStorage)earthEnergy).addFireEssence(earthyBlocksFound);
+			}else {				
+					((CustomEnergyStorage)earthEnergy).addFireEssence(earthyBlocksFound * multiBlocksFound);
 					this.markDirty();
 			}
 		});
@@ -184,18 +169,13 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 			if(h.getEnergyStored() >= 100000) {
 				
 			}else {
-				
-				//TODO:: Add A Block Identifier to look all around this entity for...the more blocks...the larger the amount...the faster it creates more		
-				
-				//numbering all Fire Entities to gain Mana from
-				//numbering All Fire Foci to multiply mana for
-				
-					((CustomEnergyStorage)windEnergy).addFireEssence(windyBlocksFound);
+					((CustomEnergyStorage)windEnergy).addFireEssence(windyBlocksFound * multiBlocksFound);
 					this.markDirty();
 			}
 		});
 
 		sendOutPower();
+		
 		
 		//energy.ifPresent(e -> ((CustomEnergyStorage)e).addEarthEssence(10));
 		
@@ -268,16 +248,12 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 	@Override
 	public void read(CompoundNBT tag) {
 		inventory.deserializeNBT(tag.getCompound("inv"));
-		// FiXME: this is wrong and will crash
-		((CustomEnergyStorage) fireEnergy).deserializeNBT(tag.getCompound("energy"));
 		super.read(tag);
 	}
 
 	@Override
 	public CompoundNBT write(CompoundNBT tag) {
 		tag.put("inv", inventory.serializeNBT());
-		// FiXME: this is wrong and will crash
-		tag.putInt("energy", ((CustomEnergyStorage)fireEnergy).getEnergyStored());
 		return super.write(tag);
 	}
 

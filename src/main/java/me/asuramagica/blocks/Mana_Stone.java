@@ -42,7 +42,8 @@ public class Mana_Stone extends Block {
 
     // getFacingFromEntity method is fine
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult result) {
         if (world.isRemote) {
             return true;
