@@ -54,19 +54,18 @@ public class Mana_StoneScreen extends ContainerScreen<ManaStoneContainer>{
 		//second part takes the relative width and height and offsets the 'bar' by that much both vertically then horizonatally.  
 		//then it takes where in the imate the bar should start...and how it should...increase. then it says where they end.
 		this.minecraft.getTextureManager().bindTexture(bar1);	
-		this.blit(relX + 112, relY + 30, 0,0+(int)getEnergyPercentage1(),9,87);
+		this.blit(relX + 112, relY + 30, 0,0+(int)getEnergyPercentage1(),9,100);
 		
 		this.minecraft.getTextureManager().bindTexture(bar2);	
-		this.blit(relX + 125, relY + 30, 0,0+(int)getEnergyPercentage2(),9,87);
+		this.blit(relX + 125, relY + 30, 0,0+(int)getEnergyPercentage2(),9,100);
 		
 		this.minecraft.getTextureManager().bindTexture(bar3);	
-		this.blit(relX + 138, relY + 30, 0,0+(int)getEnergyPercentage3(),9,87);
+		this.blit(relX + 138, relY + 30, 0,0+(int)getEnergyPercentage3(),9,100);
 		
 		this.minecraft.getTextureManager().bindTexture(bar4);	
-		this.blit(relX + 151, relY + 30, 0,0+(int)getEnergyPercentage4(),9,87);
+		this.blit(relX + 151, relY + 30, 0,0+(int)getEnergyPercentage4(),9,100);
 		
 	}
-	
 	
 
 
