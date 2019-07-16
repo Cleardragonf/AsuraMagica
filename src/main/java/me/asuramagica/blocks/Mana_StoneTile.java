@@ -117,9 +117,9 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 							++findWateryBlocks;
 						} else if (block == BlockList.mana_foci_crystal) {
 							++findMultiplierBlocks;
-						}else if(block == Blocks.GRASS) {
+						}else if(block == Blocks.GRASS || block == BlockList.earth_mana_ore || block == Blocks.DIRT) {
 							++findEarthyBlocks;
-						}else if(block == Blocks.AIR) {
+						}else if(block == BlockList.wind_mana_ore) {
 							++findWindyBlocks;
 						}
 					}

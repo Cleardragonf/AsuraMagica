@@ -18,7 +18,10 @@ public class OreGeneration {
     private static final int water_mana_veinsize = 5;
     private static final CountRangeConfig fire_ore = new CountRangeConfig(25, 10, 0, 128);
     private static final int fire_ore_veinsize = 8;
-
+    private static final CountRangeConfig earth_ore = new CountRangeConfig(25, 10, 0, 128);
+    private static final int earth_ore_veinsize = 8;
+    private static final CountRangeConfig wind_ore = new CountRangeConfig(25, 10, 0, 128);
+    private static final int wind_ore_veinsize = 8;
 	public static void setupOreGeneration() {
 		
 		
@@ -32,6 +35,12 @@ public class OreGeneration {
 			
 			biome.addFeature(Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, 
 					BlockList.fire_mana_ore.getDefaultState(), fire_ore_veinsize), Placement.COUNT_RANGE, fire_ore));
+			
+			biome.addFeature(Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, 
+					BlockList.earth_mana_ore.getDefaultState(), earth_ore_veinsize), Placement.COUNT_RANGE, earth_ore));
+			
+			biome.addFeature(Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, 
+					BlockList.wind_mana_ore.getDefaultState(), wind_ore_veinsize), Placement.COUNT_RANGE, wind_ore));
 			//biome.addFeature(Decoration.UNDERGROUND_ORES,  new ConfiguredFeature<OreFeatureConfig>(Feature.ORE, new OreFeatureConfig(FillerBlockType.NATURAL_STONE, BlockList.fire_mana_ore.getDefaultState(), 10)));
 			//biome.addFeature(Decoration.UNDERGROUND_ORES, new ConfiguredFeature(OreFeatureConfig, p_i49901_2_)<>(Feature.MINABLE, new MinableConfig(MinableConfig.IS_ROCK, BlockList.water_mana_ore.getDefaultState(), 20), new CountRange(), ore_placement));
 			

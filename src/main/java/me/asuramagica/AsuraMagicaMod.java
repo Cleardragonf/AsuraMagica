@@ -97,6 +97,8 @@ public class AsuraMagicaMod {
 					ItemList.mana_stone = new BlockItem(BlockList.mana_stone, new Item.Properties().group(ASURAMAGICA)).setRegistryName(BlockList.mana_stone.getRegistryName()),
 					ItemList.water_mana_ore = new BlockItem(BlockList.water_mana_ore, new Item.Properties().group(ASURAMAGICA)).setRegistryName(BlockList.water_mana_ore.getRegistryName()),
 					ItemList.fire_mana_ore = new BlockItem(BlockList.fire_mana_ore, new Item.Properties().group(ASURAMAGICA)).setRegistryName(BlockList.fire_mana_ore.getRegistryName()),
+					ItemList.earth_mana_ore = new BlockItem(BlockList.earth_mana_ore, new Item.Properties().group(ASURAMAGICA)).setRegistryName(BlockList.earth_mana_ore.getRegistryName()),
+					ItemList.wind_mana_ore = new BlockItem(BlockList.wind_mana_ore, new Item.Properties().group(ASURAMAGICA)).setRegistryName(BlockList.wind_mana_ore.getRegistryName()),
 					ItemList.mana_foci_crystal = new BlockItem(BlockList.mana_foci_crystal, new Item.Properties().group(ASURAMAGICA)).setRegistryName(BlockList.mana_foci_crystal.getRegistryName()),
 					
 					ItemList.tomato = new ItemCustomFood(3, 0, 0, 0, false, new Item.Properties().maxStackSize(32).group(ASURAMAGICA)).setRegistryName(location("tomato")),
@@ -120,6 +122,8 @@ public class AsuraMagicaMod {
 					BlockList.mana_stone = (Mana_Stone) new Mana_Stone(Block.Properties.create(Material.IRON).hardnessAndResistance(1.0f,1.0f)).setRegistryName(location("mana_stone")),
 					BlockList.water_mana_ore = new Block(Block.Properties.create(Material.EARTH).hardnessAndResistance(1.0f,6.0f)).setRegistryName(location("water_mana_ore")),
 					BlockList.fire_mana_ore = new Block(Block.Properties.create(Material.EARTH).hardnessAndResistance(1.0f,6.0f)).setRegistryName(location("fire_mana_ore")),
+					BlockList.earth_mana_ore = new Block(Block.Properties.create(Material.EARTH).hardnessAndResistance(1.0f,6.0f)).setRegistryName(location("earth_mana_ore")),
+					BlockList.wind_mana_ore = new Block(Block.Properties.create(Material.EARTH).hardnessAndResistance(1.0f,6.0f)).setRegistryName(location("wind_mana_ore")),
 					BlockList.mana_foci_crystal = new Block(Block.Properties.create(Material.GLASS).hardnessAndResistance(1.0f, 10.0f)).setRegistryName(location("mana_foci_crystal"))
 					);
 			

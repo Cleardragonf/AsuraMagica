@@ -17,6 +17,9 @@
 	
 	"block.asuramagica.fire_mana_ore": "Entombed Fire Mana",
 	"block.asuramagica.water_mana_ore": "Entombed Water Mana",
+	"block.asuramagica.earth_mana_ore": "Entombed Earth Mana",
+	"block.asuramagica.wind_mana_ore": "Entombed Wind Mana",
+	
 	
 	"itemGroup.asuramagica": "Asura Magica",
 	
