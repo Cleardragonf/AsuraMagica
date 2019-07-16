@@ -42,7 +42,7 @@ public class ManaStoneContainer extends Container{
 			addSlot(new SlotItemHandler(h,0,65, 57));
 		});
 		layoutPlayerInventorySlots(8, 140);
-		System.out.println(Mana_StoneTile.getWaterEnergy());
+		System.out.println(this.getWaterEnergy());
 		
 		//energy storage
 		func_216958_a(new IntReferenceHolder() {
@@ -67,7 +67,8 @@ public class ManaStoneContainer extends Container{
 	}
 	
 	public int getWaterEnergy() {
-		return Mana_StoneTile.getWaterEnergy();
+		Mana_StoneTile test = (Mana_StoneTile) tileEntity;
+		return test.getWaterEnergy();
 	}
 	
 	public int getMaxEnergy() {

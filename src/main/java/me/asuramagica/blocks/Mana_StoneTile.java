@@ -46,7 +46,7 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 	private LazyOptional<IItemHandler> handler = LazyOptional.of(this::createHandler).cast();
 	private LazyOptional<IEnergyStorage> fireSource = LazyOptional.of(this::createEnergy).cast();
 	
-	private static IEnergyStorage waterEnergy = new CustomEnergyStorage(100000, 0);
+	private IEnergyStorage waterEnergy = new CustomEnergyStorage(100000, 0);
     private LazyOptional<IEnergyStorage> waterEnergyOptional = LazyOptional.of(() -> waterEnergy);
     
 	private static  int fireEntityList;
@@ -244,8 +244,8 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 		return new CustomEnergyStorage(100000, 0);
 	}
 	
-	public static int getWaterEnergy() {
-		return waterEnergy.getEnergyStored();
+	public int getWaterEnergy() {
+		return this.waterEnergy.getEnergyStored();
 	}
 	
 	@Nonnull
