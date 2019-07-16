@@ -1,17 +1,22 @@
 package me.asuramagica.blocks;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.FireBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.fluid.IFluidState;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
@@ -39,52 +44,98 @@ import me.asuramagica.lists.ItemList;
 import me.asuramagica.tools.CustomEnergyStorage;
 
 public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, INamedContainerProvider{
+
+	public final ItemStackHandler inventory = new ItemStackHandler(1) {
+		@Override
+		public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+			if (stack.getItem() != ItemList.fire_mana_ore) {
+				return stack;
+			}
+			return super.insertItem(slot, stack, simulate);
+		}
+
+		@Override
+		public boolean isItemValid(int slot, ItemStack stack) {
+			return stack.getItem() == ItemList.fire_mana_ore;
+		}
+
+		@Override
+		protected void onContentsChanged(int slot) {
+			Mana_StoneTile.this.markDirty();
+		}
+	};	
+	public final IEnergyStorage waterEnergy = new CustomEnergyStorage(100000, 0);
+	public final IEnergyStorage fireEnergy = new CustomEnergyStorage(100000, 0); 	
+	public final IEnergyStorage earthEnergy = new CustomEnergyStorage(100000, 0); 	
+	public final IEnergyStorage windEnergy = new CustomEnergyStorage(100000, 0); 	
+
+
+	private final LazyOptional<IItemHandler> inventoryOptional = LazyOptional.of(() -> this.inventory).cast();
+    private final LazyOptional<IEnergyStorage> waterSource = LazyOptional.of(() -> this.waterEnergy).cast();
+    private final LazyOptional<IEnergyStorage> fireSource = LazyOptional.of(() -> this.fireEnergy).cast();
+    private final LazyOptional<IEnergyStorage> earthSource = LazyOptional.of(() -> this.earthEnergy).cast();
+    private final LazyOptional<IEnergyStorage> windSource = LazyOptional.of(() -> this.windEnergy).cast();
+    
 	public Mana_StoneTile() {
 		super(MANASTONETILE);
 	}
-	
-	private LazyOptional<IItemHandler> handler = LazyOptional.of(this::createHandler).cast();
-	private LazyOptional<IEnergyStorage> fireSource = LazyOptional.of(this::createEnergy).cast();
-	
-	private IEnergyStorage waterEnergy = new CustomEnergyStorage(100000, 0);
-    private LazyOptional<IEnergyStorage> waterEnergyOptional = LazyOptional.of(() -> waterEnergy);
+
     
-	private static  int fireEntityList;
-	private static  int multiplierList;
 	public List<Block> testing = new LinkedList<>();
-	private int waterEntityList;
 	
 	
 	@SuppressWarnings("unused")
 	@Override
 	public void tick() {
-		fireEntityList = 0;
-		waterEntityList = 0;
-		multiplierList = 1;
-		testing.clear();
+		int findFireryBlocks = 0;
+		int findWateryBlocks= 0;
+		int findEarthyBlocks = 0;
+		int findWindyBlocks = 0;
+		int multiplierBlocksFound = 1;
 		
-		for (int x = -5; x < 10; x++) {
-            for (int y = -5; y < 10; y++) {
-                for (int z = -5; z < 10; z++)
-                {
-                    
-                    Double newSpawnX = Double.valueOf(pos.getX() + x);
-                    Double newSpawnY = Double.valueOf(pos.getY() + y);
-                    Double newSpawnZ = Double.valueOf(pos.getZ() + z);
-                    if (Math.pow(newSpawnX.doubleValue() - pos.getX(), 2.0D) + Math.pow(newSpawnY.doubleValue() - pos.getY(), 2.0D) + Math.pow(newSpawnZ.doubleValue() - pos.getZ(), 2.0D) <= Math.pow(5,2.0D))
-                    {
-                        if (Math.pow(newSpawnX.doubleValue() - pos.getX(), 2.0D) + Math.pow(newSpawnY.doubleValue() - pos.getY(), 2.0D) + Math.pow(newSpawnZ.doubleValue() - pos.getZ(), 2.0D) >= Math.pow(1,2.0D)){
-                            World world = this.getWorld();
-                            BlockPos newSpawnLocation = new BlockPos(newSpawnX.doubleValue(), newSpawnY.doubleValue(), newSpawnZ.doubleValue());
-                            testing.add(world.getBlockState(newSpawnLocation).getBlock());
-                            
-                        }
+		try (PooledMutableBlockPos pooledMutableBlockPos = PooledMutableBlockPos.retain()) {
+			final int posX = pos.getX();
+			final int posY = pos.getY();
+			final int posZ = pos.getZ();
 
-                    }
-                }
-            }
+			for (int z = -5; z <= 10; ++z) {
+				for (int x = -5; x <= 10; ++x) {
+					for (int y = -5; y <= 10; ++y) {
+						final int dist = (x * x) + (y * y) + (z * z);
+						if (dist > 25) {
+							continue;
+						}
+						if (dist < 1) {
+							continue;
+						}
+						pooledMutableBlockPos.setPos(posX + x, posY + y, posZ + z);
+						final BlockState blockState = world.getBlockState(pooledMutableBlockPos);
+						final IFluidState fluidState = world.getFluidState(pooledMutableBlockPos);
+						final Block block = blockState.getBlock();
+						if (block instanceof FireBlock ||
+								block == Blocks.FIRE ||
+								block == BlockList.fire_mana_ore ||
+								(!fluidState.isEmpty() && fluidState.isTagged(FluidTags.LAVA))
+						) {
+							++findFireryBlocks;
+						} else if (block == BlockList.water_mana_ore ||
+								(!fluidState.isEmpty() && fluidState.isTagged(FluidTags.WATER))
+						) {
+							++findWateryBlocks;
+						} else if (block == BlockList.mana_foci_crystal) {
+							++multiplierBlocksFound;
+						}
+					}
+				}
 
-        }	
+			}
+		}
+		
+		final int fireryBlocksFound = findFireryBlocks;
+		final int wateryBlocksFound = findWateryBlocks;
+		final int earthyBlocksFound = findEarthyBlocks;
+		final int windyBlocksFound = findWindyBlocks;
+		boolean dirty = false;
 		
 		fireSource.ifPresent(h -> {			
 			if(h.getEnergyStored() >= 100000) {
@@ -95,38 +146,53 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 				
 				//numbering all Fire Entities to gain Mana from
 				//numbering All Fire Foci to multiply mana for
-				for(Block e : testing) {
-					if(e == Blocks.FIRE) {
-						fireEntityList += 1;
-					}else if(e == BlockList.fire_mana_ore){
-						fireEntityList += 1;
-					}else if(e == BlockList.mana_foci_crystal){
-						multiplierList += 1;
-					}
-                }
-					((CustomEnergyStorage)h).addFireEssence(fireEntityList);
-					markDirty();
+				
+					((CustomEnergyStorage)fireEnergy).addFireEssence(fireryBlocksFound);
+					this.markDirty();
 			}
 		});
 		
 		//Create a Tick Ratio for Water Manna Collection
-		waterEnergyOptional.ifPresent(e -> {
+		waterSource.ifPresent(e -> {
 			if(e.getEnergyStored() >= 100000) {
 				
 			}else {
-				for(Block a : testing) {
-					if(a == Blocks.WATER) {
-						waterEntityList += 1;
-					}else if(a == BlockList.water_mana_ore){
-						waterEntityList += 1;
-					}else if(a == BlockList.mana_foci_crystal){
-						multiplierList += 1;
-					}
-                }
-				((CustomEnergyStorage)e).addFireEssence(waterEntityList);
+				
+				((CustomEnergyStorage)waterEnergy).addFireEssence(wateryBlocksFound);
+				this.markDirty();
 			}
 		
 		
+		});
+		
+		earthSource.ifPresent(h -> {			
+			if(h.getEnergyStored() >= 100000) {
+				
+			}else {
+				
+				//TODO:: Add A Block Identifier to look all around this entity for...the more blocks...the larger the amount...the faster it creates more		
+				
+				//numbering all Fire Entities to gain Mana from
+				//numbering All Fire Foci to multiply mana for
+				
+					((CustomEnergyStorage)earthEnergy).addFireEssence(earthyBlocksFound);
+					this.markDirty();
+			}
+		});
+		
+		windSource.ifPresent(h -> {			
+			if(h.getEnergyStored() >= 100000) {
+				
+			}else {
+				
+				//TODO:: Add A Block Identifier to look all around this entity for...the more blocks...the larger the amount...the faster it creates more		
+				
+				//numbering all Fire Entities to gain Mana from
+				//numbering All Fire Foci to multiply mana for
+				
+					((CustomEnergyStorage)windEnergy).addFireEssence(windyBlocksFound);
+					this.markDirty();
+			}
 		});
 
 		sendOutPower();
@@ -162,102 +228,68 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 	}
 
 	public static int getSources() {
-		return fireEntityList;
+		return 0;
 	}
 	
 	private void sendOutPower() {
-		fireSource.ifPresent(energy ->{
-			AtomicInteger capacity = new AtomicInteger(energy.getEnergyStored());
-			if (capacity.get() > 0) {
-				for(Direction direction: Direction.values()) {
-					TileEntity te = world.getTileEntity(pos.offset(direction));
-					if(te != null) {
-						te.getCapability(CapabilityEnergy.ENERGY, direction).filter(handler -> {
-							if(handler.canReceive()) {
-								int received = handler.receiveEnergy(Math.min(capacity.get(),  100),  false);
-								capacity.addAndGet(-received);
-								energy.extractEnergy(received,  false);
-								((CustomEnergyStorage)energy).consumeEnergy(received);
-								markDirty();
-								return capacity.get() > 0;
-							}
-							return false;
-						});
-					}
-				}		
+		final IEnergyStorage fireEnergy = this.fireEnergy;
+		final int energyStored = fireEnergy.getEnergyStored();
+		if (energyStored > 0) {
+			final World world = this.world;
+			if (world == null) {
+				return;
 			}
-		});
-		
+			final BlockPos pos = this.pos;
+			// TODO: change Direction.values to Direction.VALUES once its ATed
+			for (Direction direction : Direction.values()) {
+				final TileEntity te = world.getTileEntity(pos.offset(direction));
+				if (te == null) {
+					continue;
+				}
+				te.getCapability(CapabilityEnergy.ENERGY, direction).ifPresent(teEnergy -> {
+					if (!teEnergy.canReceive()) {
+						return;
+					}
+					fireEnergy.extractEnergy(
+							teEnergy.receiveEnergy(
+									fireEnergy.extractEnergy(100, true),
+									false
+							),
+							false
+					);
+				});
+			}
+			if (energyStored != fireEnergy.getEnergyStored()) {
+				markDirty();
+			}
+		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void read(CompoundNBT tag) {
-		CompoundNBT invTag = tag.getCompound("inv");
-		handler.ifPresent(h -> ((INBTSerializable<CompoundNBT>)h).deserializeNBT(invTag));
-		
-		CompoundNBT energyTag = tag.getCompound("energy");
-		fireSource.ifPresent(h -> ((INBTSerializable<CompoundNBT>)h).deserializeNBT(energyTag));
-		
+		inventory.deserializeNBT(tag.getCompound("inv"));
+		// FiXME: this is wrong and will crash
+		((CustomEnergyStorage) fireEnergy).deserializeNBT(tag.getCompound("energy"));
 		super.read(tag);
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	@Override
 	public CompoundNBT write(CompoundNBT tag) {
-		handler.ifPresent(h -> {
-			CompoundNBT compound = ((INBTSerializable<CompoundNBT>)h).serializeNBT();
-			tag.put("inv", compound);
-		});
-		fireSource.ifPresent(h -> {
-			CompoundNBT compound2 = ((INBTSerializable<CompoundNBT>)h).serializeNBT();
-			tag.put("energy", compound2);
-		});
-		
+		tag.put("inv", inventory.serializeNBT());
+		// FiXME: this is wrong and will crash
+		tag.putInt("energy", ((CustomEnergyStorage)fireEnergy).getEnergyStored());
 		return super.write(tag);
 	}
-	
-	private ItemStackHandler createHandler() {
-			return new ItemStackHandler(1) {
-				
-				@Override
-				protected void onContentsChanged(int slot) {
-					markDirty();
-				}
-				
-				@Override
-				public boolean isItemValid(int slot, ItemStack stack) {
-					return stack.getItem() == ItemList.fire_mana_ore;
-				}
-				
-				@Override
-				public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-					if(stack.getItem() != ItemList.fire_mana_ore) {
-						return stack;
-					}
-					return super.insertItem(slot, stack, simulate);
-				}
-			};
-	}
 
-	private IEnergyStorage createEnergy() {
-		return new CustomEnergyStorage(100000, 0);
-	}
-	
-	public int getWaterEnergy() {
-		return this.waterEnergy.getEnergyStored();
-	}
-	
+
+
 	@Nonnull
 	@Override
 	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
 
 
 		if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-			return handler.cast();
-		}
-		if(cap == CapabilityEnergy.ENERGY) {
-			return fireSource.cast();
+			return inventoryOptional.cast();
 		}
 		return super.getCapability(cap, side);
 	}
@@ -273,7 +305,7 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 	}
 
 	public static int getAmplifiers() {
-		return multiplierList;
+		return 0;
 	}
 	
 

@@ -42,7 +42,6 @@ public class ManaStoneContainer extends Container{
 			addSlot(new SlotItemHandler(h,0,65, 57));
 		});
 		layoutPlayerInventorySlots(8, 140);
-		System.out.println(this.getWaterEnergy());
 		
 		//energy storage
 		func_216958_a(new IntReferenceHolder() {
@@ -66,13 +65,21 @@ public class ManaStoneContainer extends Container{
 		return tileEntity.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0);
 	}
 	
-	public int getWaterEnergy() {
+	public IEnergyStorage getWater() {
 		Mana_StoneTile test = (Mana_StoneTile) tileEntity;
-		return test.getWaterEnergy();
+		return test.waterEnergy;
 	}
-	
-	public int getMaxEnergy() {
-		return tileEntity.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getMaxEnergyStored).orElse(100000);
+	public IEnergyStorage getFire() {
+		Mana_StoneTile test = (Mana_StoneTile) tileEntity;
+		return test.fireEnergy;
+	}
+	public IEnergyStorage getEarth() {
+		Mana_StoneTile test = (Mana_StoneTile) tileEntity;
+		return test.earthEnergy;
+	}
+	public IEnergyStorage getWind() {
+		Mana_StoneTile test = (Mana_StoneTile) tileEntity;
+		return test.windEnergy;
 	}
 	
 	@Override
@@ -156,15 +163,4 @@ public class ManaStoneContainer extends Container{
 		}
 		return this.getEnergy() * 0;
 	}
-
-	public double getEarthEnergy() {
-		// TODO Add EArth Energy to matrix
-		return 0;
-	}
-
-	public double getWindEnergy() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-	
 }

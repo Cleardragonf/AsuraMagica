@@ -30,8 +30,8 @@ public class Mana_StoneScreen extends ContainerScreen<ManaStoneContainer>{
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		this.font.drawString("Mana Essence Collector", 8.0f, 6.0F, 4210752);
-		this.font.drawString("Energy: " + container.getEnergy(), 8, 115, 0xfffff);
-		this.font.drawString("Water: " + container.getWaterEnergy(), 8, 100, 0xfffff);
+		this.font.drawString("Energy: " + container.getFire().getEnergyStored(), 8, 115, 0xfffff);
+		this.font.drawString("Water: " + container.getWater().getEnergyStored(), 8, 100, 0xfffff);
 		this.font.drawString("Sources: " + Mana_StoneTile.getSources(), 8.0f, 20.0f, 0xffBff);
 		this.font.drawString("Amplifiers: " + Mana_StoneTile.getAmplifiers(), 8, 30, 0xfffff);
 		this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0f, 129.0f,4210752);
@@ -57,13 +57,13 @@ public class Mana_StoneScreen extends ContainerScreen<ManaStoneContainer>{
 		this.blit(relX + 112, relY + 30, 0,0+(int)getEnergyPercentage1(),9,87);
 		
 		this.minecraft.getTextureManager().bindTexture(bar2);	
-		this.blit(relX + 125, relY + 30, 0,0+(int)getEnergyPercentage1(),9,87);
+		this.blit(relX + 125, relY + 30, 0,0+(int)getEnergyPercentage2(),9,87);
 		
 		this.minecraft.getTextureManager().bindTexture(bar3);	
-		this.blit(relX + 138, relY + 30, 0,0+(int)getEnergyPercentage1(),9,87);
+		this.blit(relX + 138, relY + 30, 0,0+(int)getEnergyPercentage3(),9,87);
 		
 		this.minecraft.getTextureManager().bindTexture(bar4);	
-		this.blit(relX + 151, relY + 30, 0,0+(int)getEnergyPercentage1(),9,87);
+		this.blit(relX + 151, relY + 30, 0,0+(int)getEnergyPercentage4(),9,87);
 		
 	}
 	
@@ -72,25 +72,25 @@ public class Mana_StoneScreen extends ContainerScreen<ManaStoneContainer>{
 
 	protected double getEnergyPercentage1() {
 
-		return ((double) this.container.getEnergy()/ (double) this.container.getMaxEnergy() * 100D);
+		return ((double) this.container.getFire().getEnergyStored() / (double) this.container.getFire().getMaxEnergyStored() * 100D);
 
 	}
 	
 	protected double getEnergyPercentage2() {
 
-		return ((double) this.container.getWaterEnergy()/ (double) this.container.getMaxEnergy() * 100D);
+		return ((double) this.container.getWater().getEnergyStored()/ (double) this.container.getWater().getMaxEnergyStored() * 100D);
 
 	}
 	
 	protected double getEnergyPercentage3() {
 
-		return ((double) this.container.getEarthEnergy()/ (double) this.container.getMaxEnergy() * 100D);
+		return ((double) this.container.getEarth().getEnergyStored()/ (double) this.container.getEarth().getMaxEnergyStored() * 100D);
 
 	}
 	
 	protected double getEnergyPercentage4() {
 
-		return ((double) this.container.getWindEnergy()/ (double) this.container.getMaxEnergy() * 100D);
+		return ((double) this.container.getWind().getEnergyStored()/ (double) this.container.getWind().getMaxEnergyStored() * 100D);
 
 	}
 	
