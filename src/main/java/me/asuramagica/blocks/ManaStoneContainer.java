@@ -30,11 +30,11 @@ public class ManaStoneContainer extends Container{
 	private PlayerEntity playerEntity;
 	private IItemHandler playerInventory;
 	
-
 	public ManaStoneContainer(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player ) {
 		super(MANASTONECONTAINER, windowId);
 		
 		tileEntity = world.getTileEntity(pos);
+		
 		this.playerEntity = player;
 		this.playerInventory = new InvWrapper(playerInventory);
 		//Machine Slots (Mana Insertions and their phyical locations)

@@ -116,8 +116,8 @@ public class AsuraMagicaMod {
 		public static void registerBlocks(final RegistryEvent.Register<Block> event){
 			
 			event.getRegistry().registerAll(
-					BlockList.mana_stone = new Mana_Stone(),
 					//BlockList.mana_stone = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0f, 3.0f).lightValue(10).sound(SoundType.METAL)).setRegistryName(location("mana_stone")),
+					BlockList.mana_stone = (Mana_Stone) new Mana_Stone(Block.Properties.create(Material.IRON).hardnessAndResistance(1.0f,1.0f)).setRegistryName(location("mana_stone")),
 					BlockList.water_mana_ore = new Block(Block.Properties.create(Material.EARTH).hardnessAndResistance(1.0f,6.0f)).setRegistryName(location("water_mana_ore")),
 					BlockList.fire_mana_ore = new Block(Block.Properties.create(Material.EARTH).hardnessAndResistance(1.0f,6.0f)).setRegistryName(location("fire_mana_ore")),
 					BlockList.mana_foci_crystal = new Block(Block.Properties.create(Material.GLASS).hardnessAndResistance(1.0f, 10.0f)).setRegistryName(location("mana_foci_crystal"))
