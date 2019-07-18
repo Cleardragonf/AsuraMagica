@@ -1,4 +1,4 @@
-package me.asuramagica.blocks;
+package me.asuramagica.blocks.Mana_Stone;
 
 
 import com.mojang.blaze3d.platform.GlStateManager;

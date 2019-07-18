@@ -1,10 +1,11 @@
-package me.asuramagica.blocks;
+package me.asuramagica.blocks.Mana_Stone;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 
 import static me.asuramagica.blocks.ModBlocks.MANASTONECONTAINER;
 
+import me.asuramagica.blocks.ModBlocks;
 import me.asuramagica.lists.ItemList;
 import me.asuramagica.tools.CustomEnergyStorage;
 import net.minecraft.inventory.container.Container;

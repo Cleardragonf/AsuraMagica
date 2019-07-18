@@ -4,9 +4,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import me.asuramagica.blocks.ModBlocks;
-import me.asuramagica.blocks.ManaStoneContainer;
-import me.asuramagica.blocks.Mana_Stone;
-import me.asuramagica.blocks.Mana_StoneTile;
+import me.asuramagica.blocks.Mana_Stone.ManaStoneContainer;
+import me.asuramagica.blocks.Mana_Stone.Mana_Stone;
+import me.asuramagica.blocks.Mana_Stone.Mana_StoneTile;
+import me.asuramagica.blocks.mcm.MCM_Block;
+import me.asuramagica.blocks.mcm.MCM_Container;
+import me.asuramagica.blocks.mcm.MCM_Screen;
+import me.asuramagica.blocks.mcm.MCM_Tile;
 import me.asuramagica.events.BlockBreakEvent;
 import me.asuramagica.items.ItemCustomAxe;
 import me.asuramagica.items.Food.ItemCustomFood;
@@ -69,6 +73,7 @@ public class AsuraMagicaMod {
 		LOGGER.info("Setup is working");
 		OreGeneration.setupOreGeneration();
 		
+		
 	}
 	private void clientRegistries(final FMLClientSetupEvent event){
 		LOGGER.info("Client is running");
@@ -100,6 +105,7 @@ public class AsuraMagicaMod {
 					ItemList.earth_mana_ore = new BlockItem(BlockList.earth_mana_ore, new Item.Properties().group(ASURAMAGICA)).setRegistryName(BlockList.earth_mana_ore.getRegistryName()),
 					ItemList.wind_mana_ore = new BlockItem(BlockList.wind_mana_ore, new Item.Properties().group(ASURAMAGICA)).setRegistryName(BlockList.wind_mana_ore.getRegistryName()),
 					ItemList.mana_foci_crystal = new BlockItem(BlockList.mana_foci_crystal, new Item.Properties().group(ASURAMAGICA)).setRegistryName(BlockList.mana_foci_crystal.getRegistryName()),
+					ItemList.mana_foci_crystal = new BlockItem(BlockList.mcmblock, new Item.Properties().group(ASURAMAGICA)).setRegistryName(BlockList.mcmblock.getRegistryName()),
 					
 					ItemList.tomato = new ItemCustomFood(3, 0, 0, 0, false, new Item.Properties().maxStackSize(32).group(ASURAMAGICA)).setRegistryName(location("tomato")),
 					ItemList.lettuce = new ItemCustomFood(5, 0, 0, 0, false, new Item.Properties().maxStackSize(5).group(ASURAMAGICA)).setRegistryName(location("lettuce")),
@@ -124,7 +130,9 @@ public class AsuraMagicaMod {
 					BlockList.fire_mana_ore = new Block(Block.Properties.create(Material.EARTH).hardnessAndResistance(1.0f,6.0f)).setRegistryName(location("fire_mana_ore")),
 					BlockList.earth_mana_ore = new Block(Block.Properties.create(Material.EARTH).hardnessAndResistance(1.0f,6.0f)).setRegistryName(location("earth_mana_ore")),
 					BlockList.wind_mana_ore = new Block(Block.Properties.create(Material.EARTH).hardnessAndResistance(1.0f,6.0f)).setRegistryName(location("wind_mana_ore")),
-					BlockList.mana_foci_crystal = new Block(Block.Properties.create(Material.GLASS).hardnessAndResistance(1.0f, 10.0f)).setRegistryName(location("mana_foci_crystal"))
+					BlockList.mana_foci_crystal = new Block(Block.Properties.create(Material.GLASS).hardnessAndResistance(1.0f, 10.0f)).setRegistryName(location("mana_foci_crystal")),
+					BlockList.mcmblock = (MCM_Block) new MCM_Block(Block.Properties.create(Material.GLASS).hardnessAndResistance(1.0f, 10.0f)).setRegistryName(location("mcmblock"))
+					
 					);
 			
 			
@@ -134,6 +142,7 @@ public class AsuraMagicaMod {
 		@SubscribeEvent
 		public static void registerTileEntities(final RegistryEvent.Register<TileEntityType<?>> event) {
 			event.getRegistry().register(TileEntityType.Builder.create(Mana_StoneTile::new, ModBlocks.ManaStone).build(null).setRegistryName(location("mana_stone")));
+			event.getRegistry().register(TileEntityType.Builder.create(MCM_Tile::new, ModBlocks.MCMBlock).build(null).setRegistryName(location("mcmblock")));
 		}
 		
 		@SubscribeEvent
@@ -142,6 +151,12 @@ public class AsuraMagicaMod {
 				BlockPos pos = data.readBlockPos();
 				return new ManaStoneContainer(windowId, AsuraMagicaMod.proxy.getClientWorld(), pos, inv, AsuraMagicaMod.proxy.getClientPlayer());
 			}).setRegistryName(location("mana_stone")));
+			
+			event.getRegistry().register(IForgeContainerType.create((windowId, inv, data) ->{
+				BlockPos pos = data.readBlockPos();
+				return new MCM_Container(windowId, AsuraMagicaMod.proxy.getClientWorld(), pos, inv, AsuraMagicaMod.proxy.getClientPlayer());
+			}).setRegistryName(location("mcmblock")));
+			
 			
 		}
 	}

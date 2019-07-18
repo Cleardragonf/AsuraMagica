@@ -1,4 +1,4 @@
-package me.asuramagica.blocks;
+package me.asuramagica.blocks.mcm;
 
 //import me.asuramagica.events.BlockBreakEvent;
 import net.minecraft.block.Block;
@@ -18,8 +18,8 @@ import net.minecraft.world.World;
 //pimport net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class Mana_Stone extends Block {
-    public Mana_Stone(Block.Properties properties) {
+public class MCM_Block extends Block {
+    public MCM_Block(Block.Properties properties) {
         super(properties);
     }
 
@@ -35,7 +35,7 @@ public class Mana_Stone extends Block {
 
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new Mana_StoneTile();
+        return new MCM_Tile();
     }
 
     // onBlockPlacedBy method is fine
@@ -50,7 +50,7 @@ public class Mana_Stone extends Block {
         } else {
             TileEntity tileEntity = world.getTileEntity(pos);
             if (tileEntity instanceof INamedContainerProvider) {
-                NetworkHooks.openGui((ServerPlayerEntity) player, (Mana_StoneTile) tileEntity, tileEntity.getPos());
+                NetworkHooks.openGui((ServerPlayerEntity) player, (MCM_Tile) tileEntity, tileEntity.getPos());
                 return true;
             }
             return super.onBlockActivated(state, world, pos, player, hand, result);

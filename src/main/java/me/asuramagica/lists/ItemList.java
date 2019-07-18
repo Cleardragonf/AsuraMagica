@@ -30,6 +30,7 @@ public class ItemList {
 	public static Item earth_mana_ore;
 	public static Item wind_mana_ore;
 	public static Item mana_foci_crystal;
+	public static Item mcmblock;
 	
 	//Food
 	public static Item rice_bowl;

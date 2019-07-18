@@ -1,4 +1,4 @@
-package me.asuramagica.blocks;
+package me.asuramagica.blocks.Mana_Stone;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
