@@ -1,29 +1,44 @@
-package me.asuramagica.blocks.mcm;
+package me.asuramagica.blocks.tileentities;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.FireBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import static me.asuramagica.blocks.ModBlocks.MCMTILE;
+import static me.asuramagica.blocks.ModBlocks.MANASTONETILE;
 import java.util.LinkedList;
 import java.util.List;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import me.asuramagica.blocks.inventory.ManaStoneContainer;
 import me.asuramagica.lists.BlockList;
 import me.asuramagica.lists.ItemList;
 import me.asuramagica.tools.CustomEnergyStorage;
 
-public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedContainerProvider{
+public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, INamedContainerProvider{
 
 	public final ItemStackHandler inventory = new ItemStackHandler(1) {
 		@Override
@@ -41,7 +56,7 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 
 		@Override
 		protected void onContentsChanged(int slot) {
-			MCM_Tile.this.markDirty();
+			Mana_StoneTile.this.markDirty();
 		}
 	};	
 	public final IEnergyStorage waterEnergy = new CustomEnergyStorage(100000, 0);
@@ -50,13 +65,14 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 	public final IEnergyStorage windEnergy = new CustomEnergyStorage(100000, 0); 	
 
 
+	private final LazyOptional<IItemHandler> inventoryOptional = LazyOptional.of(() -> this.inventory).cast();
     private final LazyOptional<IEnergyStorage> waterSource = LazyOptional.of(() -> this.waterEnergy).cast();
     private final LazyOptional<IEnergyStorage> fireSource = LazyOptional.of(() -> this.fireEnergy).cast();
     private final LazyOptional<IEnergyStorage> earthSource = LazyOptional.of(() -> this.earthEnergy).cast();
     private final LazyOptional<IEnergyStorage> windSource = LazyOptional.of(() -> this.windEnergy).cast();
     
-	public MCM_Tile() {
-		super(MCMTILE);
+	public Mana_StoneTile() {
+		super(MANASTONETILE);
 	}
 
     
@@ -91,8 +107,22 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 						final BlockState blockState = world.getBlockState(pooledMutableBlockPos);
 						final IFluidState fluidState = world.getFluidState(pooledMutableBlockPos);
 						final Block block = blockState.getBlock();
-						if (block.equals(BlockList.mana_stone)) {
-							
+						if (block instanceof FireBlock ||
+								block == Blocks.FIRE ||
+								block == BlockList.fire_mana_ore ||
+								(!fluidState.isEmpty() && fluidState.isTagged(FluidTags.LAVA))
+						) {
+							++findFireryBlocks;
+						} else if (block == BlockList.water_mana_ore ||
+								(!fluidState.isEmpty() && fluidState.isTagged(FluidTags.WATER))
+						) {
+							++findWateryBlocks;
+						} else if (block == BlockList.mana_foci_crystal) {
+							++findMultiplierBlocks;
+						}else if(block == Blocks.GRASS || block == BlockList.earth_mana_ore || block == Blocks.DIRT) {
+							++findEarthyBlocks;
+						}else if(block == BlockList.wind_mana_ore) {
+							++findWindyBlocks;
 						}
 					}
 				}
@@ -145,12 +175,106 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 					this.markDirty();
 			}
 		});
+
+		sendOutPower();
+		
+		
+		//energy.ifPresent(e -> ((CustomEnergyStorage)e).addEarthEssence(10));
+		
+		/*(
+		if(counter > 20) {
+			energy.ifPresent(e -> ((CustomEnergyStorage)e).addEarthEssence(10));
+			counter = 0;
+		}else {
+			counter++;
+		}
+		*/
+		
+		//TODO: Move the below around so that Energy can be REMOVED via the item slot...
+		/*//the below is used for taking items out and putting them into energy...
+		if(counter > 0) {
+			counter --;
+			if (counter <= 0) {
+				energy.ifPresent(e -> ((CustomEnergyStorage)e).addEnergy(10));
+			}
+		}else {
+			handler.ifPresent(h -> {
+				ItemStack stack = h.getStackInSlot(0);
+				if(stack.getItem() == ItemList.fire_mana_ore) {
+					h.extractItem(0, 1, false);
+					counter = 20;
+				}
+			});
+		}
+		*/
+	}
+
+	public static int getSources() {
+		return 0;
+	}
+	
+	private void sendOutPower() {
+		final IEnergyStorage fireEnergy = this.fireEnergy;
+		final int energyStored = fireEnergy.getEnergyStored();
+		if (energyStored > 0) {
+			final World world = this.world;
+			if (world == null) {
+				return;
+			}
+			final BlockPos pos = this.pos;
+			// TODO: change Direction.values to Direction.VALUES once its ATed
+			for (Direction direction : Direction.values()) {
+				final TileEntity te = world.getTileEntity(pos.offset(direction));
+				if (te == null) {
+					continue;
+				}
+				te.getCapability(CapabilityEnergy.ENERGY, direction).ifPresent(teEnergy -> {
+					if (!teEnergy.canReceive()) {
+						return;
+					}
+					fireEnergy.extractEnergy(
+							teEnergy.receiveEnergy(
+									fireEnergy.extractEnergy(100, true),
+									false
+							),
+							false
+					);
+				});
+			}
+			if (energyStored != fireEnergy.getEnergyStored()) {
+				markDirty();
+			}
+		}
+	}
+
+	@Override
+	public void read(CompoundNBT tag) {
+		inventory.deserializeNBT(tag.getCompound("inv"));
+		super.read(tag);
+	}
+
+	@Override
+	public CompoundNBT write(CompoundNBT tag) {
+		tag.put("inv", inventory.serializeNBT());
+		return super.write(tag);
 	}
 
 
+
+	@Nonnull
+	@Override
+	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+
+
+		if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+			return inventoryOptional.cast();
+		}
+		return super.getCapability(cap, side);
+	}
+
 	@Override
 	public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-		return new MCM_Container(i, world, pos, playerInventory, playerEntity);
+		return new ManaStoneContainer(i, world, pos, playerInventory, playerEntity);
 	}
 
 	@Override
@@ -158,6 +282,10 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 		return new StringTextComponent(getType().getRegistryName().getPath());
 	}
 
+	public static int getAmplifiers() {
+		return 0;
+	}
+	
 
 	
 	

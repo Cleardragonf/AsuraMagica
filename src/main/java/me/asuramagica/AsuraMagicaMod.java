@@ -4,12 +4,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import me.asuramagica.blocks.ModBlocks;
-import me.asuramagica.blocks.Mana_Stone.ManaStoneContainer;
-import me.asuramagica.blocks.Mana_Stone.Mana_Stone;
-import me.asuramagica.blocks.Mana_Stone.Mana_StoneTile;
+import me.asuramagica.blocks.inventory.ManaStoneContainer;
+import me.asuramagica.blocks.Mana_Stone;
+import me.asuramagica.blocks.tileentities.Mana_StoneTile;
 import me.asuramagica.blocks.mcm.MCM_Block;
 import me.asuramagica.blocks.mcm.MCM_Container;
-import me.asuramagica.blocks.mcm.MCM_Screen;
 import me.asuramagica.blocks.mcm.MCM_Tile;
 import me.asuramagica.events.BlockBreakEvent;
 import me.asuramagica.items.ItemCustomAxe;

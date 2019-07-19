@@ -1,7 +1,7 @@
 package me.asuramagica.lists;
 
 
-import me.asuramagica.blocks.Mana_Stone.Mana_Stone;
+import me.asuramagica.blocks.Mana_Stone;
 import me.asuramagica.blocks.mcm.MCM_Block;
 import net.minecraft.block.Block;
 
