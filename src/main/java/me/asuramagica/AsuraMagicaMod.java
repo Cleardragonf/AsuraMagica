@@ -12,6 +12,7 @@ import me.asuramagica.blocks.mcm.MCM_Container;
 import me.asuramagica.blocks.mcm.MCM_Tile;
 import me.asuramagica.events.BlockBreakEvent;
 import me.asuramagica.items.ItemCustomAxe;
+import me.asuramagica.items.WardEnscriber;
 import me.asuramagica.items.Food.ItemCustomFood;
 import me.asuramagica.lists.ArmorMaterialList;
 import me.asuramagica.lists.BlockList;
@@ -86,6 +87,7 @@ public class AsuraMagicaMod {
 			
 			event.getRegistry().registerAll(
 					ItemList.mana = new Item(new Item.Properties().group(ASURAMAGICA)).setRegistryName(location("mana")),
+							ItemList.ward_enscriber = new WardEnscriber(new Item.Properties().group(ASURAMAGICA)).setRegistryName(location("ward_enscriber")),
 					
 					ItemList.mana_axe = new ItemCustomAxe(ToolMaterialList.crystalizedmanatier1, 0, 0, new Item.Properties().group(ASURAMAGICA)).setRegistryName(location("mana_axe")),
 					ItemList.mana_pickaxe = new ItemCustomAxe(ToolMaterialList.crystalizedmanatier1, 0, 0, new Item.Properties().group(ASURAMAGICA)).setRegistryName(location("mana_pickaxe")),

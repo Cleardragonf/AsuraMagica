@@ -12,6 +12,7 @@ public class ItemList {
 	public static Item handheld_manacollector;
 	public static Item mana_pickaxe;
 	public static Item mana_axe;
+	public static Item ward_enscriber;
 	
 	//GeneralWeaponry etc
 	public static Item ritual_dagger;
