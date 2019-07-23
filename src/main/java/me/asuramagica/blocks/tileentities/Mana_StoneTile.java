@@ -65,11 +65,11 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 	public final IEnergyStorage windEnergy = new CustomEnergyStorage(100000, 0); 	
 
 
-	private final LazyOptional<IItemHandler> inventoryOptional = LazyOptional.of(() -> this.inventory).cast();
-    private final LazyOptional<IEnergyStorage> waterSource = LazyOptional.of(() -> this.waterEnergy).cast();
-    private final LazyOptional<IEnergyStorage> fireSource = LazyOptional.of(() -> this.fireEnergy).cast();
-    private final LazyOptional<IEnergyStorage> earthSource = LazyOptional.of(() -> this.earthEnergy).cast();
-    private final LazyOptional<IEnergyStorage> windSource = LazyOptional.of(() -> this.windEnergy).cast();
+	public final LazyOptional<IItemHandler> inventoryOptional = LazyOptional.of(() -> this.inventory).cast();
+	public final LazyOptional<IEnergyStorage> waterSource = LazyOptional.of(() -> this.waterEnergy).cast();
+    public final LazyOptional<IEnergyStorage> fireSource = LazyOptional.of(() -> this.fireEnergy).cast();
+    public final LazyOptional<IEnergyStorage> earthSource = LazyOptional.of(() -> this.earthEnergy).cast();
+    public final LazyOptional<IEnergyStorage> windSource = LazyOptional.of(() -> this.windEnergy).cast();
     
 	public Mana_StoneTile() {
 		super(MANASTONETILE);

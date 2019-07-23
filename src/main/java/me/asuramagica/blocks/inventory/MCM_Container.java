@@ -29,13 +29,13 @@ public class MCM_Container extends Container{
 	private TileEntity tileEntity;
 	private PlayerEntity playerEntity;
 	private IItemHandler playerInventory;
+	private MCM_Tile test;
 	
 	public MCM_Container(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player ) {
 		super(MCMCONTAINER, windowId);
 		
 		
 		//TESTING
-		System.out.println(this.getLinked().toString() );
 		
 		
 		tileEntity = world.getTileEntity(pos);
@@ -62,6 +62,12 @@ public class MCM_Container extends Container{
 				return getEnergy();
 			}
 		});
+		if(tileEntity instanceof MCM_Tile) {
+			MCM_Tile a = (MCM_Tile) tileEntity;
+			//System.out.println(a.linkedPowerSource.toString());
+		}
+		
+		test = (MCM_Tile) tileEntity;
 	}
 	
 	private void func_216958_a(IntReferenceHolder intReferenceHolder) {}
@@ -70,10 +76,6 @@ public class MCM_Container extends Container{
 		return tileEntity.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0);
 	}
 	
-	public String getLinked() {
-		MCM_Tile test = (MCM_Tile) tileEntity;
-		return test.linkedPowerSource;
-	}
 	
 	public IEnergyStorage getWater() {
 		MCM_Tile test = (MCM_Tile) tileEntity;

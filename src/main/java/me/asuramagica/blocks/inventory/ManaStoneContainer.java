@@ -6,6 +6,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import static me.asuramagica.blocks.ModBlocks.MANASTONECONTAINER;
 
 import me.asuramagica.blocks.ModBlocks;
+import me.asuramagica.blocks.tileentities.MCM_Tile;
 import me.asuramagica.blocks.tileentities.Mana_StoneTile;
 import me.asuramagica.lists.ItemList;
 import me.asuramagica.tools.CustomEnergyStorage;
@@ -30,6 +31,7 @@ public class ManaStoneContainer extends Container{
 	private TileEntity tileEntity;
 	private PlayerEntity playerEntity;
 	private IItemHandler playerInventory;
+	
 	
 	public ManaStoneContainer(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player ) {
 		super(MANASTONECONTAINER, windowId);
@@ -57,7 +59,7 @@ public class ManaStoneContainer extends Container{
 			public int get() {
 				return getEnergy();
 			}
-		});
+		});		
 	}
 	
 	private void func_216958_a(IntReferenceHolder intReferenceHolder) {}
@@ -82,7 +84,12 @@ public class ManaStoneContainer extends Container{
 		Mana_StoneTile test = (Mana_StoneTile) tileEntity;
 		return test.windEnergy;
 	}
-	
+	/*
+	public BlockPos getLinkedPowerSource() {
+		//return test.linkedPowerSource;
+		return
+	}
+	*/
 	@Override
 	public boolean canInteractWith(PlayerEntity playerIn) {
 		return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos()), playerEntity, ModBlocks.ManaStone);

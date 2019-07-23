@@ -28,7 +28,7 @@ public class MCM_Screen extends ContainerScreen<MCM_Container>{
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		this.font.drawString("Matter Conversion Block", 8.0f, 6.0F, 4210752);
-		this.font.drawString("Int: " + container.getLinked().toString(), 15.0f, 15.0F, 4210752);
+		//this.font.drawString("Int: " + container.getLinked().toString(), 15.0f, 15.0F, 4210752);
 		this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0f, 129.0f,4210752);
 		int relX = (this.width - this.xSize) /2;
 		int relY = (this.height - this.ySize) /2;

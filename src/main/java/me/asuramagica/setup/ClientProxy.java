@@ -2,7 +2,7 @@ package me.asuramagica.setup;
 
 import me.asuramagica.blocks.ModBlocks;
 import me.asuramagica.blocks.client.gui.Mana_StoneScreen;
-import me.asuramagica.blocks.mcm.MCM_Screen;
+import me.asuramagica.blocks.client.gui.MCM_Screen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.entity.player.PlayerEntity;
