@@ -1,7 +1,12 @@
 package me.asuramagica;
 
+import java.lang.annotation.Annotation;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.maven.artifact.repository.Authentication;
+
+import com.mojang.realmsclient.dto.PlayerInfo;
 
 import me.asuramagica.blocks.ModBlocks;
 import me.asuramagica.blocks.inventory.ManaStoneContainer;
@@ -11,6 +16,7 @@ import me.asuramagica.blocks.MCM_Block;
 import me.asuramagica.blocks.inventory.MCM_Container;
 import me.asuramagica.blocks.tileentities.MCM_Tile;
 import me.asuramagica.events.BlockBreakEvent;
+import me.asuramagica.gui.Temperature;
 import me.asuramagica.items.ItemCustomAxe;
 import me.asuramagica.items.WardEnscriber;
 import me.asuramagica.items.Food.ItemCustomFood;
@@ -24,6 +30,11 @@ import me.asuramagica.setup.ServerProxy;
 import me.asuramagica.world.OreGeneration;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.RenderComponentsUtil;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.RenderList;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ArmorItem;
@@ -31,13 +42,20 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.SwordItem;
+import net.minecraft.profiler.FilledProfileResult;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.client.event.FOVUpdateEvent;
+import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -47,6 +65,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod("asuramagica")
 public class AsuraMagicaMod {
+	
 
 	public static IProxy proxy = DistExecutor.runForDist(() -> () -> new ClientProxy(), () -> () -> new ServerProxy());
 		
@@ -71,9 +90,7 @@ public class AsuraMagicaMod {
 	private void setup(final FMLCommonSetupEvent event){
 		proxy.init();
 		LOGGER.info("Setup is working");
-		OreGeneration.setupOreGeneration();
-		
-		
+		OreGeneration.setupOreGeneration();		
 	}
 	private void clientRegistries(final FMLClientSetupEvent event){
 		LOGGER.info("Client is running");
@@ -160,6 +177,19 @@ public class AsuraMagicaMod {
 			
 			
 		}
+		
+	}
+	//Render TickEvent works completely...except it happens at the start menu...tooo
+	//Useless RenderPlayerEvent, RenderComponentsUtil, 
+	@SubscribeEvent //closest has been RenderGameOverlayEvent.Text,chat...pre and post are broken and element
+	public void TempGUI(final RenderGameOverlayEvent.Post event) {
+
+		if ((event.getType() != RenderGameOverlayEvent.ElementType.ALL) || (Minecraft.getInstance().currentScreen != null)) {
+
+			return;
+
+		}
+		Temperature.draw();
 	}
 	
 	
