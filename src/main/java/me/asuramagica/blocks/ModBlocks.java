@@ -3,6 +3,7 @@ package me.asuramagica.blocks;
 import me.asuramagica.blocks.inventory.ManaStoneContainer;
 import me.asuramagica.blocks.Mana_Stone;
 import me.asuramagica.blocks.tileentities.Mana_StoneTile;
+import me.asuramagica.gui.TemperatureContainer;
 import me.asuramagica.blocks.MCM_Block;
 import me.asuramagica.blocks.inventory.MCM_Container;
 import me.asuramagica.blocks.tileentities.MCM_Tile;
@@ -26,6 +27,9 @@ public class ModBlocks {
 	
 	@ObjectHolder("asuramagica:mcmblock")
 	public static ContainerType<MCM_Container> MCMCONTAINER;
+	
+	@ObjectHolder("asuramagica:temp")
+	public static ContainerType<TemperatureContainer> TempContainer;
 	
 	@ObjectHolder("asuramagica:mcmblock")
 	public static TileEntityType<MCM_Tile> MCMTILE;
