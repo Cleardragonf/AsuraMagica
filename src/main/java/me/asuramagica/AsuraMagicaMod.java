@@ -179,20 +179,7 @@ public class AsuraMagicaMod {
 		}
 		
 	}
-	//Render TickEvent works completely...except it happens at the start menu...tooo
-	//Useless RenderPlayerEvent, RenderComponentsUtil, 
-	@SubscribeEvent //closest has been RenderGameOverlayEvent.Text,chat...pre and post are broken and element
-	public void TempGUI(final RenderGameOverlayEvent.Post event) {
 
-		if ((event.getType() != RenderGameOverlayEvent.ElementType.ALL) || (Minecraft.getInstance().currentScreen != null)) {
-
-			return;
-
-		}
-		Temperature.draw();
-	}
-	
-	
 	@SubscribeEvent
 	public void onbreak(BlockEvent.BreakEvent event) {
 		BlockBreakEvent trial = new BlockBreakEvent();
