@@ -4,13 +4,16 @@ import me.asuramagica.AsuraMagicaMod;
 import me.asuramagica.tools.customGUI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IngameGui;
-
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 
 public class Temperature extends IngameGui{
 
@@ -34,5 +37,4 @@ public class Temperature extends IngameGui{
 	      
 	  }
 	
-
 }

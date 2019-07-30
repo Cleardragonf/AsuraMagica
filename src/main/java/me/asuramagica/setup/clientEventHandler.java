@@ -1,6 +1,7 @@
-package me.asuramagica.gui;
+package me.asuramagica.setup;
 
 import me.asuramagica.AsuraMagicaMod;
+import me.asuramagica.gui.Temperature;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;

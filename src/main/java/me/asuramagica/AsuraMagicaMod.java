@@ -2,6 +2,8 @@ package me.asuramagica;
 
 import java.lang.annotation.Annotation;
 
+import javax.xml.transform.Source;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.maven.artifact.repository.Authentication;
@@ -33,8 +35,11 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.RenderComponentsUtil;
+import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderList;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ArmorItem;
@@ -47,6 +52,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -59,6 +65,9 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -180,9 +189,40 @@ public class AsuraMagicaMod {
 		
 	}
 
+
+	
 	@SubscribeEvent
 	public void onbreak(BlockEvent.BreakEvent event) {
 		BlockBreakEvent trial = new BlockBreakEvent();
 		trial.onbreak(event.getState().getBlock(), event.getWorld().getWorld(), event.getPos(), event.getPlayer());
 	}
+	
+	@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.FORGE)
+	public static class RegisterForgeEvents{
+		public static int i = 0;
+		@SubscribeEvent
+	    public static void checkPlayersTemp(PlayerTickEvent event) {
+			if(i == 20) {
+				PlayerEntity player = event.player;
+				player.sendMessage(new StringTextComponent("Well...hello there"));
+				i = 0;
+	         }else {
+	        	 i++;
+	         }
+
+			
+			
+			//if(event.player.getServer().getPlayerList().getPlayers() == null) {
+			//	System.out.println("BROKEN!");
+			//}else {
+			//	for(ServerPlayerEntity serverplayerentity : event.player.getServer().getPlayerList().getPlayers()) {
+			//		System.out.println(serverplayerentity.toString());
+			//	}
+			//}
+
+			
+	    }
+	}
+	
+    
 }
