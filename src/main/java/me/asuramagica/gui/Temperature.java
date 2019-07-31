@@ -2,12 +2,17 @@ package me.asuramagica.gui;
 
 import me.asuramagica.AsuraMagicaMod;
 import me.asuramagica.tools.customGUI;
+import me.asuramagica.tools.util.IPlayerTemperatureCapability;
+import me.asuramagica.tools.util.PlayerTemperatureCapability;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IngameGui;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
@@ -37,4 +42,17 @@ public class Temperature extends IngameGui{
 	      
 	  }
 	
+	
+	public static void temperatureSetings(PlayerEntity player){
+		final IPlayerTemperatureCapability test = new PlayerTemperatureCapability(); 	
+
+
+		final LazyOptional<IPlayerTemperatureCapability> temperature = LazyOptional.of(() -> test).cast();
+		
+
+			temperature.ifPresent(a ->{
+				player.sendMessage(new StringTextComponent("Well...hello there"));
+			});
+
+	}
 }

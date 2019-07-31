@@ -29,6 +29,8 @@ import me.asuramagica.lists.ToolMaterialList;
 import me.asuramagica.setup.ClientProxy;
 import me.asuramagica.setup.IProxy;
 import me.asuramagica.setup.ServerProxy;
+import me.asuramagica.tools.util.IPlayerTemperatureCapability;
+import me.asuramagica.tools.util.PlayerTemperatureCapability;
 import me.asuramagica.world.OreGeneration;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -59,6 +61,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.extensions.IForgeContainerType;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -202,9 +205,12 @@ public class AsuraMagicaMod {
 		public static int i = 0;
 		@SubscribeEvent
 	    public static void checkPlayersTemp(PlayerTickEvent event) {
+			
+			
 			if(i == 20) {
 				PlayerEntity player = event.player;
-				player.sendMessage(new StringTextComponent("Well...hello there"));
+				
+				Temperature.temperatureSetings(player);
 				i = 0;
 	         }else {
 	        	 i++;
