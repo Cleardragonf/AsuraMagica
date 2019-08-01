@@ -10,6 +10,7 @@ import org.apache.maven.artifact.repository.Authentication;
 
 import com.mojang.realmsclient.dto.PlayerInfo;
 
+import cpw.mods.modlauncher.serviceapi.ILaunchPluginService.Phase;
 import me.asuramagica.blocks.ModBlocks;
 import me.asuramagica.blocks.inventory.ManaStoneContainer;
 import me.asuramagica.blocks.Mana_Stone;
@@ -31,6 +32,7 @@ import me.asuramagica.setup.IProxy;
 import me.asuramagica.setup.ServerProxy;
 import me.asuramagica.tools.util.IPlayerTemperatureCapability;
 import me.asuramagica.tools.util.PlayerTemperatureCapability;
+import me.asuramagica.tools.util.PlayerTemperatureProvider;
 import me.asuramagica.world.OreGeneration;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -98,11 +100,13 @@ public class AsuraMagicaMod {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientRegistries);
 		
 		MinecraftForge.EVENT_BUS.register(this);
+		
 	}
 	private void setup(final FMLCommonSetupEvent event){
 		proxy.init();
 		LOGGER.info("Setup is working");
 		OreGeneration.setupOreGeneration();		
+		PlayerTemperatureProvider.registerCapability();
 	}
 	private void clientRegistries(final FMLClientSetupEvent event){
 		LOGGER.info("Client is running");
@@ -205,16 +209,31 @@ public class AsuraMagicaMod {
 		public static int i = 0;
 		@SubscribeEvent
 	    public static void checkPlayersTemp(PlayerTickEvent event) {
-			
-			
-			if(i == 20) {
+			if(event.phase == net.minecraftforge.fml.common.gameevent.TickEvent.Phase.START) {
 				PlayerEntity player = event.player;
 				
-				Temperature.temperatureSetings(player);
-				i = 0;
-	         }else {
-	        	 i++;
-	         }
+				final IPlayerTemperatureCapability test = new PlayerTemperatureCapability();     
+
+
+		        final LazyOptional<IPlayerTemperatureCapability> temperature = LazyOptional.of(() -> test).cast();
+		        
+
+		            temperature.ifPresent(a ->{
+		                player.sendMessage(new StringTextComponent("Well...hello there"));
+		            });
+				
+				/*
+				if(i == 20) {
+					PlayerEntity player = event.player;
+					
+					Temperature.temperatureSetings(player);
+					i = 0;
+		         }else {
+		        	 i++;
+		         }
+		         */
+			}
+
 
 			
 			

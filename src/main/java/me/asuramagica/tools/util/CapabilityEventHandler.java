@@ -15,7 +15,7 @@ public class CapabilityEventHandler
 
 {
 
-	public static final ResourceLocation PlayerTemperature = new ResourceLocation(AsuraMagicaMod.MODID, "PlayerTemperature");
+	public static final ResourceLocation PlayerTemperature = new ResourceLocation(AsuraMagicaMod.MODID, "playertemperature");
 
 	
 
