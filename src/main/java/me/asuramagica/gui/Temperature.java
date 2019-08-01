@@ -7,18 +7,12 @@ import me.asuramagica.tools.util.PlayerTemperatureCapability;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IngameGui;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biomes;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
+
 
 public class Temperature extends IngameGui{
 
@@ -43,16 +37,26 @@ public class Temperature extends IngameGui{
 	  }
 	
 	
-	public static void temperatureSetings(PlayerEntity player){
+	public static void temperatureSetings(PlayerEntity player, World world){
 		final IPlayerTemperatureCapability test = new PlayerTemperatureCapability(); 	
 
 
 		final LazyOptional<IPlayerTemperatureCapability> temperature = LazyOptional.of(() -> test).cast();
 		
+		temperature.ifPresent(h -> {			
+				BlockPos postion = player.getPosition();
+				if(player.world.getBiome(postion) == Biomes.PLAINS) {
+					((PlayerTemperatureCapability)test).setPlayerTemp(10);
+				}else if(player.world.getBiome(postion) == Biomes.DESERT) {
+					((PlayerTemperatureCapability)test).setPlayerTemp(100);
+				}else {
+					((PlayerTemperatureCapability)test).setPlayerTemp(0);
+				}
+				
+			int a = h.playerTemp();
+			System.out.println(a);
+		});
 
-			temperature.ifPresent(a ->{
-				player.sendMessage(new StringTextComponent("Well...hello there"));
-			});
 
 	}
 }

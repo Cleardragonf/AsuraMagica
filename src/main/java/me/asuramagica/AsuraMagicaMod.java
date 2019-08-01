@@ -57,6 +57,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -211,16 +212,16 @@ public class AsuraMagicaMod {
 	    public static void checkPlayersTemp(PlayerTickEvent event) {
 			if(event.phase == net.minecraftforge.fml.common.gameevent.TickEvent.Phase.START) {
 				PlayerEntity player = event.player;
+				World world = event.player.world;
 				
-				final IPlayerTemperatureCapability test = new PlayerTemperatureCapability();     
-
-
-		        final LazyOptional<IPlayerTemperatureCapability> temperature = LazyOptional.of(() -> test).cast();
-		        
-
-		            temperature.ifPresent(a ->{
-		                player.sendMessage(new StringTextComponent("Well...hello there"));
-		            });
+		        if(i == 60) {
+					
+					Temperature.temperatureSetings(player, world);
+					i = 0;
+		         }else {
+		        	 i++;
+		         }
+		            
 				
 				/*
 				if(i == 20) {
