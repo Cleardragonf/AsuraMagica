@@ -1,22 +1,32 @@
 package me.asuramagica.tools.util;
 
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
+import net.minecraft.util.Direction;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.common.util.LazyOptional;
 
-public class PlayerTemperatureCapability implements IPlayerTemperatureCapability, INBTSerializable<CompoundNBT>{
+public class PlayerTemperatureCapability implements IPlayerTemperatureCapability{
 
-	private int playerTemp;
-	private int maxTemp;
-	private int minTemp;
+	private static int playerTemp;
+	static int maxTemp = 100;
+	static int minTemp = -100;
 	
 	public void setPlayerTemp(int setPlayerTemp) {
-		this.playerTemp = setPlayerTemp;
+		this.setPlayerTemp2(this.getPlayerTemp() + setPlayerTemp);
+		if(getPlayerTemp() > maxTemp) {
+			this.setPlayerTemp2(100);
+		}if(getPlayerTemp() < minTemp) {
+			this.setPlayerTemp2(-100);
+		}
 	}
 
 	
 	@Override
 	public int playerTemp() {
-		return this.playerTemp;
+		return this.getPlayerTemp();
 	}
 	
 
@@ -30,21 +40,17 @@ public class PlayerTemperatureCapability implements IPlayerTemperatureCapability
 		return this.minTemp;
 	}
 
-	@Override
-	public CompoundNBT serializeNBT() {
-		CompoundNBT nbt = new CompoundNBT();
-		nbt.putInt("MaxTemp", this.maxTemp);
-		nbt.putInt("MinTemp", minTemp);
-		nbt.putInt("PlayerTemp", this.playerTemp);
-		return nbt;
+
+	
+	public static int getPlayerTemp() {
+		return playerTemp;
 	}
 
-	@Override
-	public void deserializeNBT(CompoundNBT nbt) {
-		this.maxTemp = nbt.getInt("MaxTemp");
-		this.minTemp = nbt.getInt("MinTemp");
-		this.playerTemp = nbt.getInt("PlayerTemp");
-		
+
+	public static void setPlayerTemp2(int playerTemp) {
+		PlayerTemperatureCapability.playerTemp = playerTemp;
 	}
+
+
 
 }

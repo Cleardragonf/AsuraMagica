@@ -27,9 +27,7 @@ public class ModBlocks {
 	
 	@ObjectHolder("asuramagica:mcmblock")
 	public static ContainerType<MCM_Container> MCMCONTAINER;
-	
-	@ObjectHolder("asuramagica:temp")
-	public static ContainerType<TemperatureContainer> TempContainer;
+
 	
 	@ObjectHolder("asuramagica:mcmblock")
 	public static TileEntityType<MCM_Tile> MCMTILE;

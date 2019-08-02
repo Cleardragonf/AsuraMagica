@@ -2,6 +2,7 @@ package me.asuramagica.tools.util;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
@@ -16,7 +17,11 @@ public class PlayerTemperatureStorage implements Capability.IStorage<IPlayerTemp
 
 	{
 
-		return null;
+		CompoundNBT nbt = new CompoundNBT();
+		nbt.putInt("maxtemp", PlayerTemperatureCapability.maxTemp);
+		nbt.putInt("mintemp", PlayerTemperatureCapability.minTemp);
+		nbt.putInt("playertemp", PlayerTemperatureCapability.getPlayerTemp());
+		return nbt;
 
 	}
 

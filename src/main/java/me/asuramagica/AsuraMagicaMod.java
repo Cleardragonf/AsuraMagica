@@ -20,6 +20,7 @@ import me.asuramagica.blocks.inventory.MCM_Container;
 import me.asuramagica.blocks.tileentities.MCM_Tile;
 import me.asuramagica.events.BlockBreakEvent;
 import me.asuramagica.gui.Temperature;
+import me.asuramagica.gui.TemperatureContainer;
 import me.asuramagica.items.ItemCustomAxe;
 import me.asuramagica.items.WardEnscriber;
 import me.asuramagica.items.Food.ItemCustomFood;
@@ -216,7 +217,7 @@ public class AsuraMagicaMod {
 				
 		        if(i == 60) {
 					
-					Temperature.temperatureSetings(player, world);
+					TemperatureContainer.setTemp(player, world);
 					i = 0;
 		         }else {
 		        	 i++;

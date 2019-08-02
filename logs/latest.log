@@ -1,2 +1,6 @@
-[28Jul2019 22:00:43.897] [Client thread/ERROR] [net.minecraft.client.resources.ResourceIndex/]: Can't find the resource index file: assets\indexes\1.14.json
-[28Jul2019 22:00:44.034] [Client thread/INFO] [net.minecraft.client.Minecraft/]: Setting user: Player821
+[01Aug2019 15:06:54.486] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--gameDir, ., --launchTarget, fmluserdevclient, --fml.mcpVersion, 20190624.152911, --fml.mcVersion, 1.14.3, --fml.forgeGroup, net.minecraftforge, --fml.forgeVersion, 27.0.13, --version, MOD_DEV, --assetIndex, 1.14, --assetsDir, C:\Users\chris\.gradle\caches\forge_gradle\assets, --username, Dev, --accessToken, ????????, --userProperties, {}]
+[01Aug2019 15:06:54.492] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher starting: java version 1.8.0_121 by Oracle Corporation
+[01Aug2019 15:06:54.817] [main/INFO] [net.minecraftforge.fml.loading.FixSSL/CORE]: Added Lets Encrypt root certificates as additional trust
+[01Aug2019 15:06:55.311] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'fmluserdevclient' with arguments [--version, MOD_DEV, --gameDir, ., --assetsDir, C:\Users\chris\.gradle\caches\forge_gradle\assets, --assetIndex, 1.14, --username, Dev, --accessToken, ????????, --userProperties, {}]
+[01Aug2019 15:06:57.400] [Client thread/INFO] [net.minecraft.client.Minecraft/]: Setting user: Dev
+[01Aug2019 15:06:57.796] [Client thread/INFO] [net.minecraftforge.fml.ModLoader/CORE]: Loading Network data for FML net version: FML2
