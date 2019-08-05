@@ -9,7 +9,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 
-@Mod.EventBusSubscriber(modid = AsuraMagicaMod.MODID, bus=Bus.FORGE)
+@Mod.EventBusSubscriber(value= {Dist.CLIENT}, modid = AsuraMagicaMod.MODID, bus=Bus.FORGE)
 public class MCMValueHandler {
 	
 	@SubscribeEvent

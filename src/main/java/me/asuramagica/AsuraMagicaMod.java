@@ -1,16 +1,7 @@
 package me.asuramagica;
 
-import java.lang.annotation.Annotation;
-
-import javax.xml.transform.Source;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.maven.artifact.repository.Authentication;
-
-import com.mojang.realmsclient.dto.PlayerInfo;
-
-import cpw.mods.modlauncher.serviceapi.ILaunchPluginService.Phase;
 import me.asuramagica.blocks.ModBlocks;
 import me.asuramagica.blocks.inventory.ManaStoneContainer;
 import me.asuramagica.blocks.Mana_Stone;
@@ -19,7 +10,6 @@ import me.asuramagica.blocks.MCM_Block;
 import me.asuramagica.blocks.inventory.MCM_Container;
 import me.asuramagica.blocks.tileentities.MCM_Tile;
 import me.asuramagica.events.BlockBreakEvent;
-import me.asuramagica.gui.Temperature;
 import me.asuramagica.gui.TemperatureContainer;
 import me.asuramagica.items.ItemCustomAxe;
 import me.asuramagica.items.WardEnscriber;
@@ -31,59 +21,33 @@ import me.asuramagica.lists.ToolMaterialList;
 import me.asuramagica.setup.ClientProxy;
 import me.asuramagica.setup.IProxy;
 import me.asuramagica.setup.ServerProxy;
-import me.asuramagica.tools.util.MCMValueCapability.MCMValueCapability;
-import me.asuramagica.tools.util.MCMValueCapability.MCMValueStorage;
-import me.asuramagica.tools.util.Temperature.IPlayerTemperatureCapability;
-import me.asuramagica.tools.util.Temperature.PlayerTemperatureCapability;
 import me.asuramagica.tools.util.Temperature.PlayerTemperatureProvider;
 import me.asuramagica.world.OreGeneration;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.RenderComponentsUtil;
-import net.minecraft.client.multiplayer.ServerData;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.RenderList;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.item.Items;
 import net.minecraft.item.SwordItem;
-import net.minecraft.profiler.FilledProfileResult;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.FOVUpdateEvent;
-import net.minecraftforge.client.event.GuiScreenEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.extensions.IForgeContainerType;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod("asuramagica")
 public class AsuraMagicaMod {
