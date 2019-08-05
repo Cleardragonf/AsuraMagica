@@ -1,8 +1,11 @@
 package me.asuramagica.tools.util;
 
 import me.asuramagica.AsuraMagicaMod;
+import me.asuramagica.tools.util.MCMValueCapability.MCMValueProvider;
+import me.asuramagica.tools.util.Temperature.PlayerTemperatureProvider;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -16,7 +19,7 @@ public class CapabilityEventHandler
 {
 
 	public static final ResourceLocation PlayerTemperature = new ResourceLocation(AsuraMagicaMod.MODID, "playertemperature");
-
+	public static final ResourceLocation MCMValue = new ResourceLocation(AsuraMagicaMod.MODID, "mcmvalue");
 	
 
 	@SubscribeEvent
@@ -37,4 +40,11 @@ public class CapabilityEventHandler
 
 	}
 
+	@SubscribeEvent
+	public static void onAttachCapabilitesToItems(AttachCapabilitiesEvent<Items>a) {
+		Items item = a.getObject();
+		if(item instanceof Items) {
+			a.addCapability(MCMValue, new MCMValueProvider());
+		}
+	}
 }

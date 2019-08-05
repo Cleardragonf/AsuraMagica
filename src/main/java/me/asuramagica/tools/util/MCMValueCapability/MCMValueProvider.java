@@ -1,4 +1,4 @@
-package me.asuramagica.tools.util;
+package me.asuramagica.tools.util.MCMValueCapability;
 
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
@@ -7,19 +7,19 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 
-public class PlayerTemperatureProvider implements ICapabilityProvider{
+public class MCMValueProvider implements ICapabilityProvider{
 
-	@CapabilityInject(IPlayerTemperatureCapability.class)
+	@CapabilityInject(IMCMValueCapability.class)
 
-	public static final Capability<IPlayerTemperatureCapability> PlayerTemperature = null;
+	public static final Capability<IMCMValueCapability> MCMValue = null;
 	
 	public static void registerCapability() {
-		CapabilityManager.INSTANCE.register(IPlayerTemperatureCapability.class, new PlayerTemperatureStorage(), PlayerTemperatureCapability::new);
+		CapabilityManager.INSTANCE.register(IMCMValueCapability.class, new MCMValueStorage(), MCMValueCapability::new);
 	}
 
 	
 
-	private IPlayerTemperatureCapability instance = PlayerTemperature.getDefaultInstance();
+	private IMCMValueCapability instance = MCMValue.getDefaultInstance();
 	
 
 	
@@ -32,7 +32,7 @@ public class PlayerTemperatureProvider implements ICapabilityProvider{
 
 		// TODO Auto-generated method stub
 
-		if (cap == PlayerTemperature)
+		if (cap == MCMValue)
 
 		{
 

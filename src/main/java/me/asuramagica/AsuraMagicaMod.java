@@ -31,9 +31,11 @@ import me.asuramagica.lists.ToolMaterialList;
 import me.asuramagica.setup.ClientProxy;
 import me.asuramagica.setup.IProxy;
 import me.asuramagica.setup.ServerProxy;
-import me.asuramagica.tools.util.IPlayerTemperatureCapability;
-import me.asuramagica.tools.util.PlayerTemperatureCapability;
-import me.asuramagica.tools.util.PlayerTemperatureProvider;
+import me.asuramagica.tools.util.MCMValueCapability.MCMValueCapability;
+import me.asuramagica.tools.util.MCMValueCapability.MCMValueStorage;
+import me.asuramagica.tools.util.Temperature.IPlayerTemperatureCapability;
+import me.asuramagica.tools.util.Temperature.PlayerTemperatureCapability;
+import me.asuramagica.tools.util.Temperature.PlayerTemperatureProvider;
 import me.asuramagica.world.OreGeneration;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -43,6 +45,7 @@ import net.minecraft.client.gui.RenderComponentsUtil;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderList;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -51,6 +54,7 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.Items;
 import net.minecraft.item.SwordItem;
 import net.minecraft.profiler.FilledProfileResult;
 import net.minecraft.server.MinecraftServer;
@@ -67,6 +71,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -78,6 +83,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod("asuramagica")
 public class AsuraMagicaMod {
@@ -93,6 +99,7 @@ public class AsuraMagicaMod {
 	}
 	
 	public static final ItemGroup ASURAMAGICA = new AsuraMagicaItemGroup();
+
 	
 	public AsuraMagicaMod(){
 		
@@ -201,7 +208,7 @@ public class AsuraMagicaMod {
 
 	
 	@SubscribeEvent
-	public void onbreak(BlockEvent.BreakEvent event) {
+ 	public void onbreak(BlockEvent.BreakEvent event) {
 		BlockBreakEvent trial = new BlockBreakEvent();
 		trial.onbreak(event.getState().getBlock(), event.getWorld().getWorld(), event.getPos(), event.getPlayer());
 	}

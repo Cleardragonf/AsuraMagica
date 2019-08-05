@@ -2,10 +2,10 @@ package me.asuramagica.gui;
 
 import me.asuramagica.AsuraMagicaMod;
 import me.asuramagica.tools.customGUI;
-import me.asuramagica.tools.util.IPlayerTemperatureCapability;
-import me.asuramagica.tools.util.PlayerTemperatureCapability;
-import me.asuramagica.tools.util.PlayerTemperatureProvider;
-import me.asuramagica.tools.util.PlayerTemperatureStorage;
+import me.asuramagica.tools.util.Temperature.IPlayerTemperatureCapability;
+import me.asuramagica.tools.util.Temperature.PlayerTemperatureCapability;
+import me.asuramagica.tools.util.Temperature.PlayerTemperatureProvider;
+import me.asuramagica.tools.util.Temperature.PlayerTemperatureStorage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IngameGui;
 import net.minecraft.entity.player.PlayerEntity;

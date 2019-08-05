@@ -1,4 +1,4 @@
-package me.asuramagica.tools.util;
+package me.asuramagica.tools.util.Temperature;
 
 import javax.annotation.Nullable;
 

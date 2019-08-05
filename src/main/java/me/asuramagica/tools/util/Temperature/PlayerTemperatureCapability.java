@@ -1,4 +1,4 @@
-package me.asuramagica.tools.util;
+package me.asuramagica.tools.util.Temperature;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
