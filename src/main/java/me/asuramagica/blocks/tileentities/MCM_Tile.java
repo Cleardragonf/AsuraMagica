@@ -106,21 +106,11 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 						if (block.getClass().equals(Mana_Stone.class)){
 							TileEntity test = world.getTileEntity(pooledMutableBlockPos);
 								Mana_StoneTile test2 = (Mana_StoneTile) test;
-								if(test2.waterEnergy.getEnergyStored() > 0 && test2.waterEnergy.getEnergyStored() < test2.waterEnergy.getMaxEnergyStored()) {
+								if(test2.waterEnergy.getEnergyStored() > 0 && this.waterEnergy.getEnergyStored() < 100000) {
 									test2.waterEnergy.consumeEnergy(50);
 									this.waterEnergy.addFireEssence(50);
-								}
-								
+								}		
 						}
-						/*
-						Mana_Stone test = (Mana_Stone) world.getTileEntity(pooledMutableBlockPos);
-						if (block.getClass().equals(Mana_Stone.class)) {
-							test.waterSource.ifPresent(h->{
-								
-							});
-							System.out.println(test.waterEnergy.getEnergyStored());
-						} 
-						*/
 					}
 				}
 

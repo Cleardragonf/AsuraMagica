@@ -45,6 +45,9 @@ public class MCM_Container extends Container{
 		//Machine Slots (Mana Insertions and their phyical locations)
 		tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h ->{
 			addSlot(new SlotItemHandler(h,0,8,19));
+			addSlot(new SlotItemHandler(h,0,56,19));
+			addSlot(new SlotItemHandler(h,0,104,19));
+			addSlot(new SlotItemHandler(h,0,152,19));
 		});
 		layoutPlayerInventorySlots(8, 140);
 		
@@ -62,10 +65,7 @@ public class MCM_Container extends Container{
 				return getEnergy();
 			}
 		});
-		if(tileEntity instanceof MCM_Tile) {
-			MCM_Tile a = (MCM_Tile) tileEntity;
-			//System.out.println(a.linkedPowerSource.toString());
-		}
+
 		
 		test = (MCM_Tile) tileEntity;
 	}
