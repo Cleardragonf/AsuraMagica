@@ -41,7 +41,7 @@ import me.asuramagica.tools.CustomEnergyStorage;
 public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedContainerProvider{
 
 	public final LazyOptional<IItemHandler> inventoryOptional = LazyOptional.of(() -> this.inventory).cast();
-	public final ItemStackHandler inventory = new ItemStackHandler(1) {
+	public final ItemStackHandler inventory = new ItemStackHandler(300) {
 		@Override
 		public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
 			if (stack.getItem() != ItemList.fire_mana_ore) {
@@ -116,10 +116,18 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 
 			}
 		}
-		System.out.println(this.waterEnergy.getEnergyStored());
+		//TODO Add a MCMValue Check using the Items Capability MCMValue...to then subract that from the mcm.storedEnergy()...
+		//TODO Lookinto combining the four elements into one...for mcm purposes...
+		if(!(this.getStackinSlot(0).isEmpty())) {
+			System.out.println("Testing");
+		}
 	}
 
-
+	
+	public ItemStack getStackinSlot(int index) {
+		return(ItemStack)this.inventory.getStackInSlot(index);
+	}
+	
 	@Override
 	public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
 		return new MCM_Container(i, world, pos, playerInventory, playerEntity);

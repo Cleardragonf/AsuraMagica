@@ -1,5 +1,6 @@
 package me.asuramagica.blocks.inventory;
 
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 
@@ -10,16 +11,19 @@ import me.asuramagica.lists.ItemList;
 import me.asuramagica.tools.CustomEnergyStorage;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
@@ -29,7 +33,6 @@ public class MCM_Container extends Container{
 	private TileEntity tileEntity;
 	private PlayerEntity playerEntity;
 	private IItemHandler playerInventory;
-	private MCM_Tile test;
 	
 	public MCM_Container(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player ) {
 		super(MCMCONTAINER, windowId);
@@ -39,17 +42,25 @@ public class MCM_Container extends Container{
 		
 		
 		tileEntity = world.getTileEntity(pos);
-		
+		MCM_Tile test = (MCM_Tile) tileEntity;
 		this.playerEntity = player;
 		this.playerInventory = new InvWrapper(playerInventory);
 		//Machine Slots (Mana Insertions and their phyical locations)
-		tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h ->{
-			addSlot(new SlotItemHandler(h,0,8,19));
-			addSlot(new SlotItemHandler(h,0,56,19));
-			addSlot(new SlotItemHandler(h,0,104,19));
-			addSlot(new SlotItemHandler(h,0,152,19));
-		});
-		layoutPlayerInventorySlots(8, 140);
+			addSlot(new SlotItemHandler(test.inventory,0,8,19));
+			addSlot(new SlotItemHandler(test.inventory,1,56,19));
+			//addSlot(new SlotItemHandler(h,1,56,19));
+			addSlot(new SlotItemHandler(test.inventory,2,104,19));
+			addSlot(new SlotItemHandler(test.inventory,3,152,19));
+
+			//addSlotBox(test.inventory, 4, 8, 140, 9, 18, 4, 18);
+			addSlotBox(test.inventory, 4,8,86,9,18,1,18);
+			addSlotBox(test.inventory, 13,8,104,9,18,1,18);
+			addSlotBox(test.inventory, 22,8,122,9,18,1,18);
+			addSlotBox(test.inventory, 31,8,140,9,18,1,18);
+			addSlotBox(test.inventory, 40,8,158,9,18,1,18);
+			addSlotBox(test.inventory, 49,8,176,9,18,1,18);
+			
+			layoutPlayerInventorySlots(8, 140);
 		
 		//energy storage
 		func_216958_a(new IntReferenceHolder() {
@@ -68,6 +79,10 @@ public class MCM_Container extends Container{
 
 		
 		test = (MCM_Tile) tileEntity;
+	}
+	
+	public Item getItemA() {
+		return this.inventorySlots.get(0).inventory.getStackInSlot(0).getItem();
 	}
 	
 	private void func_216958_a(IntReferenceHolder intReferenceHolder) {}
@@ -121,7 +136,7 @@ public class MCM_Container extends Container{
 	
 	private void layoutPlayerInventorySlots(int leftCol, int topRow) {
 		//player inventory
-		addSlotBox(playerInventory, 9, leftCol, topRow, 9, 18, 3, 18);
+		//addSlotBox(playerInventory, 9, leftCol, topRow, 9, 18, 3, 18);
 		
 		//player hotbar
 		topRow = 198;
