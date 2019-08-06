@@ -59,7 +59,7 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 			Mana_StoneTile.this.markDirty();
 		}
 	};	
-	public final IEnergyStorage waterEnergy = new CustomEnergyStorage(100000, 0);
+	public final CustomEnergyStorage waterEnergy = new CustomEnergyStorage(100000, 0);
 	public final IEnergyStorage fireEnergy = new CustomEnergyStorage(100000, 0); 	
 	public final IEnergyStorage earthEnergy = new CustomEnergyStorage(100000, 0); 	
 	public final IEnergyStorage windEnergy = new CustomEnergyStorage(100000, 0); 	

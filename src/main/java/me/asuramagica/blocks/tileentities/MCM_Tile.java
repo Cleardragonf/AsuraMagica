@@ -60,7 +60,7 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 			MCM_Tile.this.markDirty();
 		}
 	};	
-	public final IEnergyStorage waterEnergy = new CustomEnergyStorage(100000, 0);
+	public final CustomEnergyStorage waterEnergy = new CustomEnergyStorage(100000, 0);
 	public final IEnergyStorage fireEnergy = new CustomEnergyStorage(100000, 0); 	
 	public final IEnergyStorage earthEnergy = new CustomEnergyStorage(100000, 0); 	
 	public final IEnergyStorage windEnergy = new CustomEnergyStorage(100000, 0); 	
@@ -103,6 +103,15 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 						final BlockState blockState = world.getBlockState(pooledMutableBlockPos);
 						//final IFluidState fluidState = world.getFluidState(pooledMutableBlockPos);
 						final Block block = blockState.getBlock();
+						if (block.getClass().equals(Mana_Stone.class)){
+							TileEntity test = world.getTileEntity(pooledMutableBlockPos);
+								Mana_StoneTile test2 = (Mana_StoneTile) test;
+								if(test2.waterEnergy.getEnergyStored() > 0 && test2.waterEnergy.getEnergyStored() < test2.waterEnergy.getMaxEnergyStored()) {
+									test2.waterEnergy.consumeEnergy(50);
+									this.waterEnergy.addFireEssence(50);
+								}
+								
+						}
 						/*
 						Mana_Stone test = (Mana_Stone) world.getTileEntity(pooledMutableBlockPos);
 						if (block.getClass().equals(Mana_Stone.class)) {
@@ -117,6 +126,7 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 
 			}
 		}
+		System.out.println(this.waterEnergy.getEnergyStored());
 	}
 
 

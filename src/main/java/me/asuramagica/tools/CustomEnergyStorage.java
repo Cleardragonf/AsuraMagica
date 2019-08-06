@@ -17,7 +17,14 @@ public class CustomEnergyStorage extends EnergyStorage  implements INBTSerializa
     }
     
 	public void setEnergy(int energy) {
-		this.energy = energy;
+		if(this.energy >= 0 && this.energy <= this.capacity) {
+			this.energy = energy;
+		}else if(this.energy < 0) {
+			this.energy = 0;
+		}else if(this.energy > this.capacity) {
+			this.energy = this.capacity;
+		}
+		
 	}
 	
 	public void addFireEssence(int energy) {
