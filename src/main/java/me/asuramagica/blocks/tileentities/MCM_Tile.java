@@ -14,15 +14,23 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import static me.asuramagica.blocks.ModBlocks.MCMTILE;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import me.asuramagica.blocks.Mana_Stone;
 import me.asuramagica.blocks.inventory.MCM_Container;
@@ -32,6 +40,7 @@ import me.asuramagica.tools.CustomEnergyStorage;
 
 public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedContainerProvider{
 
+	public final LazyOptional<IItemHandler> inventoryOptional = LazyOptional.of(() -> this.inventory).cast();
 	public final ItemStackHandler inventory = new ItemStackHandler(1) {
 		@Override
 		public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
@@ -94,13 +103,15 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 						final BlockState blockState = world.getBlockState(pooledMutableBlockPos);
 						//final IFluidState fluidState = world.getFluidState(pooledMutableBlockPos);
 						final Block block = blockState.getBlock();
-						Mana_StoneTile test = (Mana_StoneTile) world.getTileEntity(pooledMutableBlockPos);
+						/*
+						Mana_Stone test = (Mana_Stone) world.getTileEntity(pooledMutableBlockPos);
 						if (block.getClass().equals(Mana_Stone.class)) {
 							test.waterSource.ifPresent(h->{
 								
 							});
 							System.out.println(test.waterEnergy.getEnergyStored());
 						} 
+						*/
 					}
 				}
 
@@ -119,7 +130,16 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 		return new StringTextComponent(getType().getRegistryName().getPath());
 	}
 
+	@Nonnull
+	@Override
+	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
 
+
+		if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+			return inventoryOptional.cast();
+		}
+		return super.getCapability(cap, side);
+	}
 	
 	
 }

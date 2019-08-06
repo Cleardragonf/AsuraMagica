@@ -44,7 +44,7 @@ public class MCM_Container extends Container{
 		this.playerInventory = new InvWrapper(playerInventory);
 		//Machine Slots (Mana Insertions and their phyical locations)
 		tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h ->{
-			addSlot(new SlotItemHandler(h,0,65, 57));
+			addSlot(new SlotItemHandler(h,0,8,19));
 		});
 		layoutPlayerInventorySlots(8, 140);
 		
