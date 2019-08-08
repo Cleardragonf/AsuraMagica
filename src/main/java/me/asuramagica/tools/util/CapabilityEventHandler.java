@@ -5,6 +5,8 @@ import me.asuramagica.tools.util.MCMValueCapability.MCMValueProvider;
 import me.asuramagica.tools.util.Temperature.PlayerTemperatureProvider;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -41,10 +43,11 @@ public class CapabilityEventHandler
 	}
 
 	@SubscribeEvent
-	public static void onAttachCapabilitesToItems(AttachCapabilitiesEvent<Items>a) {
-		Items item = a.getObject();
-		if(item instanceof Items) {
+	public static void onAttachCapabilitesToItems(AttachCapabilitiesEvent<ItemStack>a) {
+		ItemStack item = a.getObject();
+		if(item instanceof ItemStack) {
 			a.addCapability(MCMValue, new MCMValueProvider());
+			//a.addCapability(MCMValue, new MCMValueProvider());
 		}
 	}
 }

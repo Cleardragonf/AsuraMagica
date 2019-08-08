@@ -37,14 +37,17 @@ import me.asuramagica.blocks.inventory.MCM_Container;
 import me.asuramagica.lists.BlockList;
 import me.asuramagica.lists.ItemList;
 import me.asuramagica.tools.CustomEnergyStorage;
+import me.asuramagica.tools.util.MCMValueCapability.MCMValueCapability;
+import me.asuramagica.tools.util.MCMValueCapability.MCMValueProvider;
 
 public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedContainerProvider{
 
 	public final LazyOptional<IItemHandler> inventoryOptional = LazyOptional.of(() -> this.inventory).cast();
 	public final ItemStackHandler inventory = new ItemStackHandler(300) {
+
 		@Override
 		public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-			if (stack.getItem() != ItemList.fire_mana_ore) {
+			if (stack.getItem() == null) {
 				return stack;
 			}
 			return super.insertItem(slot, stack, simulate);
@@ -52,7 +55,7 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 
 		@Override
 		public boolean isItemValid(int slot, ItemStack stack) {
-			return stack.getItem() == ItemList.fire_mana_ore;
+			return stack.getItem() != null;
 		}
 
 		@Override
@@ -119,11 +122,32 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 		//TODO Add a MCMValue Check using the Items Capability MCMValue...to then subract that from the mcm.storedEnergy()...
 		//TODO Lookinto combining the four elements into one...for mcm purposes...
 		if(!(this.getStackinSlot(0).isEmpty())) {
-			System.out.println("Testing");
+			asdf(0);
+		}
+		if(!(this.getStackinSlot(1).isEmpty())){
+			asdf(1);
+		}
+		if(!(this.getStackinSlot(2).isEmpty())) {
+			asdf(2);
+		}
+		if(!(this.getStackinSlot(3).isEmpty())) {
+			asdf(3);
 		}
 	}
-
-	
+	public void asdf(int slotNumber) {
+		ItemStack Goal = this.getStackinSlot(slotNumber).getStack();
+		this.getStackinSlot(slotNumber).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(h ->{
+			
+			if(this.inventory.getStackInSlot(4).isEmpty()) {
+				this.inventory.insertItem(4, Goal, false);	
+			}else if(this.inventory.getStackInSlot(4).equals("fire_mana_ore") || (this.inventory.getStackInSlot(4).getStack().getCount() < this.inventory.getSlotLimit(4))) {
+				this.inventory.insertItem(4, Goal, false);
+			}else {
+				this.inventory.insertItem(5, Goal, false);
+			}
+		});
+	}
+		
 	public ItemStack getStackinSlot(int index) {
 		return(ItemStack)this.inventory.getStackInSlot(index);
 	}

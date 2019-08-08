@@ -10,7 +10,7 @@ import net.minecraftforge.common.util.LazyOptional;
 
 public class MCMValueCapability implements IMCMValueCapability{
 
-	private static int mcmValue = 0;
+	private static int mcmValue = 10000;
 
 	static int minValue= 0;
 	
@@ -39,7 +39,7 @@ public class MCMValueCapability implements IMCMValueCapability{
 	}
 
 
-	public static void setPlayerTemp2(int mcmValue) {
+	public void setPlayerTemp2(int mcmValue) {
 		MCMValueCapability.mcmValue = mcmValue;
 	}
 

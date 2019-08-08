@@ -21,6 +21,7 @@ import me.asuramagica.lists.ToolMaterialList;
 import me.asuramagica.setup.ClientProxy;
 import me.asuramagica.setup.IProxy;
 import me.asuramagica.setup.ServerProxy;
+import me.asuramagica.tools.util.MCMValueCapability.MCMValueProvider;
 import me.asuramagica.tools.util.Temperature.PlayerTemperatureProvider;
 import me.asuramagica.world.OreGeneration;
 import net.minecraft.block.Block;
@@ -80,6 +81,7 @@ public class AsuraMagicaMod {
 		LOGGER.info("Setup is working");
 		OreGeneration.setupOreGeneration();		
 		PlayerTemperatureProvider.registerCapability();
+		MCMValueProvider.registerCapability();
 	}
 	private void clientRegistries(final FMLClientSetupEvent event){
 		LOGGER.info("Client is running");

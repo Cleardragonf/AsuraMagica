@@ -2,6 +2,7 @@ package me.asuramagica.setup;
 
 import me.asuramagica.AsuraMagicaMod;
 import me.asuramagica.tools.util.MCMValueCapability.MCMValueCapability;
+import me.asuramagica.tools.util.MCMValueCapability.MCMValueProvider;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -11,12 +12,19 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 
 @Mod.EventBusSubscriber(value= {Dist.CLIENT}, modid = AsuraMagicaMod.MODID, bus=Bus.FORGE)
 public class MCMValueHandler {
-	
+	public final static MCMValueCapability fireEnergy = new MCMValueCapability(); 
 	@SubscribeEvent
 	public static void toolTip(ItemTooltipEvent event) {
-		int test = MCMValueCapability.getMCMValue();
-		String testA = "MCMValue: " + test;
-		event.getToolTip().add(new StringTextComponent(testA));
+		
+		event.getItemStack().getCapability(MCMValueProvider.MCMValue).ifPresent(h ->{
+			System.out.println(event.getItemStack().getItem().toString());
+			//even.getItemStack().getItem().toString()...brings out the "fire_mana_ore"....
+			((MCMValueCapability)fireEnergy).setPlayerTemp2(200);
+			String testA = "MCMValue: " + h.mcmValue();
+			event.getToolTip().add(new StringTextComponent(testA));
+		});
+		//int test = MCMValueCapability.getMCMValue();
+
 	}
 
 }
