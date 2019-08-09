@@ -17,13 +17,11 @@ public class MCMValueHandler {
 	public static void toolTip(ItemTooltipEvent event) {
 		
 		event.getItemStack().getCapability(MCMValueProvider.MCMValue).ifPresent(h ->{
-			System.out.println(event.getItemStack().getItem().toString());
 			//even.getItemStack().getItem().toString()...brings out the "fire_mana_ore"....
 			((MCMValueCapability)fireEnergy).setPlayerTemp2(200);
 			String testA = "MCMValue: " + h.mcmValue();
 			event.getToolTip().add(new StringTextComponent(testA));
 		});
-		//int test = MCMValueCapability.getMCMValue();
 
 	}
 

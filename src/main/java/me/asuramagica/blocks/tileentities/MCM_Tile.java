@@ -3,6 +3,7 @@ package me.asuramagica.blocks.tileentities;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import me.asuramagica.blocks.tileentities.Mana_StoneTile;
+import me.asuramagica.gui.TemperatureContainer;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FireBlock;
 import net.minecraft.entity.player.PlayerEntity;
@@ -10,7 +11,9 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -32,6 +35,8 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import afu.org.checkerframework.checker.javari.qual.ThisMutable;
+import afu.org.checkerframework.checker.regex.qual.Var;
 import me.asuramagica.blocks.Mana_Stone;
 import me.asuramagica.blocks.inventory.MCM_Container;
 import me.asuramagica.lists.BlockList;
@@ -72,7 +77,7 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 	public MCM_Tile() {
 		super(MCMTILE);
 	}
-
+	public int tick = 0;
     
 	public List<Block> testing = new LinkedList<>();
 	/*
@@ -121,33 +126,52 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 		}
 		//TODO Add a MCMValue Check using the Items Capability MCMValue...to then subract that from the mcm.storedEnergy()...
 		//TODO Lookinto combining the four elements into one...for mcm purposes...
-		if(!(this.getStackinSlot(0).isEmpty())) {
-			asdf(0);
-		}
-		if(!(this.getStackinSlot(1).isEmpty())){
-			asdf(1);
-		}
-		if(!(this.getStackinSlot(2).isEmpty())) {
-			asdf(2);
-		}
-		if(!(this.getStackinSlot(3).isEmpty())) {
-			asdf(3);
-		}
+        if(tick == 20) {
+    		if(!(this.getStackinSlot(0).isEmpty())) {
+    			asdf(0);
+    		}
+    		if(!(this.getStackinSlot(1).isEmpty())){
+    			asdf(1);
+    		}
+    		if(!(this.getStackinSlot(2).isEmpty())) {
+    			asdf(2);
+    		}
+    		if(!(this.getStackinSlot(3).isEmpty())) {
+    			asdf(3);
+    		}
+    		tick = 0;
+         }
+        tick++;
+
 	}
 	public void asdf(int slotNumber) {
-		ItemStack Goal = this.getStackinSlot(slotNumber).getStack();
-		this.getStackinSlot(slotNumber).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(h ->{
-			
-			if(this.inventory.getStackInSlot(4).isEmpty()) {
-				this.inventory.insertItem(4, Goal, false);	
-			}else if(this.inventory.getStackInSlot(4).equals("fire_mana_ore") || (this.inventory.getStackInSlot(4).getStack().getCount() < this.inventory.getSlotLimit(4))) {
-				this.inventory.insertItem(4, Goal, false);
-			}else {
-				this.inventory.insertItem(5, Goal, false);
-			}
-		});
-	}
 		
+        
+        ItemStack Goal = this.getStackinSlot(slotNumber).getStack();
+        ItemStack stack = new ItemStack(inventory.getStackInSlot(slotNumber).getStack().getItem());
+        Item mcmValueItem = stack.getItem();
+        
+        this.getStackinSlot(slotNumber).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(h ->{
+
+            for(int i = 4; i< 58;i++) {
+
+                if(this.inventory.getStackInSlot(i).isEmpty()) {
+                	stack.setCount(this.inventory.getStackInSlot(i).getCount() + 1);
+                    inventory.setStackInSlot(i, stack);
+                    break;
+                }else {
+                	if(this.inventory.getStackInSlot(i).getStack().getItem().equals(mcmValueItem)) {
+                    	stack.setCount(this.inventory.getStackInSlot(i).getCount() + 1);
+                    	inventory.setStackInSlot(i, stack);
+                    	break;
+                	}
+
+                }
+            }
+        });
+    }
+		
+	
 	public ItemStack getStackinSlot(int index) {
 		return(ItemStack)this.inventory.getStackInSlot(index);
 	}
