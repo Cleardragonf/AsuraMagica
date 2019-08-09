@@ -33,6 +33,7 @@ public class MCM_Screen extends ContainerScreen<MCM_Container>{
 		int relX = (this.width - this.xSize) /2;
 		int relY = (this.height - this.ySize) /2;
 		this.blit(relX, relY, 0,0,256,256);
+		
 	}
 
 	@Override
@@ -46,7 +47,26 @@ public class MCM_Screen extends ContainerScreen<MCM_Container>{
 		
 	}
 	
+	@Override
+	public boolean mouseClicked(double x, double y, int mouseButton) {
+		int relX = (this.width - this.xSize) /2;
+		int relY = (this.height - this.ySize) /2;
+		
+		if(trueZone(relX + 3, relY + 43, 26,42,x,y)) {
+			System.out.println("Trying To Change SlotA");
+		}
+		//TODO Once SlotA is done...replicate the above for SlotsB,C and D
+		return super.mouseClicked(x, y, mouseButton);
+	}
 
+	private boolean trueZone(int OffsX, int OffsY, int Width, int Height, double MouseX, double MouseY) {
+		if(OffsX <= MouseX && MouseX <= OffsX + Width && OffsY <= MouseY && MouseY <= OffsY + Height ){
+			return true;
+		}
+		else{
+			return false;	
+		}
+	}
 
 	protected double getEnergyPercentage1() {
 
