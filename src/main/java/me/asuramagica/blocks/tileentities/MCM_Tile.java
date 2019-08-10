@@ -76,6 +76,9 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 	public final CustomEnergyStorage earthEnergy = new CustomEnergyStorage(100000, 0); 	
 	public final CustomEnergyStorage windEnergy = new CustomEnergyStorage(100000, 0); 
 	public int slotAType = 0;
+	public int slotBType = 0;
+	public int slotCType = 0;
+	public int slotDType = 0;
 	
     
 	public MCM_Tile() {
@@ -116,14 +119,32 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 						final BlockState blockState = world.getBlockState(pooledMutableBlockPos);
 						//final IFluidState fluidState = world.getFluidState(pooledMutableBlockPos);
 						final Block block = blockState.getBlock();
+						TileEntity test = world.getTileEntity(pooledMutableBlockPos);
+
 						if (block.getClass().equals(Mana_Stone.class)){
-							TileEntity test = world.getTileEntity(pooledMutableBlockPos);
-								Mana_StoneTile test2 = (Mana_StoneTile) test;
-								if(test2.waterEnergy.getEnergyStored() > 0 && this.waterEnergy.getEnergyStored() < 100000) {
-									test2.waterEnergy.consumeEnergy(50);
-									this.waterEnergy.addFireEssence(50);
-								}		
+							Mana_StoneTile test2 = (Mana_StoneTile) test;
+							if(test2.earthEnergy.getEnergyStored() > 0 && this.earthEnergy.getEnergyStored() < 100000) {
+								test2.earthEnergy.consumeEnergy(50);
+								this.earthEnergy.addFireEssence(50);
+							}
+							if(test2.fireEnergy.getEnergyStored() > 0 && this.fireEnergy.getEnergyStored() < 100000) {
+								test2.fireEnergy.consumeEnergy(50);
+								this.fireEnergy.addFireEssence(50);
+							}
+							if(test2.waterEnergy.getEnergyStored() > 0 && this.waterEnergy.getEnergyStored() < 100000) {
+								test2.waterEnergy.consumeEnergy(50);
+								this.waterEnergy.addFireEssence(50);
+							}
+							if(test2.windEnergy.getEnergyStored() > 0 && this.windEnergy.getEnergyStored() < 100000) {
+								test2.windEnergy.consumeEnergy(50);
+								this.windEnergy.addFireEssence(50);
+							}
+							
 						}
+						else {
+							
+						}
+						
 					}
 				}
 
@@ -132,6 +153,7 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 		//TODO Add a MCMValue Check using the Items Capability MCMValue...to then subract that from the mcm.storedEnergy()...
 		//TODO Lookinto combining the four elements into one...for mcm purposes...
         if(tick == 20) {
+        	System.out.println(this.earthEnergy.getEnergyStored() + " " + this.fireEnergy.getEnergyStored() + " " + this.waterEnergy.getEnergyStored() + " " + this.windEnergy.getEnergyStored());
     		if(!(this.getStackinSlot(0).isEmpty())) {
     			convertMatterIntoItem(0);
     		}
@@ -155,47 +177,171 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
         ItemStack Goal = this.getStackinSlot(slotNumber).getStack();
         ItemStack stack = new ItemStack(inventory.getStackInSlot(slotNumber).getStack().getItem());
         Item mcmValueItem = stack.getItem();
+        if(slotNumber == 0) {
+        	this.getStackinSlot(slotNumber).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(h ->{
+            	CustomEnergyStorage energyType;
+            	switch (slotAType) {
+    				case 0:
+    					energyType= this.earthEnergy;
+    					break;
+    				case 1:
+    					energyType= this.fireEnergy;
+    					break;
+    				case 2:
+    					energyType= this.waterEnergy;
+    					break;
+    				case 3:
+    					energyType= this.windEnergy;
+    					break;
+    	
+    				default:
+    					energyType= this.earthEnergy;
+    					break;
+    			}
+    			if(h.mcmValue() <= energyType.getEnergyStored()) {
+    				for(int i = 4; i< 58;i++) {
+
+    	                if(this.inventory.getStackInSlot(i).isEmpty()) {
+    	                	stack.setCount(this.inventory.getStackInSlot(i).getCount() + 1);
+    	                    inventory.setStackInSlot(i, stack);
+    	                    break;
+    	                }else {
+    	                	if(this.inventory.getStackInSlot(i).getStack().getItem().equals(mcmValueItem)) {
+    	                    	stack.setCount(this.inventory.getStackInSlot(i).getCount() + 1);
+    	                    	inventory.setStackInSlot(i, stack);
+    	                    	break;
+    	                	}
+
+    	                }
+    	            }
+            	}
+    			energyType.consumeEnergy(h.mcmValue());
+            });
+        }
+        else if(slotNumber == 1) {
+        	this.getStackinSlot(slotNumber).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(h ->{
+            	CustomEnergyStorage energyType;
+            	switch (slotBType) {
+    				case 0:
+    					energyType= this.earthEnergy;
+    					break;
+    				case 1:
+    					energyType= this.fireEnergy;
+    					break;
+    				case 2:
+    					energyType= this.waterEnergy;
+    					break;
+    				case 3:
+    					energyType= this.windEnergy;
+    					break;
+    	
+    				default:
+    					energyType= this.earthEnergy;
+    					break;
+    			}
+    			if(h.mcmValue() <= energyType.getEnergyStored()) {
+    				for(int i = 4; i< 58;i++) {
+
+    	                if(this.inventory.getStackInSlot(i).isEmpty()) {
+    	                	stack.setCount(this.inventory.getStackInSlot(i).getCount() + 1);
+    	                    inventory.setStackInSlot(i, stack);
+    	                    break;
+    	                }else {
+    	                	if(this.inventory.getStackInSlot(i).getStack().getItem().equals(mcmValueItem)) {
+    	                    	stack.setCount(this.inventory.getStackInSlot(i).getCount() + 1);
+    	                    	inventory.setStackInSlot(i, stack);
+    	                    	break;
+    	                	}
+
+    	                }
+    	            }
+            	}
+    			energyType.consumeEnergy(h.mcmValue());
+            });
+        }
+        if(slotNumber == 2) {
+        	this.getStackinSlot(slotNumber).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(h ->{
+            	CustomEnergyStorage energyType;
+            	switch (slotCType) {
+    				case 0:
+    					energyType= this.earthEnergy;
+    					break;
+    				case 1:
+    					energyType= this.fireEnergy;
+    					break;
+    				case 2:
+    					energyType= this.waterEnergy;
+    					break;
+    				case 3:
+    					energyType= this.windEnergy;
+    					break;
+    	
+    				default:
+    					energyType= this.earthEnergy;
+    					break;
+    			}
+    			if(h.mcmValue() <= energyType.getEnergyStored()) {
+    				for(int i = 4; i< 58;i++) {
+
+    	                if(this.inventory.getStackInSlot(i).isEmpty()) {
+    	                	stack.setCount(this.inventory.getStackInSlot(i).getCount() + 1);
+    	                    inventory.setStackInSlot(i, stack);
+    	                    break;
+    	                }else {
+    	                	if(this.inventory.getStackInSlot(i).getStack().getItem().equals(mcmValueItem)) {
+    	                    	stack.setCount(this.inventory.getStackInSlot(i).getCount() + 1);
+    	                    	inventory.setStackInSlot(i, stack);
+    	                    	break;
+    	                	}
+
+    	                }
+    	            }
+            	}
+    			energyType.consumeEnergy(h.mcmValue());
+            });
+        }
+        if(slotNumber == 3) {
+        	this.getStackinSlot(slotNumber).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(h ->{
+            	CustomEnergyStorage energyType;
+            	switch (slotDType) {
+    				case 0:
+    					energyType= this.earthEnergy;
+    					break;
+    				case 1:
+    					energyType= this.fireEnergy;
+    					break;
+    				case 2:
+    					energyType= this.waterEnergy;
+    					break;
+    				case 3:
+    					energyType= this.windEnergy;
+    					break;
+    	
+    				default:
+    					energyType= this.earthEnergy;
+    					break;
+    			}
+    			if(h.mcmValue() <= energyType.getEnergyStored()) {
+    				for(int i = 4; i< 58;i++) {
+
+    	                if(this.inventory.getStackInSlot(i).isEmpty()) {
+    	                	stack.setCount(this.inventory.getStackInSlot(i).getCount() + 1);
+    	                    inventory.setStackInSlot(i, stack);
+    	                    break;
+    	                }else {
+    	                	if(this.inventory.getStackInSlot(i).getStack().getItem().equals(mcmValueItem)) {
+    	                    	stack.setCount(this.inventory.getStackInSlot(i).getCount() + 1);
+    	                    	inventory.setStackInSlot(i, stack);
+    	                    	break;
+    	                	}
+
+    	                }
+    	            }
+            	}
+    			energyType.consumeEnergy(h.mcmValue());
+            });
+        }
         
-        this.getStackinSlot(slotNumber).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(h ->{
-        	CustomEnergyStorage energyType;
-        	switch (slotAType) {
-				case 0:
-					energyType= this.earthEnergy;
-					break;
-				case 1:
-					energyType= this.fireEnergy;
-					break;
-				case 2:
-					energyType= this.waterEnergy;
-					break;
-				case 3:
-					energyType= this.windEnergy;
-					break;
-	
-				default:
-					energyType= this.earthEnergy;
-					break;
-			}
-        	
-			if(h.mcmValue() <= energyType.getEnergyStored()) {
-				for(int i = 4; i< 58;i++) {
-
-	                if(this.inventory.getStackInSlot(i).isEmpty()) {
-	                	stack.setCount(this.inventory.getStackInSlot(i).getCount() + 1);
-	                    inventory.setStackInSlot(i, stack);
-	                    break;
-	                }else {
-	                	if(this.inventory.getStackInSlot(i).getStack().getItem().equals(mcmValueItem)) {
-	                    	stack.setCount(this.inventory.getStackInSlot(i).getCount() + 1);
-	                    	inventory.setStackInSlot(i, stack);
-	                    	break;
-	                	}
-
-	                }
-	            }
-        	}
-			energyType.consumeEnergy(h.mcmValue());
-        });
     }
 		
 	

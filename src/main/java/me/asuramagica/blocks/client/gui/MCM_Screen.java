@@ -1,6 +1,11 @@
 package me.asuramagica.blocks.client.gui;
 
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import me.asuramagica.AsuraMagicaMod;
@@ -8,6 +13,9 @@ import me.asuramagica.blocks.inventory.MCM_Container;
 import me.asuramagica.blocks.tileentities.MCM_Tile;
 import me.asuramagica.tools.util.EnergyTypePacket;
 import me.asuramagica.tools.util.EnergyTypePacketHandler;
+import me.asuramagica.tools.util.Packets.MCM.EnergyTypePacketB;
+import me.asuramagica.tools.util.Packets.MCM.EnergyTypePacketC;
+import me.asuramagica.tools.util.Packets.MCM.EnergyTypePacketD;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
@@ -18,7 +26,11 @@ import net.minecraft.world.dimension.DimensionType;
 
 
 public class MCM_Screen extends ContainerScreen<MCM_Container>{
-	private int slotA = 0;
+	private int slotA;
+	private int slotB;
+	private int slotC;
+	private int slotD;
+	
 	BlockPos postest;
 	private ResourceLocation GUI = new ResourceLocation(AsuraMagicaMod.MODID, "textures/gui/mcmgui.png");
 	private ResourceLocation MCMEarthType = new ResourceLocation(AsuraMagicaMod.MODID, "textures/gui/mcmearthtype.png");
@@ -39,21 +51,53 @@ public class MCM_Screen extends ContainerScreen<MCM_Container>{
 	
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+		MCM_Tile tileEntity = (MCM_Tile) container.tileEntity;
+		this.slotA = tileEntity.slotAType;
+		this.slotB = tileEntity.slotBType;
+		this.slotC = tileEntity.slotCType;
+		this.slotD = tileEntity.slotDType;
 		this.font.drawString("Matter Conversion Block", 8.0f, 6.0F, 4210752);
 		//this.font.drawString("Int: " + container.getLinked().toString(), 15.0f, 15.0F, 4210752);
-		if(this.slotA == 0) {
-			this.font.drawString("::Earth::", 6,36,4210752);
-		}else if(this.slotA == 1) {
-			this.font.drawString("::Fire::", 6,36,4210752);
-		}else if(this.slotA == 2) {
-			this.font.drawString("::Water::", 6,36,4210752);
-		}else if(this.slotA == 3) {
-			this.font.drawString("::Wind::", 6,36,4210752);
-		}
+
 		int relX = (this.width - this.xSize) /2;
 		int relY = (this.height - this.ySize) /2;
 		this.blit(relX, relY, 0,0,256,256);
-		
+		if(this.slotA == 0) {
+			this.font.drawString("::Earth::", 3,36,4210752);
+		}else if(this.slotA == 1) {
+			this.font.drawString("::Fire::",3,36,4210752);
+		}else if(this.slotA == 2) {
+			this.font.drawString("::Water::", 3,36,4210752);
+		}else if(this.slotA == 3) {
+			this.font.drawString("::Wind::", 3,36,4210752);
+		}
+		if(this.slotB == 0) {
+			this.font.drawString("::Earth::", 55,36,4210752);
+		}else if(this.slotB == 1) {
+			this.font.drawString("::Fire::", 55,36,4210752);
+		}else if(this.slotB == 2) {
+			this.font.drawString("::Water::", 55,36,4210752);
+		}else if(this.slotB == 3) {
+			this.font.drawString("::Wind::", 55,36,4210752);
+		}
+		if(this.slotC == 0) {
+			this.font.drawString("::Earth::", 103,36,4210752);
+		}else if(this.slotC == 1) {
+			this.font.drawString("::Fire::", 103,36,4210752);
+		}else if(this.slotC == 2) {
+			this.font.drawString("::Water::", 103,36,4210752);
+		}else if(this.slotC == 3) {
+			this.font.drawString("::Wind::", 103,36,4210752);
+		}
+		if(this.slotD == 0) {
+			this.font.drawString("::Earth::",151,36,4210752);
+		}else if(this.slotD == 1) {
+			this.font.drawString("::Fire::", 151,36,4210752);
+		}else if(this.slotD == 2) {
+			this.font.drawString("::Water::", 151,36,4210752);
+		}else if(this.slotD == 3) {
+			this.font.drawString("::Wind::", 151,36,4210752);
+		}
 	}
 
 	@Override
@@ -71,15 +115,33 @@ public class MCM_Screen extends ContainerScreen<MCM_Container>{
 	public boolean mouseClicked(double x, double y, int mouseButton) {
 		int relX = (this.width - this.xSize) /2;
 		int relY = (this.height - this.ySize) /2;
-		if(trueZone(relX + 3, relY + 43, 26,42,x,y)) {
-			
-			cycleThroug(mouseButton);
-			
+		if(trueZone(relX + 3, relY + 42, 26,42,x,y)) {
+			cycleThroug(mouseButton, 0);
 			BlockPos pos = this.container.pos;
 			EnergyTypePacketHandler.CHANNEL.sendToServer(new EnergyTypePacket(pos, DimensionType.OVERWORLD, slotA));
 			MCM_Tile tileEntity = (MCM_Tile) container.tileEntity;
 			tileEntity.slotAType = slotA;
-			
+		}
+		else if(trueZone(relX + 51, relY + 42, 26,42,x,y)) {
+			cycleThroug(mouseButton, 1);
+			BlockPos pos = this.container.pos;
+			EnergyTypePacketHandler.CHANNEL.sendToServer(new EnergyTypePacketB(pos, DimensionType.OVERWORLD, slotB));
+			MCM_Tile tileEntity = (MCM_Tile) container.tileEntity;
+			tileEntity.slotBType = slotB;
+		}
+		else if(trueZone(relX + 99, relY + 42, 26,42,x,y)) {
+			cycleThroug(mouseButton, 2);
+			BlockPos pos = this.container.pos;
+			EnergyTypePacketHandler.CHANNEL.sendToServer(new EnergyTypePacketC(pos, DimensionType.OVERWORLD, slotC));
+			MCM_Tile tileEntity = (MCM_Tile) container.tileEntity;
+			tileEntity.slotCType = slotC;
+		}
+		else if(trueZone(relX + 147, relY + 42, 26,42,x,y)) {
+			cycleThroug(mouseButton, 3);
+			BlockPos pos = this.container.pos;
+			EnergyTypePacketHandler.CHANNEL.sendToServer(new EnergyTypePacketD(pos, DimensionType.OVERWORLD, slotD));
+			MCM_Tile tileEntity = (MCM_Tile) container.tileEntity;
+			tileEntity.slotDType = slotD;
 		}
 		//TODO Once SlotA is done...replicate the above for SlotsB,C and D
 		return super.mouseClicked(x, y, mouseButton);
@@ -87,20 +149,65 @@ public class MCM_Screen extends ContainerScreen<MCM_Container>{
 
 
 
-	private void cycleThroug(int mouseButton) {
-		if(mouseButton == 0) {
-			if(slotA < 3) {
-				slotA += 1;
-			}else {
-				slotA = 0;
+	private void cycleThroug(int mouseButton, int slot) {
+		if(slot == 0) {
+			if(mouseButton == 0) {
+				if(slotA < 3) {
+					slotA += 1;
+				}else {
+					slotA = 0;
+				}
+			}else if(mouseButton ==1) {
+				if(slotA > 0) {
+					slotA -= 1;
+				}else {
+					slotA = 3;
+				}
 			}
-		}else if(mouseButton ==1) {
-			if(slotA > 0) {
-				slotA -= 1;
-			}else {
-				slotA = 3;
+		}else if(slot == 1) {
+			if(mouseButton == 0) {
+				if(slotB < 3) {
+					slotB += 1;
+				}else {
+					slotB = 0;
+				}
+			}else if(mouseButton ==1) {
+				if(slotB > 0) {
+					slotB -= 1;
+				}else {
+					slotB = 3;
+				}
+			}
+		}else if(slot == 2) {
+			if(mouseButton == 0) {
+				if(slotC < 3) {
+					slotC += 1;
+				}else {
+					slotC = 0;
+				}
+			}else if(mouseButton ==1) {
+				if(slotC > 0) {
+					slotC -= 1;
+				}else {
+					slotC = 3;
+				}
+			}
+		}else if(slot == 3) {
+			if(mouseButton == 0) {
+				if(slotD < 3) {
+					slotD += 1;
+				}else {
+					slotD = 0;
+				}
+			}else if(mouseButton ==1) {
+				if(slotD > 0) {
+					slotD -= 1;
+				}else {
+					slotD = 3;
+				}
 			}
 		}
+		
 		
 	}
 
