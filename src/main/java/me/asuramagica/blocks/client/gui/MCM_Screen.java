@@ -18,9 +18,13 @@ import net.minecraft.world.dimension.DimensionType;
 
 
 public class MCM_Screen extends ContainerScreen<MCM_Container>{
-	public int slotA = 2;
+	private int slotA = 0;
 	BlockPos postest;
 	private ResourceLocation GUI = new ResourceLocation(AsuraMagicaMod.MODID, "textures/gui/mcmgui.png");
+	private ResourceLocation MCMEarthType = new ResourceLocation(AsuraMagicaMod.MODID, "textures/gui/mcmearthtype.png");
+	private ResourceLocation MCMFireType = new ResourceLocation(AsuraMagicaMod.MODID, "textures/gui/mcmfiretype.png");
+	private ResourceLocation MCMWaterType = new ResourceLocation(AsuraMagicaMod.MODID, "textures/gui/mcmwatertype.png");
+	private ResourceLocation MCMWindType = new ResourceLocation(AsuraMagicaMod.MODID, "textures/gui/mcmwindtype.png");
 
 	public MCM_Screen(MCM_Container container, PlayerInventory inv, ITextComponent name) {
 		super(container, inv, name);
@@ -37,7 +41,15 @@ public class MCM_Screen extends ContainerScreen<MCM_Container>{
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		this.font.drawString("Matter Conversion Block", 8.0f, 6.0F, 4210752);
 		//this.font.drawString("Int: " + container.getLinked().toString(), 15.0f, 15.0F, 4210752);
-		this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0f, 129.0f,4210752);
+		if(this.slotA == 0) {
+			this.font.drawString("::Earth::", 6,36,4210752);
+		}else if(this.slotA == 1) {
+			this.font.drawString("::Fire::", 6,36,4210752);
+		}else if(this.slotA == 2) {
+			this.font.drawString("::Water::", 6,36,4210752);
+		}else if(this.slotA == 3) {
+			this.font.drawString("::Wind::", 6,36,4210752);
+		}
 		int relX = (this.width - this.xSize) /2;
 		int relY = (this.height - this.ySize) /2;
 		this.blit(relX, relY, 0,0,256,256);
@@ -60,7 +72,9 @@ public class MCM_Screen extends ContainerScreen<MCM_Container>{
 		int relX = (this.width - this.xSize) /2;
 		int relY = (this.height - this.ySize) /2;
 		if(trueZone(relX + 3, relY + 43, 26,42,x,y)) {
-			System.out.println("Trying To Change SlotA");
+			
+			cycleThroug(mouseButton);
+			
 			BlockPos pos = this.container.pos;
 			EnergyTypePacketHandler.CHANNEL.sendToServer(new EnergyTypePacket(pos, DimensionType.OVERWORLD, slotA));
 			MCM_Tile tileEntity = (MCM_Tile) container.tileEntity;
@@ -69,6 +83,25 @@ public class MCM_Screen extends ContainerScreen<MCM_Container>{
 		}
 		//TODO Once SlotA is done...replicate the above for SlotsB,C and D
 		return super.mouseClicked(x, y, mouseButton);
+	}
+
+
+
+	private void cycleThroug(int mouseButton) {
+		if(mouseButton == 0) {
+			if(slotA < 3) {
+				slotA += 1;
+			}else {
+				slotA = 0;
+			}
+		}else if(mouseButton ==1) {
+			if(slotA > 0) {
+				slotA -= 1;
+			}else {
+				slotA = 3;
+			}
+		}
+		
 	}
 
 	private boolean trueZone(int OffsX, int OffsY, int Width, int Height, double MouseX, double MouseY) {

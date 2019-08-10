@@ -50,6 +50,7 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 	public final LazyOptional<IItemHandler> inventoryOptional = LazyOptional.of(() -> this.inventory).cast();
 	public final ItemStackHandler inventory = new ItemStackHandler(300) {
 
+
 		@Override
 		public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
 			if (stack.getItem() == null) {
@@ -68,10 +69,12 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 			MCM_Tile.this.markDirty();
 		}
 	};	
+	
+	
 	public final CustomEnergyStorage waterEnergy = new CustomEnergyStorage(100000, 0);
-	public final IEnergyStorage fireEnergy = new CustomEnergyStorage(100000, 0); 	
-	public final IEnergyStorage earthEnergy = new CustomEnergyStorage(100000, 0); 	
-	public final IEnergyStorage windEnergy = new CustomEnergyStorage(100000, 0); 
+	public final CustomEnergyStorage fireEnergy = new CustomEnergyStorage(100000, 0); 	
+	public final CustomEnergyStorage earthEnergy = new CustomEnergyStorage(100000, 0); 	
+	public final CustomEnergyStorage windEnergy = new CustomEnergyStorage(100000, 0); 
 	public int slotAType = 0;
 	
     
@@ -129,25 +132,24 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 		//TODO Add a MCMValue Check using the Items Capability MCMValue...to then subract that from the mcm.storedEnergy()...
 		//TODO Lookinto combining the four elements into one...for mcm purposes...
         if(tick == 20) {
-        	System.out.println(slotAType);
     		if(!(this.getStackinSlot(0).isEmpty())) {
-    			asdf(0);
+    			convertMatterIntoItem(0);
     		}
     		if(!(this.getStackinSlot(1).isEmpty())){
-    			asdf(1);
+    			convertMatterIntoItem(1);
     		}
     		if(!(this.getStackinSlot(2).isEmpty())) {
-    			asdf(2);
+    			convertMatterIntoItem(2);
     		}
     		if(!(this.getStackinSlot(3).isEmpty())) {
-    			asdf(3);
+    			convertMatterIntoItem(3);
     		}
     		tick = 0;
          }
         tick++;
 
 	}
-	public void asdf(int slotNumber) {
+	public void convertMatterIntoItem(int slotNumber) {
 		
         
         ItemStack Goal = this.getStackinSlot(slotNumber).getStack();
@@ -155,22 +157,44 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
         Item mcmValueItem = stack.getItem();
         
         this.getStackinSlot(slotNumber).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(h ->{
+        	CustomEnergyStorage energyType;
+        	switch (slotAType) {
+				case 0:
+					energyType= this.earthEnergy;
+					break;
+				case 1:
+					energyType= this.fireEnergy;
+					break;
+				case 2:
+					energyType= this.waterEnergy;
+					break;
+				case 3:
+					energyType= this.windEnergy;
+					break;
+	
+				default:
+					energyType= this.earthEnergy;
+					break;
+			}
+        	
+			if(h.mcmValue() <= energyType.getEnergyStored()) {
+				for(int i = 4; i< 58;i++) {
 
-            for(int i = 4; i< 58;i++) {
+	                if(this.inventory.getStackInSlot(i).isEmpty()) {
+	                	stack.setCount(this.inventory.getStackInSlot(i).getCount() + 1);
+	                    inventory.setStackInSlot(i, stack);
+	                    break;
+	                }else {
+	                	if(this.inventory.getStackInSlot(i).getStack().getItem().equals(mcmValueItem)) {
+	                    	stack.setCount(this.inventory.getStackInSlot(i).getCount() + 1);
+	                    	inventory.setStackInSlot(i, stack);
+	                    	break;
+	                	}
 
-                if(this.inventory.getStackInSlot(i).isEmpty()) {
-                	stack.setCount(this.inventory.getStackInSlot(i).getCount() + 1);
-                    inventory.setStackInSlot(i, stack);
-                    break;
-                }else {
-                	if(this.inventory.getStackInSlot(i).getStack().getItem().equals(mcmValueItem)) {
-                    	stack.setCount(this.inventory.getStackInSlot(i).getCount() + 1);
-                    	inventory.setStackInSlot(i, stack);
-                    	break;
-                	}
-
-                }
-            }
+	                }
+	            }
+        	}
+			energyType.consumeEnergy(h.mcmValue());
         });
     }
 		

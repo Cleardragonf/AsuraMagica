@@ -58,7 +58,6 @@ public final class EnergyTypePacket {
     		if(entity instanceof MCM_Tile) {
     			MCM_Tile tile = (MCM_Tile) entity;
     		    tile.slotAType = msg.slotA;
-    	    	System.out.println("Updated " + tile.slotAType + " in tile entity to " + msg.slotA);
     		}
     		
     		});
