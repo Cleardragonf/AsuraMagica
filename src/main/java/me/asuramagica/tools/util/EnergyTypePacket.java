@@ -5,12 +5,13 @@ package me.asuramagica.tools.util;
 import net.minecraft.client.Minecraft;
 
 import net.minecraft.network.PacketBuffer;
-
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
@@ -18,6 +19,8 @@ import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import java.util.*;
 
 import java.util.function.Supplier;
+
+import me.asuramagica.blocks.tileentities.MCM_Tile;
 
 
 
@@ -49,12 +52,16 @@ public final class EnergyTypePacket {
 
     public static void handle(EnergyTypePacket msg, Supplier<NetworkEvent.Context> ctx) {
 
-        ctx.get().enqueueWork(() -> {
-
-            ServerLifecycleHooks.getCurrentServer().getWorld(msg.dimension);
-
-
-        });
+    	ctx.get().enqueueWork(() -> {
+    		ServerWorld world = ServerLifecycleHooks.getCurrentServer().getWorld(msg.dimension);
+    		TileEntity entity = world.getTileEntity(msg.controllerPos);
+    		if(entity instanceof MCM_Tile) {
+    			MCM_Tile tile = (MCM_Tile) entity;
+    		    tile.slotAType = msg.slotA;
+    	    	System.out.println("Updated " + tile.slotAType + " in tile entity to " + msg.slotA);
+    		}
+    		
+    		});
 
     }
 

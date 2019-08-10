@@ -71,7 +71,8 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 	public final CustomEnergyStorage waterEnergy = new CustomEnergyStorage(100000, 0);
 	public final IEnergyStorage fireEnergy = new CustomEnergyStorage(100000, 0); 	
 	public final IEnergyStorage earthEnergy = new CustomEnergyStorage(100000, 0); 	
-	public final IEnergyStorage windEnergy = new CustomEnergyStorage(100000, 0); 	
+	public final IEnergyStorage windEnergy = new CustomEnergyStorage(100000, 0); 
+	public int slotAType = 0;
 	
     
 	public MCM_Tile() {
@@ -92,6 +93,7 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 		//if(linkedPowerSource != null) {
 		//	System.out.println(this.linkedPowerSource.toString());
 		//}
+		
 		try (PooledMutableBlockPos pooledMutableBlockPos = PooledMutableBlockPos.retain()) {
 			final int posX = pos.getX();
 			final int posY = pos.getY();
@@ -127,6 +129,7 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 		//TODO Add a MCMValue Check using the Items Capability MCMValue...to then subract that from the mcm.storedEnergy()...
 		//TODO Lookinto combining the four elements into one...for mcm purposes...
         if(tick == 20) {
+        	System.out.println(slotAType);
     		if(!(this.getStackinSlot(0).isEmpty())) {
     			asdf(0);
     		}
@@ -178,7 +181,7 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 	
 	@Override
 	public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-		return new MCM_Container(i, world, pos, playerInventory, this.world.getDimension().getType().getRegistryName(), 0, playerEntity);
+		return new MCM_Container(i, world, pos, playerInventory, playerEntity);
 	}
 
 	@Override

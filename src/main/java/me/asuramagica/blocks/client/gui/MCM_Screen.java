@@ -5,6 +5,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 
 import me.asuramagica.AsuraMagicaMod;
 import me.asuramagica.blocks.inventory.MCM_Container;
+import me.asuramagica.blocks.tileentities.MCM_Tile;
 import me.asuramagica.tools.util.EnergyTypePacket;
 import me.asuramagica.tools.util.EnergyTypePacketHandler;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -17,15 +18,12 @@ import net.minecraft.world.dimension.DimensionType;
 
 
 public class MCM_Screen extends ContainerScreen<MCM_Container>{
-	public int slotA = 0;
+	public int slotA = 2;
 	BlockPos postest;
 	private ResourceLocation GUI = new ResourceLocation(AsuraMagicaMod.MODID, "textures/gui/mcmgui.png");
 
 	public MCM_Screen(MCM_Container container, PlayerInventory inv, ITextComponent name) {
-	
-		
 		super(container, inv, name);
-		container = this.container;		
 	}
 
 	@Override
@@ -65,6 +63,8 @@ public class MCM_Screen extends ContainerScreen<MCM_Container>{
 			System.out.println("Trying To Change SlotA");
 			BlockPos pos = this.container.pos;
 			EnergyTypePacketHandler.CHANNEL.sendToServer(new EnergyTypePacket(pos, DimensionType.OVERWORLD, slotA));
+			MCM_Tile tileEntity = (MCM_Tile) container.tileEntity;
+			tileEntity.slotAType = slotA;
 			
 		}
 		//TODO Once SlotA is done...replicate the above for SlotsB,C and D
