@@ -178,7 +178,7 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 	
 	@Override
 	public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-		return new MCM_Container(i, world, pos, playerInventory, playerEntity);
+		return new MCM_Container(i, world, pos, playerInventory, this.world.getDimension().getType().getRegistryName(), 0, playerEntity);
 	}
 
 	@Override

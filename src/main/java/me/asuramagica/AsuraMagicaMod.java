@@ -42,11 +42,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -165,7 +165,9 @@ public class AsuraMagicaMod {
 			
 			event.getRegistry().register(IForgeContainerType.create((windowId, inv, data) ->{
 				BlockPos pos = data.readBlockPos();
-				return new MCM_Container(windowId, AsuraMagicaMod.proxy.getClientWorld(), pos, inv, AsuraMagicaMod.proxy.getClientPlayer());
+				ResourceLocation dimension = data.readResourceLocation();
+				int slotA = data.readInt();
+				return new MCM_Container(windowId, AsuraMagicaMod.proxy.getClientWorld(), pos, inv, dimension, slotA, AsuraMagicaMod.proxy.getClientPlayer());
 			}).setRegistryName(location("mcmblock")));
 			
 			
@@ -185,8 +187,8 @@ public class AsuraMagicaMod {
 	public static class RegisterForgeEvents{
 		public static int i = 0;
 		@SubscribeEvent
-	    public static void checkPlayersTemp(PlayerTickEvent event) {
-			if(event.phase == net.minecraftforge.fml.common.gameevent.TickEvent.Phase.START) {
+	    public static void checkPlayersTemp(TickEvent.PlayerTickEvent event) {
+			if(event.phase == TickEvent.Phase.START) {
 				PlayerEntity player = event.player;
 				World world = event.player.world;
 				

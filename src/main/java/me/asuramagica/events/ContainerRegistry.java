@@ -32,7 +32,9 @@ public class ContainerRegistry {
 			
 			event.getRegistry().register(IForgeContainerType.create((windowId, inv, data) ->{
 				BlockPos pos = data.readBlockPos();
-				return new MCM_Container(windowId, AsuraMagicaMod.proxy.getClientWorld(), pos, inv, AsuraMagicaMod.proxy.getClientPlayer());
+				ResourceLocation dimension = data.readResourceLocation();
+				int slotA = data.readInt();
+				return new MCM_Container(windowId, AsuraMagicaMod.proxy.getClientWorld(), pos, inv, dimension, slotA, AsuraMagicaMod.proxy.getClientPlayer());
 			}).setRegistryName(location("mcmblock")));
 			
 			

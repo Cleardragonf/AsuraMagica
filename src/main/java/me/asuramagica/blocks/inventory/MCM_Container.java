@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.IntReferenceHolder;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.LazyOptional;
@@ -35,7 +36,7 @@ public class MCM_Container extends Container{
 	private IItemHandler playerInventory;
 	public BlockPos pos;
 	
-	public MCM_Container(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player ) {
+	public MCM_Container(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, ResourceLocation dimension, int slotA, PlayerEntity player ) {
 		super(MCMCONTAINER, windowId);
 		
 		
