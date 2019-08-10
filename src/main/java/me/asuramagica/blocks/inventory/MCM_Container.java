@@ -33,6 +33,7 @@ public class MCM_Container extends Container{
 	private TileEntity tileEntity;
 	private PlayerEntity playerEntity;
 	private IItemHandler playerInventory;
+	public BlockPos pos;
 	
 	public MCM_Container(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player ) {
 		super(MCMCONTAINER, windowId);
@@ -40,7 +41,7 @@ public class MCM_Container extends Container{
 		
 		//TESTING
 		
-		
+		this.pos = pos; 
 		tileEntity = world.getTileEntity(pos);
 		MCM_Tile test = (MCM_Tile) tileEntity;
 		this.playerEntity = player;

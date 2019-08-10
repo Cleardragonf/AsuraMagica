@@ -2,20 +2,30 @@ package me.asuramagica.blocks.client.gui;
 
 
 import com.mojang.blaze3d.platform.GlStateManager;
+
 import me.asuramagica.AsuraMagicaMod;
 import me.asuramagica.blocks.inventory.MCM_Container;
+import me.asuramagica.tools.util.EnergyTypePacket;
+import me.asuramagica.tools.util.EnergyTypePacketHandler;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.dimension.Dimension;
+import net.minecraft.world.dimension.DimensionType;
 
 
 public class MCM_Screen extends ContainerScreen<MCM_Container>{
-	
+	public int slotA = 0;
+	BlockPos postest;
 	private ResourceLocation GUI = new ResourceLocation(AsuraMagicaMod.MODID, "textures/gui/mcmgui.png");
 
 	public MCM_Screen(MCM_Container container, PlayerInventory inv, ITextComponent name) {
+	
+		
 		super(container, inv, name);
+		container = this.container;		
 	}
 
 	@Override
@@ -51,9 +61,11 @@ public class MCM_Screen extends ContainerScreen<MCM_Container>{
 	public boolean mouseClicked(double x, double y, int mouseButton) {
 		int relX = (this.width - this.xSize) /2;
 		int relY = (this.height - this.ySize) /2;
-		
 		if(trueZone(relX + 3, relY + 43, 26,42,x,y)) {
 			System.out.println("Trying To Change SlotA");
+			BlockPos pos = this.container.pos;
+			EnergyTypePacketHandler.CHANNEL.sendToServer(new EnergyTypePacket(pos, DimensionType.OVERWORLD, slotA));
+			
 		}
 		//TODO Once SlotA is done...replicate the above for SlotsB,C and D
 		return super.mouseClicked(x, y, mouseButton);

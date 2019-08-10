@@ -9,10 +9,11 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 
 import net.minecraft.world.World;
-
+import net.minecraft.world.dimension.Dimension;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.fml.network.NetworkEvent;
-
-
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.util.*;
 
@@ -26,8 +27,9 @@ public final class EnergyTypePacket {
 
     public static void encode(EnergyTypePacket msg, PacketBuffer buf) {
 
-        buf.writeBlockPos(msg.controllerPos);
-
+    	buf.writeBlockPos(msg.controllerPos);
+    	buf.writeResourceLocation(msg.dimension.getRegistryName());
+    	buf.writeInt(msg.slotA);
         //IOHelper.writeBlockPoses(msg.linkedInventories, buf);
 
     }
@@ -36,12 +38,10 @@ public final class EnergyTypePacket {
 
     public static EnergyTypePacket decode(PacketBuffer buf) {
 
-        BlockPos controllerPos = buf.readBlockPos();
-
-        //List<BlockPos> linkedInventories = IOHelper.readBlockPosesSized(buf, ArrayList::new);
-        List<BlockPos> linkedInventories = new LinkedList<BlockPos>();
-
-        return new EnergyTypePacket(controllerPos, linkedInventories);
+    	BlockPos pos = buf.readBlockPos();
+    	DimensionType dimension = DimensionType.byName(buf.readResourceLocation());
+    	int slotA = buf.readInt();
+    	return new EnergyTypePacket(pos, dimension, slotA);
 
     }
 
@@ -51,13 +51,8 @@ public final class EnergyTypePacket {
 
         ctx.get().enqueueWork(() -> {
 
-            World world = Minecraft.getInstance().world;
+            ServerLifecycleHooks.getCurrentServer().getWorld(msg.dimension);
 
-            //INetworkController controller = Objects.requireNonNull((INetworkController) world.getTileEntity(msg.controllerPos));
-
-            //controller.removeAllLinks();
-
-            //controller.addLinks(msg.linkedInventories);
 
         });
 
@@ -67,16 +62,25 @@ public final class EnergyTypePacket {
 
     private BlockPos controllerPos;
 
-    private Collection<BlockPos> linkedInventories;
+    private DimensionType dimension;
+
+    private int slotA;
 
 
-
-    public EnergyTypePacket(BlockPos controllerPos, Collection<BlockPos> poses) {
+    public EnergyTypePacket(BlockPos controllerPos,DimensionType dimension, int slotA) {
 
         this.controllerPos = controllerPos;
 
-        this.linkedInventories = poses;
+        this.dimension = dimension;
+        
+        this.slotA = slotA;
 
     }
+	
+
+
+
+
+
 
 }
