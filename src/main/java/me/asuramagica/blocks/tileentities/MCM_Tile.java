@@ -125,19 +125,19 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 							Mana_StoneTile test2 = (Mana_StoneTile) test;
 							if(test2.earthEnergy.getEnergyStored() > 0 && this.earthEnergy.getEnergyStored() < 100000) {
 								test2.earthEnergy.consumeEnergy(50);
-								this.earthEnergy.addFireEssence(50);
+								this.earthEnergy.addEnergy(50);
 							}
 							if(test2.fireEnergy.getEnergyStored() > 0 && this.fireEnergy.getEnergyStored() < 100000) {
 								test2.fireEnergy.consumeEnergy(50);
-								this.fireEnergy.addFireEssence(50);
+								this.fireEnergy.addEnergy(50);
 							}
 							if(test2.waterEnergy.getEnergyStored() > 0 && this.waterEnergy.getEnergyStored() < 100000) {
 								test2.waterEnergy.consumeEnergy(50);
-								this.waterEnergy.addFireEssence(50);
+								this.waterEnergy.addEnergy(50);
 							}
 							if(test2.windEnergy.getEnergyStored() > 0 && this.windEnergy.getEnergyStored() < 100000) {
 								test2.windEnergy.consumeEnergy(50);
-								this.windEnergy.addFireEssence(50);
+								this.windEnergy.addEnergy(50);
 							}
 							
 						}
@@ -153,7 +153,7 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 		//TODO Add a MCMValue Check using the Items Capability MCMValue...to then subract that from the mcm.storedEnergy()...
 		//TODO Lookinto combining the four elements into one...for mcm purposes...
         if(tick == 20) {
-        	System.out.println(this.earthEnergy.getEnergyStored() + " " + this.fireEnergy.getEnergyStored() + " " + this.waterEnergy.getEnergyStored() + " " + this.windEnergy.getEnergyStored());
+        	//System.out.println(this.earthEnergy.getEnergyStored() + " " + this.fireEnergy.getEnergyStored() + " " + this.waterEnergy.getEnergyStored() + " " + this.windEnergy.getEnergyStored());
     		if(!(this.getStackinSlot(0).isEmpty())) {
     			convertMatterIntoItem(0);
     		}

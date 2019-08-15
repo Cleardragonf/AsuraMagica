@@ -20,7 +20,9 @@ import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -37,6 +39,9 @@ import me.asuramagica.blocks.inventory.ManaStoneContainer;
 import me.asuramagica.lists.BlockList;
 import me.asuramagica.lists.ItemList;
 import me.asuramagica.tools.CustomEnergyStorage;
+import me.asuramagica.tools.util.EnergyTypePacket;
+import me.asuramagica.tools.util.EnergyTypePacketHandler;
+import me.asuramagica.tools.util.Packets.ManaStone.ManaEnergyPacket;
 
 public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, INamedContainerProvider{
 
@@ -68,10 +73,10 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 
 
 	public final LazyOptional<IItemHandler> inventoryOptional = LazyOptional.of(() -> this.inventory).cast();
-	public final LazyOptional<IEnergyStorage> waterSource = LazyOptional.of(() -> this.waterEnergy).cast();
-    public final LazyOptional<IEnergyStorage> fireSource = LazyOptional.of(() -> this.fireEnergy).cast();
-    public final LazyOptional<IEnergyStorage> earthSource = LazyOptional.of(() -> this.earthEnergy).cast();
-    public final LazyOptional<IEnergyStorage> windSource = LazyOptional.of(() -> this.windEnergy).cast();
+	public final LazyOptional<CustomEnergyStorage> waterSource = LazyOptional.of(() -> this.waterEnergy).cast();
+    public final LazyOptional<CustomEnergyStorage> fireSource = LazyOptional.of(() -> this.fireEnergy).cast();
+    public final LazyOptional<CustomEnergyStorage> earthSource = LazyOptional.of(() -> this.earthEnergy).cast();
+    public final LazyOptional<CustomEnergyStorage> windSource = LazyOptional.of(() -> this.windEnergy).cast();
     
 	public Mana_StoneTile() {
 		super(MANASTONETILE);
@@ -88,6 +93,8 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 	@SuppressWarnings("unused")
 	@Override
 	public void tick() {
+		EnergyTypePacketHandler.CHANNEL.sendToServer(new ManaEnergyPacket(pos, DimensionType.OVERWORLD, waterEnergy.getEnergyStored()));
+		System.out.println("water: " + waterEnergy.getEnergyStored());
 		int findFireryBlocks = 0;
 		int findWateryBlocks= 0;
 		int findEarthyBlocks = 0;
@@ -143,46 +150,37 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 		final int multiBlocksFound = findMultiplierBlocks;
 		boolean dirty = false;
 		
-		fireSource.ifPresent(h -> {			
-			if(h.getEnergyStored() >= 100000) {
+			if(this.fireEnergy.getEnergyStored() >= 100000) {
 				
 			}else {
-					((CustomEnergyStorage)fireEnergy).addFireEssence(fireryBlocksFound * multiBlocksFound);
+					((CustomEnergyStorage)fireEnergy).addEnergy(fireryBlocksFound * multiBlocksFound);
 					this.markDirty();
 			}
-		});
 		
 		//Create a Tick Ratio for Water Manna Collection
-		waterSource.ifPresent(e -> {
-			if(e.getEnergyStored() >= 100000) {
+			if(this.waterEnergy.getEnergyStored() >= 100000) {
 				
 			}else {
-				((CustomEnergyStorage)waterEnergy).addFireEssence(wateryBlocksFound * multiBlocksFound);
+				EnergyTypePacketHandler.CHANNEL.sendToServer(new ManaEnergyPacket(pos, DimensionType.OVERWORLD, waterEnergy.getEnergyStored()));
+				((CustomEnergyStorage)waterEnergy).addEnergy(wateryBlocksFound * multiBlocksFound);
+				EnergyTypePacketHandler.CHANNEL.sendToServer(new ManaEnergyPacket(pos, DimensionType.OVERWORLD, waterEnergy.getEnergyStored()));
 				this.markDirty();
+				EnergyTypePacketHandler.CHANNEL.sendToServer(new ManaEnergyPacket(pos, DimensionType.OVERWORLD, waterEnergy.getEnergyStored()));
 			}
 		
-		
-		});
-		
-		earthSource.ifPresent(h -> {			
-			if(h.getEnergyStored() >= 100000) {
+			if(this.earthEnergy.getEnergyStored() >= 100000) {
 				
 			}else {				
-					((CustomEnergyStorage)earthEnergy).addFireEssence(earthyBlocksFound * multiBlocksFound);
+					((CustomEnergyStorage)earthEnergy).addEnergy(earthyBlocksFound * multiBlocksFound);
 					this.markDirty();
 			}
-		});
 		
-		windSource.ifPresent(h -> {			
-			if(h.getEnergyStored() >= 100000) {
+			if(this.windEnergy.getEnergyStored() >= 100000) {
 				
 			}else {
-					((CustomEnergyStorage)windEnergy).addFireEssence(windyBlocksFound * multiBlocksFound);
+					((CustomEnergyStorage)windEnergy).addEnergy(windyBlocksFound * multiBlocksFound);
 					this.markDirty();
 			}
-		});
-
-		sendOutPower();
 		
 		
 		//energy.ifPresent(e -> ((CustomEnergyStorage)e).addEarthEssence(10));
@@ -215,54 +213,27 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 		*/
 	}
 
-	public static int getSources() {
-		return 0;
-	}
-	
-	private void sendOutPower() {
-		final IEnergyStorage fireEnergy = this.fireEnergy;
-		final int energyStored = fireEnergy.getEnergyStored();
-		if (energyStored > 0) {
-			final World world = this.world;
-			if (world == null) {
-				return;
-			}
-			final BlockPos pos = this.pos;
-			// TODO: change Direction.values to Direction.VALUES once its ATed
-			for (Direction direction : Direction.values()) {
-				final TileEntity te = world.getTileEntity(pos.offset(direction));
-				if (te == null) {
-					continue;
-				}
-				te.getCapability(CapabilityEnergy.ENERGY, direction).ifPresent(teEnergy -> {
-					if (!teEnergy.canReceive()) {
-						return;
-					}
-					fireEnergy.extractEnergy(
-							teEnergy.receiveEnergy(
-									fireEnergy.extractEnergy(100, true),
-									false
-							),
-							false
-					);
-				});
-			}
-			if (energyStored != fireEnergy.getEnergyStored()) {
-				markDirty();
-			}
-		}
-	}
-
 	@Override
-	public void read(CompoundNBT tag) {
+	public void read(CompoundNBT tag) {		
 		inventory.deserializeNBT(tag.getCompound("inv"));
+		EnergyTypePacketHandler.CHANNEL.sendToServer(new ManaEnergyPacket(pos, DimensionType.OVERWORLD, waterEnergy.getEnergyStored()));
+		//waterEnergy.setEnergy(tag.getInt("energy"));
+		waterEnergy.deserializeNBT(tag.getCompound("energy"));
+		EnergyTypePacketHandler.CHANNEL.sendToServer(new ManaEnergyPacket(pos, DimensionType.OVERWORLD, waterEnergy.getEnergyStored()));
+
 		super.read(tag);
+		EnergyTypePacketHandler.CHANNEL.sendToServer(new ManaEnergyPacket(pos, DimensionType.OVERWORLD, waterEnergy.getEnergyStored()));
 	}
 
 	@Override
 	public CompoundNBT write(CompoundNBT tag) {
 		tag.put("inv", inventory.serializeNBT());
+		EnergyTypePacketHandler.CHANNEL.sendToServer(new ManaEnergyPacket(pos, DimensionType.OVERWORLD, waterEnergy.getEnergyStored()));
+		//tag.putInt("energy", waterEnergy.getEnergyStored());
+		tag.put("energy", waterEnergy.serializeNBT());
+		EnergyTypePacketHandler.CHANNEL.sendToServer(new ManaEnergyPacket(pos, DimensionType.OVERWORLD, waterEnergy.getEnergyStored()));
 		return super.write(tag);
+		
 	}
 
 
@@ -274,6 +245,8 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 
 		if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			return inventoryOptional.cast();
+		}if(cap == CapabilityEnergy.ENERGY) {
+			return waterSource.cast();
 		}
 		return super.getCapability(cap, side);
 	}

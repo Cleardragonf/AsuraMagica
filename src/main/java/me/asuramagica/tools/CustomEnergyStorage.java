@@ -27,7 +27,7 @@ public class CustomEnergyStorage extends EnergyStorage  implements INBTSerializa
 		
 	}
 	
-	public void addFireEssence(int energy) {
+	public void addEnergy(int energy) {
 		this.energy += energy;
 		if(this.energy > getMaxEnergyStored()) {
 			this.energy = getEnergyStored();
@@ -52,6 +52,5 @@ public class CustomEnergyStorage extends EnergyStorage  implements INBTSerializa
 	@Override
 	public void deserializeNBT(CompoundNBT nbt) {
 		setEnergy(nbt.getInt("energy"));
-		
 	}
 }

@@ -13,6 +13,7 @@ import me.asuramagica.blocks.inventory.MCM_Container;
 import me.asuramagica.blocks.tileentities.MCM_Tile;
 import me.asuramagica.tools.util.EnergyTypePacket;
 import me.asuramagica.tools.util.EnergyTypePacketHandler;
+import me.asuramagica.tools.util.MCMValueCapability.MCMValueProvider;
 import me.asuramagica.tools.util.Packets.MCM.EnergyTypePacketB;
 import me.asuramagica.tools.util.Packets.MCM.EnergyTypePacketC;
 import me.asuramagica.tools.util.Packets.MCM.EnergyTypePacketD;
@@ -30,10 +31,11 @@ public class MCM_Screen extends ContainerScreen<MCM_Container>{
 	private int slotB;
 	private int slotC;
 	private int slotD;
+	public int mcmValueA;
 	
 	BlockPos postest;
 	private ResourceLocation GUI = new ResourceLocation(AsuraMagicaMod.MODID, "textures/gui/mcmgui.png");
-	private ResourceLocation MCMEarthType = new ResourceLocation(AsuraMagicaMod.MODID, "textures/gui/mcmearthtype.png");
+	private ResourceLocation MCMEnergyType = new ResourceLocation(AsuraMagicaMod.MODID, "textures/gui/mcmenergytype.png");
 	private ResourceLocation MCMFireType = new ResourceLocation(AsuraMagicaMod.MODID, "textures/gui/mcmfiretype.png");
 	private ResourceLocation MCMWaterType = new ResourceLocation(AsuraMagicaMod.MODID, "textures/gui/mcmwatertype.png");
 	private ResourceLocation MCMWindType = new ResourceLocation(AsuraMagicaMod.MODID, "textures/gui/mcmwindtype.png");
@@ -62,42 +64,83 @@ public class MCM_Screen extends ContainerScreen<MCM_Container>{
 		int relX = (this.width - this.xSize) /2;
 		int relY = (this.height - this.ySize) /2;
 		this.blit(relX, relY, 0,0,256,256);
+
+
 		if(this.slotA == 0) {
-			this.font.drawString("::Earth::", 3,36,4210752);
+			this.container.getSlot(0).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(h ->{
+				mcmValueA = h.mcmValue();
+			});
+			if(this.container.getEarth().getEnergyStored() >= mcmValueA) {
+				this.font.drawString("::...::", 3,36,4210752);
+			}
+			this.minecraft.textureManager.bindTexture(MCMEnergyType);
+			this.blit(3,42,0,0,26,42);
 		}else if(this.slotA == 1) {
 			this.font.drawString("::Fire::",3,36,4210752);
+			this.minecraft.textureManager.bindTexture(MCMEnergyType);
+			this.blit(3,42,31,0,26,42);
 		}else if(this.slotA == 2) {
 			this.font.drawString("::Water::", 3,36,4210752);
+			this.minecraft.textureManager.bindTexture(MCMEnergyType);
+			this.blit(3,42,62 ,0,26,42);
 		}else if(this.slotA == 3) {
 			this.font.drawString("::Wind::", 3,36,4210752);
+			this.minecraft.textureManager.bindTexture(MCMEnergyType);
+			this.blit(3,42,91,0,26,42);
 		}
 		if(this.slotB == 0) {
 			this.font.drawString("::Earth::", 55,36,4210752);
+			this.minecraft.textureManager.bindTexture(MCMEnergyType);
+			this.blit(51,42,0,0,26,42);
 		}else if(this.slotB == 1) {
 			this.font.drawString("::Fire::", 55,36,4210752);
+			this.minecraft.textureManager.bindTexture(MCMEnergyType);
+			this.blit(51,42,31,0,26,42);
 		}else if(this.slotB == 2) {
 			this.font.drawString("::Water::", 55,36,4210752);
+			this.minecraft.textureManager.bindTexture(MCMEnergyType);
+			this.blit(51,42,62 ,0,26,42);
 		}else if(this.slotB == 3) {
 			this.font.drawString("::Wind::", 55,36,4210752);
+			this.minecraft.textureManager.bindTexture(MCMEnergyType);
+			this.blit(51,42,91,0,26,42);
 		}
 		if(this.slotC == 0) {
 			this.font.drawString("::Earth::", 103,36,4210752);
+			this.minecraft.textureManager.bindTexture(MCMEnergyType);
+			this.blit(99,42,0,0,26,42);
 		}else if(this.slotC == 1) {
 			this.font.drawString("::Fire::", 103,36,4210752);
+			this.minecraft.textureManager.bindTexture(MCMEnergyType);
+			this.blit(99,42,31,0,26,42);
 		}else if(this.slotC == 2) {
 			this.font.drawString("::Water::", 103,36,4210752);
+			this.minecraft.textureManager.bindTexture(MCMEnergyType);
+			this.blit(99,42,62 ,0,26,42);
 		}else if(this.slotC == 3) {
 			this.font.drawString("::Wind::", 103,36,4210752);
+			this.minecraft.textureManager.bindTexture(MCMEnergyType);
+			this.blit(99,42,91,0,26,42);
 		}
 		if(this.slotD == 0) {
 			this.font.drawString("::Earth::",151,36,4210752);
+			this.minecraft.textureManager.bindTexture(MCMEnergyType);
+			this.blit(147,42,0,0,26,42);
 		}else if(this.slotD == 1) {
 			this.font.drawString("::Fire::", 151,36,4210752);
+			this.minecraft.textureManager.bindTexture(MCMEnergyType);
+			this.blit(147,42,31,0,26,42);
 		}else if(this.slotD == 2) {
 			this.font.drawString("::Water::", 151,36,4210752);
+			this.minecraft.textureManager.bindTexture(MCMEnergyType);
+			this.blit(147,42,62 ,0,26,42);
 		}else if(this.slotD == 3) {
 			this.font.drawString("::Wind::", 151,36,4210752);
+			this.minecraft.textureManager.bindTexture(MCMEnergyType);
+			this.blit(147,42,91,0,26,42);
 		}
+		
+
 	}
 
 	@Override
@@ -108,6 +151,7 @@ public class MCM_Screen extends ContainerScreen<MCM_Container>{
 		int relY = (this.height - this.ySize) /2;
 		//size and positioning of the image
 		this.blit(relX, relY, 0,0,256,256);
+
 		
 	}
 	
@@ -147,7 +191,15 @@ public class MCM_Screen extends ContainerScreen<MCM_Container>{
 		return super.mouseClicked(x, y, mouseButton);
 	}
 
-
+	@Override
+	protected void renderHoveredToolTip(int x, int y) {
+		int relX = (this.width - this.xSize) /2;
+		int relY = (this.height - this.ySize) /2;
+		if(trueZone(relX + 3, relY + 42, 26,42,x,y)) {
+			//TODO Create the Hover event for stating wheather something is fire, water etc....
+		}
+		super.renderHoveredToolTip(x, y);
+	}
 
 	private void cycleThroug(int mouseButton, int slot) {
 		if(slot == 0) {
@@ -219,22 +271,27 @@ public class MCM_Screen extends ContainerScreen<MCM_Container>{
 			return false;	
 		}
 	}
-
+	
+	
 	protected double getEnergyPercentage1() {
-
-		return ((double) this.container.getFire().getEnergyStored() / (double) this.container.getFire().getMaxEnergyStored() * 100D);
+		
+		
+		this.container.getSlot(0).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(h ->{
+			mcmValueA = h.mcmValue();
+		});
+		return (double) mcmValueA / (double) this.container.getEarth().getMaxEnergyStored() * 100D;
 
 	}
 	
 	protected double getEnergyPercentage2() {
 
-		return ((double) this.container.getWater().getEnergyStored()/ (double) this.container.getWater().getMaxEnergyStored() * 100D);
+		return ((double) this.container.getFire().getEnergyStored()/ (double) this.container.getFire().getMaxEnergyStored() * 100D);
 
 	}
 	
 	protected double getEnergyPercentage3() {
 
-		return ((double) this.container.getEarth().getEnergyStored()/ (double) this.container.getEarth().getMaxEnergyStored() * 100D);
+		return ((double) this.container.getWater().getEnergyStored()/ (double) this.container.getWater().getMaxEnergyStored() * 100D);
 
 	}
 	

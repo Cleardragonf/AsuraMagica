@@ -6,6 +6,7 @@ import me.asuramagica.AsuraMagicaMod;
 import me.asuramagica.tools.util.Packets.MCM.EnergyTypePacketB;
 import me.asuramagica.tools.util.Packets.MCM.EnergyTypePacketC;
 import me.asuramagica.tools.util.Packets.MCM.EnergyTypePacketD;
+import me.asuramagica.tools.util.Packets.ManaStone.ManaEnergyPacket;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
@@ -39,6 +40,7 @@ public final class EnergyTypePacketHandler {
     	registerMessage(EnergyTypePacketB.class, EnergyTypePacketB::encode, EnergyTypePacketB::decode, EnergyTypePacketB::handle);
     	registerMessage(EnergyTypePacketC.class, EnergyTypePacketC::encode, EnergyTypePacketC::decode, EnergyTypePacketC::handle);
     	registerMessage(EnergyTypePacketD.class, EnergyTypePacketD::encode, EnergyTypePacketD::decode, EnergyTypePacketD::handle);
+    	registerMessage(ManaEnergyPacket.class, ManaEnergyPacket::encode, ManaEnergyPacket::decode, ManaEnergyPacket::handle);
     }
 
 

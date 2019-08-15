@@ -22,8 +22,23 @@
                   "op": "replace"
                 },
                 {
+                  "source": "fire",
+                  "target": "BlockEntityTag.fire",
+                  "op": "replace"
+                },
+                {
                   "source": "energy",
                   "target": "BlockEntityTag.energy",
+                  "op": "replace"
+                },
+                {
+                  "source": "wind",
+                  "target": "BlockEntityTag.wind",
+                  "op": "replace"
+                },
+                {
+                  "source": "earth",
+                  "target": "BlockEntityTag.earth",
                   "op": "replace"
                 }
               ]
