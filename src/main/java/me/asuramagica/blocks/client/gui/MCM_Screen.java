@@ -65,82 +65,36 @@ public class MCM_Screen extends ContainerScreen<MCM_Container>{
 		int relY = (this.height - this.ySize) /2;
 		this.blit(relX, relY, 0,0,256,256);
 
+		changeColor(slotA, 3);
+		changeColor(slotB, 51);
+		changeColor(slotC, 99);
+		changeColor(slotD, 147);
 
-		if(this.slotA == 0) {
-			this.container.getSlot(0).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(h ->{
-				mcmValueA = h.mcmValue();
-			});
-			if(this.container.getEarth().getEnergyStored() >= mcmValueA) {
-				this.font.drawString("::...::", 3,36,4210752);
-			}
+	}
+	
+	public void changeColor(int slot, int a) {
+		switch (slot) {
+		case 0:
 			this.minecraft.textureManager.bindTexture(MCMEnergyType);
-			this.blit(3,42,0,0,26,42);
-		}else if(this.slotA == 1) {
-			this.font.drawString("::Fire::",3,36,4210752);
+			this.blit(a,42,0,0,26,42);
+			break;
+		case 1:
 			this.minecraft.textureManager.bindTexture(MCMEnergyType);
-			this.blit(3,42,31,0,26,42);
-		}else if(this.slotA == 2) {
-			this.font.drawString("::Water::", 3,36,4210752);
+			this.blit(a,42,31,0,26,42);
+			break;
+		case 2:
 			this.minecraft.textureManager.bindTexture(MCMEnergyType);
-			this.blit(3,42,62 ,0,26,42);
-		}else if(this.slotA == 3) {
-			this.font.drawString("::Wind::", 3,36,4210752);
+			this.blit(a,42,62,0,26,42);
+			break;
+		case 3:
 			this.minecraft.textureManager.bindTexture(MCMEnergyType);
-			this.blit(3,42,91,0,26,42);
+			this.blit(a,42,91,0,26,42);
+			break;
+		default:
+			this.minecraft.textureManager.bindTexture(MCMEnergyType);
+			this.blit(a,42,0,0,26,42);
+			break;
 		}
-		if(this.slotB == 0) {
-			this.font.drawString("::Earth::", 55,36,4210752);
-			this.minecraft.textureManager.bindTexture(MCMEnergyType);
-			this.blit(51,42,0,0,26,42);
-		}else if(this.slotB == 1) {
-			this.font.drawString("::Fire::", 55,36,4210752);
-			this.minecraft.textureManager.bindTexture(MCMEnergyType);
-			this.blit(51,42,31,0,26,42);
-		}else if(this.slotB == 2) {
-			this.font.drawString("::Water::", 55,36,4210752);
-			this.minecraft.textureManager.bindTexture(MCMEnergyType);
-			this.blit(51,42,62 ,0,26,42);
-		}else if(this.slotB == 3) {
-			this.font.drawString("::Wind::", 55,36,4210752);
-			this.minecraft.textureManager.bindTexture(MCMEnergyType);
-			this.blit(51,42,91,0,26,42);
-		}
-		if(this.slotC == 0) {
-			this.font.drawString("::Earth::", 103,36,4210752);
-			this.minecraft.textureManager.bindTexture(MCMEnergyType);
-			this.blit(99,42,0,0,26,42);
-		}else if(this.slotC == 1) {
-			this.font.drawString("::Fire::", 103,36,4210752);
-			this.minecraft.textureManager.bindTexture(MCMEnergyType);
-			this.blit(99,42,31,0,26,42);
-		}else if(this.slotC == 2) {
-			this.font.drawString("::Water::", 103,36,4210752);
-			this.minecraft.textureManager.bindTexture(MCMEnergyType);
-			this.blit(99,42,62 ,0,26,42);
-		}else if(this.slotC == 3) {
-			this.font.drawString("::Wind::", 103,36,4210752);
-			this.minecraft.textureManager.bindTexture(MCMEnergyType);
-			this.blit(99,42,91,0,26,42);
-		}
-		if(this.slotD == 0) {
-			this.font.drawString("::Earth::",151,36,4210752);
-			this.minecraft.textureManager.bindTexture(MCMEnergyType);
-			this.blit(147,42,0,0,26,42);
-		}else if(this.slotD == 1) {
-			this.font.drawString("::Fire::", 151,36,4210752);
-			this.minecraft.textureManager.bindTexture(MCMEnergyType);
-			this.blit(147,42,31,0,26,42);
-		}else if(this.slotD == 2) {
-			this.font.drawString("::Water::", 151,36,4210752);
-			this.minecraft.textureManager.bindTexture(MCMEnergyType);
-			this.blit(147,42,62 ,0,26,42);
-		}else if(this.slotD == 3) {
-			this.font.drawString("::Wind::", 151,36,4210752);
-			this.minecraft.textureManager.bindTexture(MCMEnergyType);
-			this.blit(147,42,91,0,26,42);
-		}
-		
-
 	}
 
 	@Override
@@ -196,9 +150,38 @@ public class MCM_Screen extends ContainerScreen<MCM_Container>{
 		int relX = (this.width - this.xSize) /2;
 		int relY = (this.height - this.ySize) /2;
 		if(trueZone(relX + 3, relY + 42, 26,42,x,y)) {
-			//TODO Create the Hover event for stating wheather something is fire, water etc....
-		}
+			tooltipText(slotA, x, y);
+		}	
+		if(trueZone(relX + 51, relY + 42, 26,42,x,y)) {
+			tooltipText(slotB, x, y);
+		}	
+		if(trueZone(relX + 99, relY + 42, 26,42,x,y)) {
+			tooltipText(slotC, x, y);
+		}	
+		if(trueZone(relX + 147, relY + 42, 26,42,x,y)) {
+			tooltipText(slotD, x, y);
+		}	
 		super.renderHoveredToolTip(x, y);
+	}
+	
+	public void tooltipText(int slot, int x, int y) {
+		switch (slot) {
+		case 0:
+			this.renderTooltip("Earth", x, y);
+			break;
+		case 1:
+			this.renderTooltip("Fire", x, y);
+			break;
+		case 2:
+			this.renderTooltip("Water", x, y);
+			break;
+		case 3:
+			this.renderTooltip("Wind", x, y);
+			break;
+		default:
+			this.renderTooltip("Earth", x, y);
+			break;
+		}
 	}
 
 	private void cycleThroug(int mouseButton, int slot) {
