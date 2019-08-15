@@ -35,6 +35,8 @@ public class customGUI {
 	      bufferbuilder.pos(x1, y2, -90.0D).tex(0.0D, 0.0D).endVertex();
 
 	      tessellator.draw();
+	      GlStateManager.enableBlend();
+	      GlStateManager.enableTexture();
 	      GlStateManager.depthMask(true);
 	      GlStateManager.enableDepthTest();
 	      GlStateManager.enableAlphaTest();

@@ -3,6 +3,7 @@ package me.asuramagica.setup;
 import java.util.List;
 
 import me.asuramagica.AsuraMagicaMod;
+import me.asuramagica.gui.Hydration;
 import me.asuramagica.gui.Temperature;
 import me.asuramagica.tools.util.MCMValueCapability.MCMValueCapability;
 import me.asuramagica.tools.util.MCMValueCapability.MCMValueStorage;
@@ -25,12 +26,14 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class clientEventHandler {
 
 	@SubscribeEvent
+	//public static void draw(final RenderGameOverlayEvent.Post event) {
 	public static void draw(final RenderGameOverlayEvent.Post event) {	
-		if ((event.getType() != RenderGameOverlayEvent.ElementType.ALL) || (Minecraft.getInstance().currentScreen != null)) {
+		if ((event.getType() != RenderGameOverlayEvent.ElementType.ALL)) {
 
 			return;
 
 		}
+		Hydration.draw();
 		Temperature.draw();
 	}
 

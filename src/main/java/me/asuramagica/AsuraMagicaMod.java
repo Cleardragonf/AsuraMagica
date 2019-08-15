@@ -10,6 +10,7 @@ import me.asuramagica.blocks.MCM_Block;
 import me.asuramagica.blocks.inventory.MCM_Container;
 import me.asuramagica.blocks.tileentities.MCM_Tile;
 import me.asuramagica.events.BlockBreakEvent;
+import me.asuramagica.gui.HydrationContainer;
 import me.asuramagica.gui.TemperatureContainer;
 import me.asuramagica.items.ItemCustomAxe;
 import me.asuramagica.items.WardEnscriber;
@@ -22,6 +23,7 @@ import me.asuramagica.setup.ClientProxy;
 import me.asuramagica.setup.IProxy;
 import me.asuramagica.setup.ServerProxy;
 import me.asuramagica.tools.util.EnergyTypePacketHandler;
+import me.asuramagica.tools.util.Hydration.PlayerHydrationProvider;
 import me.asuramagica.tools.util.MCMValueCapability.MCMValueProvider;
 import me.asuramagica.tools.util.Temperature.PlayerTemperatureProvider;
 import me.asuramagica.world.OreGeneration;
@@ -82,6 +84,7 @@ public class AsuraMagicaMod {
 		LOGGER.info("Setup is working");
 		OreGeneration.setupOreGeneration();		
 		PlayerTemperatureProvider.registerCapability();
+		PlayerHydrationProvider.registerCapability();
 		MCMValueProvider.registerCapability();
 		EnergyTypePacketHandler.register();
 	}
@@ -191,7 +194,7 @@ public class AsuraMagicaMod {
 				World world = event.player.world;
 				
 		        if(i == 60) {
-					
+					HydrationContainer.setThirst(player, world);
 					TemperatureContainer.setTemp(player, world);
 					i = 0;
 		         }else {

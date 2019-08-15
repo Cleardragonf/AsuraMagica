@@ -1,6 +1,7 @@
 package me.asuramagica.tools.util;
 
 import me.asuramagica.AsuraMagicaMod;
+import me.asuramagica.tools.util.Hydration.PlayerHydrationProvider;
 import me.asuramagica.tools.util.MCMValueCapability.MCMValueProvider;
 import me.asuramagica.tools.util.Temperature.PlayerTemperatureProvider;
 import net.minecraft.entity.Entity;
@@ -22,7 +23,7 @@ public class CapabilityEventHandler
 
 	public static final ResourceLocation PlayerTemperature = new ResourceLocation(AsuraMagicaMod.MODID, "playertemperature");
 	public static final ResourceLocation MCMValue = new ResourceLocation(AsuraMagicaMod.MODID, "mcmvalue");
-	
+	public static final ResourceLocation PlayerThirst = new ResourceLocation(AsuraMagicaMod.MODID, "playerthirst");
 
 	@SubscribeEvent
 
@@ -37,6 +38,7 @@ public class CapabilityEventHandler
 		{
 
 			e.addCapability(PlayerTemperature, new PlayerTemperatureProvider());
+			e.addCapability(PlayerThirst, new PlayerHydrationProvider());
 
 		}
 
