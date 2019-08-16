@@ -58,7 +58,7 @@ public final class ManaEnergyPacket {
     		TileEntity entity = world.getTileEntity(msg.controllerPos);
     		if(entity instanceof Mana_StoneTile) {
     			Mana_StoneTile tile = (Mana_StoneTile) entity;
-    		    tile.waterEnergy.setEnergy(msg.waterEnergy);
+    		    tile.waterEnergy.setEnergyStored(msg.waterEnergy);
     		}
     		
     		});
