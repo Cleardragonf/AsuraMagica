@@ -26,7 +26,6 @@ public class TemperatureContainer extends PlayerTemperatureCapability{
 		private static Integer biomeValue;
 		private static boolean increaseBodyTemp = false;
 		private static boolean decreaseBodyTemp = false;
-		private static int playersActivityTemp;
 		public static void setTemp(PlayerEntity player, World world) {
 			
 			//TODO Add Back in...Weather Check, shade check, local blocks nearby for warmth or cooling off
@@ -155,6 +154,7 @@ public class TemperatureContainer extends PlayerTemperatureCapability{
 
 			player.getCapability(PlayerTemperatureProvider.PlayerTemperature).ifPresent(a -> {
 				if(((PlayerTemperatureCapability)a).getPlayerTemp() >= ((PlayerTemperatureCapability)a).minTemp() && ((PlayerTemperatureCapability)a).getPlayerTemp() <= ((PlayerTemperatureCapability)a).maxTemp() ) {
+					int playersActivityTemp = 0;
 					if(player.isSwimming()) {
 						playersActivityTemp -= 1;
 					}

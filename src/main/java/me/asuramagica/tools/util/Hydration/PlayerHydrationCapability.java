@@ -10,15 +10,15 @@ import net.minecraftforge.common.util.LazyOptional;
 
 public class PlayerHydrationCapability implements IPlayerHydrationCapability{
 
-	private static int playersThirst = 99;
+	private static int playersThirst = 100;
 	static int maxThirst = 100;
 	static int minThirst = 0;
 	
 	public void setPlayersThirst(int setPlayersThirst) {
 		this.setPlayersThirst2(this.getPlayersThirst() + setPlayersThirst);
-		if(getPlayersThirst() > maxThirst()) {
-			this.setPlayersThirst(100);
-		}if(getPlayersThirst() < minThirst) {
+		if(getPlayersThirst() >= maxThirst()) {
+			this.setPlayersThirst2(100);
+		}if(getPlayersThirst() <= minThirst) {
 			this.setPlayersThirst2(0);
 		}
 	}

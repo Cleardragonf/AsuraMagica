@@ -1,6 +1,8 @@
 package me.asuramagica;
 
 import java.awt.Event;
+import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,6 +27,7 @@ import me.asuramagica.setup.ClientProxy;
 import me.asuramagica.setup.IProxy;
 import me.asuramagica.setup.ServerProxy;
 import me.asuramagica.tools.util.EnergyTypePacketHandler;
+import me.asuramagica.tools.util.Hydration.PlayerHydrationCapability;
 import me.asuramagica.tools.util.Hydration.PlayerHydrationProvider;
 import me.asuramagica.tools.util.MCMValueCapability.MCMValueProvider;
 import me.asuramagica.tools.util.Temperature.PlayerTemperatureProvider;
@@ -40,14 +43,17 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.SwordItem;
+import net.minecraft.item.UseAction;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -192,6 +198,7 @@ public class AsuraMagicaMod {
 	public static class RegisterForgeEvents{
 		public static int i = 0;
 		public static int b = 0;
+		private static ICapabilityProvider player;
 		@SubscribeEvent
 	    public static void checkPlayersTemp(TickEvent.PlayerTickEvent event) {
 			if(event.phase == TickEvent.Phase.START) {
@@ -217,5 +224,19 @@ public class AsuraMagicaMod {
 		         
 			}
 	    }
+		@SubscribeEvent
+		public static void drink(LivingEntityUseItemEvent.Finish event) {
+
+			if(event.getEntityLiving() instanceof PlayerEntity) {
+				player = (PlayerEntity) event.getEntityLiving();
+			}
+			UseAction test = event.getItem().getUseAction().DRINK;
+			
+			if(event.getItem().getUseAction().equals(test)) {
+				player.getCapability(PlayerHydrationProvider.PlayerThirst).ifPresent(h ->{
+					((PlayerHydrationCapability)h).setPlayersThirst(5);
+				});
+			}
+		}
 	}
 }
