@@ -229,5 +229,14 @@ public class AsuraMagicaMod {
 	    }
 	}
 	
-    
+	
+    /*
+     *   @Override
+  @OnlyIn(Dist.CLIENT)
+  public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+   // if (stack.hasTag())tooltip.add(new StringTextComponent(stack.getTag().toString()));
+}
+     * 
+     * 
+     */
 }

@@ -28,16 +28,20 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 //The Container is practically the actuall "math behind the scene of a GUI" //Server Side kind of stuff...
 public class ManaStoneContainer extends Container{
 	
-	private TileEntity tileEntity;
+	public TileEntity tileEntity;
 	private PlayerEntity playerEntity;
 	private IItemHandler playerInventory;
+	public BlockPos pos;
+	public World world;
 	
 	
+
 	public ManaStoneContainer(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player ) {
 		super(MANASTONECONTAINER, windowId);
 		
+		this.world = world;
 		tileEntity = world.getTileEntity(pos);
-		
+		this.pos = pos;
 		this.playerEntity = player;
 		this.playerInventory = new InvWrapper(playerInventory);
 		//Machine Slots (Mana Insertions and their phyical locations)
@@ -92,7 +96,7 @@ public class ManaStoneContainer extends Container{
 	*/
 	@Override
 	public boolean canInteractWith(PlayerEntity playerIn) {
-		return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos()), playerEntity, ModBlocks.ManaStone);
+		return isWithinUsableDistance(IWorldPosCallable.of(world , pos), playerEntity, ModBlocks.ManaStone);
 	} 
 
 	public void addSlot(IItemHandler handler, int index, int x, int y) {

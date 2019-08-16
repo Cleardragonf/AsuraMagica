@@ -5,10 +5,14 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import me.asuramagica.AsuraMagicaMod;
 import me.asuramagica.blocks.inventory.ManaStoneContainer;
 import me.asuramagica.blocks.tileentities.Mana_StoneTile;
+import me.asuramagica.tools.util.EnergyTypePacket;
+import me.asuramagica.tools.util.EnergyTypePacketHandler;
+import me.asuramagica.tools.util.Packets.ManaStone.ManaEnergyPacket;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.dimension.DimensionType;
 
 
 public class Mana_StoneScreen extends ContainerScreen<ManaStoneContainer>{
@@ -24,6 +28,8 @@ public class Mana_StoneScreen extends ContainerScreen<ManaStoneContainer>{
 
 	@Override
 	public void render(int mouseX, int mouseY, float partialTicks_) {
+		
+		
 		this.renderBackground();
 		super.render(mouseX, mouseY, partialTicks_);
 		this.renderHoveredToolTip(mouseX, mouseY);

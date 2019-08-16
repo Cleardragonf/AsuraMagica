@@ -3,72 +3,47 @@ package me.asuramagica.blocks.tileentities;
 
 
 import me.asuramagica.blocks.inventory.ManaStoneContainer;
-
 import me.asuramagica.lists.BlockList;
-
 import me.asuramagica.lists.ItemList;
-
+import me.asuramagica.tools.util.EnergyTypePacketHandler;
+import me.asuramagica.tools.util.Packets.ManaStone.ManaEnergyPacket;
 import net.minecraft.block.Block;
-
 import net.minecraft.block.BlockState;
-
 import net.minecraft.block.Blocks;
-
 import net.minecraft.block.FireBlock;
-
 import net.minecraft.entity.player.PlayerEntity;
-
 import net.minecraft.entity.player.PlayerInventory;
-
 import net.minecraft.fluid.IFluidState;
-
 import net.minecraft.inventory.container.Container;
-
 import net.minecraft.inventory.container.INamedContainerProvider;
-
 import net.minecraft.item.ItemStack;
-
 import net.minecraft.nbt.CompoundNBT;
-
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tags.FluidTags;
-
 import net.minecraft.tileentity.ITickableTileEntity;
-
 import net.minecraft.tileentity.TileEntity;
-
 import net.minecraft.util.Direction;
-
 import net.minecraft.util.math.BlockPos;
-
 import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
-
 import net.minecraft.util.text.ITextComponent;
-
 import net.minecraft.util.text.StringTextComponent;
-
 import net.minecraft.world.World;
-
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.capabilities.Capability;
-
+import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
-
 import net.minecraftforge.energy.CapabilityEnergy;
-
 import net.minecraftforge.energy.EnergyStorage;
-
 import net.minecraftforge.energy.IEnergyStorage;
-
 import net.minecraftforge.items.CapabilityItemHandler;
-
 import net.minecraftforge.items.ItemStackHandler;
 
 
 
 import javax.annotation.Nonnull;
-
 import javax.annotation.Nullable;
-
-
 
 import static me.asuramagica.blocks.ModBlocks.MANASTONETILE;
 
@@ -76,7 +51,8 @@ import static me.asuramagica.blocks.ModBlocks.MANASTONETILE;
 
 public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
 
-
+	
+	
 
 	public final ItemStackHandler inventory = new ItemStackHandler(1) {
 
@@ -143,15 +119,13 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 	public Mana_StoneTile() {
 
 		super(MANASTONETILE);
-
+		
 	}
-
 
 
 	@Override
 
 	public void tick() {
-
 
 
 		final BlockPos tilePos = this.pos;
@@ -424,23 +398,12 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 	}
 
 
-
 	@Override
 
 	public void read(CompoundNBT tag) {
-
-		this.inventory.deserializeNBT(tag.getCompound("inv"));
-
-		this.fireEnergy.setEnergyStored(tag.getInt("fire"));
-
-		this.waterEnergy.setEnergyStored(tag.getInt("water"));
-
-		this.earthEnergy.setEnergyStored(tag.getInt("earth"));
-
-		this.windEnergy.setEnergyStored(tag.getInt("wind"));
-
 		super.read(tag);
-
+		readRestorableNBT(tag);
+		
 	}
 
 
@@ -448,7 +411,7 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 	@Override
 
 	public CompoundNBT write(CompoundNBT tag) {
-
+		super.write(tag);
 		tag.put("inv", inventory.serializeNBT());
 
 		tag.putInt("fire", this.fireEnergy.getEnergyStored());
@@ -459,11 +422,15 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 
 		tag.putInt("wind", this.windEnergy.getEnergyStored());
 
-		return super.write(tag);
+		return tag;
 
 	}
 
-
+	@Override
+	public SUpdateTileEntityPacket getUpdatePacket() {
+		// TODO Auto-generated method stub
+		return super.getUpdatePacket();
+	}
 
 	@Nonnull
 
@@ -525,7 +492,7 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 
 	 */
 
-	public static class CustomEnergyStorage extends EnergyStorage {
+	public static class CustomEnergyStorage extends EnergyStorage{
 
 
 
@@ -534,9 +501,7 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 			super(capacity);
 
 		}
-
-
-
+		
 		public CustomEnergyStorage(final int capacity, final int maxTransfer) {
 
 			super(capacity, maxTransfer);
@@ -586,6 +551,22 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 
 
 
+	}
+
+
+
+	public void readRestorableNBT(CompoundNBT tag) {
+			this.inventory.deserializeNBT(tag.getCompound("inv"));
+			
+			this.fireEnergy.setEnergyStored(tag.getInt("fire"));
+			
+			this.waterEnergy.setEnergyStored(tag.getInt("water"));
+			System.out.println(tag.getInt("water"));
+			
+			this.earthEnergy.setEnergyStored(tag.getInt("earth"));
+			
+			this.windEnergy.setEnergyStored(tag.getInt("wind"));
+		
 	}
 
 
