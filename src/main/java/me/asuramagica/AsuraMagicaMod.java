@@ -200,6 +200,7 @@ public class AsuraMagicaMod {
 				if((player.isSprinting() == true )|| (player.isSwimming() == true)) {
 					if(b == 60) {
 						HydrationContainer.onActivity(player, world);	
+						TemperatureContainer.onActivity(player, world);
 						b = 0;
 					}else {
 						b++;

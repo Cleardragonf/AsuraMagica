@@ -53,14 +53,14 @@ public class HydrationContainer extends PlayerHydrationCapability{
 	}	
 	
 	public static void onActivity(PlayerEntity player, World world) {
-		int playerActivity = 0;
+		int playerActivityHydration = 0;
 		if(player.isSprinting()) {
-			playerActivity -= 1;
+			playerActivityHydration -= 1;
 		}
 		if(player.isSwimming()) {
-			playerActivity -= 1;
+			playerActivityHydration -= 1;
 		}
-		int thirstdue = playerActivity;
+		int thirstdue = playerActivityHydration;
 		player.getCapability(PlayerHydrationProvider.PlayerThirst).ifPresent(h -> {
 			if(((PlayerHydrationCapability)h).getPlayersThirst() >= ((PlayerHydrationCapability)h).minThirst() && ((PlayerHydrationCapability)h).getPlayersThirst() <= ((PlayerHydrationCapability)h).maxThirst() ) {
 				((PlayerHydrationCapability)h).setPlayersThirst(thirstdue);

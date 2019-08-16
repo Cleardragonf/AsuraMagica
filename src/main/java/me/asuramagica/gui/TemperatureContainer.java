@@ -24,8 +24,9 @@ import net.minecraft.world.biome.Biomes;
 public class TemperatureContainer extends PlayerTemperatureCapability{
 		static Boolean thirstIsLow = false;
 		private static Integer biomeValue;
-		private static boolean incraseBodyTemp = false;
+		private static boolean increaseBodyTemp = false;
 		private static boolean decreaseBodyTemp = false;
+		private static int playersActivityTemp;
 		public static void setTemp(PlayerEntity player, World world) {
 			
 			//TODO Add Back in...Weather Check, shade check, local blocks nearby for warmth or cooling off
@@ -124,15 +125,20 @@ public class TemperatureContainer extends PlayerTemperatureCapability{
 			
 			//check if the temperature may incrase...
 			if(biomeValue > 0 && thirstIsLow == true) {
-				incraseBodyTemp = true;
+				increaseBodyTemp = true;
 			}
 			//check if the Temperature may Decrease...
 			//TODO Add the Hunger Container here...
 			if(biomeValue < 0) {
-				decreaseBodyTemp = true;
+				if (player.getFoodStats().getFoodLevel() <= 8) {
+					decreaseBodyTemp = true;
+				}else {
+					player.getFoodStats().setFoodLevel(player.getFoodStats().getFoodLevel() - 1);
+				}
+				
 			}
 			
-			if(incraseBodyTemp == true || decreaseBodyTemp == true) {
+			if(increaseBodyTemp == true || decreaseBodyTemp == true) {
 				player.getCapability(PlayerTemperatureProvider.PlayerTemperature).ifPresent(a -> {
 					if(((PlayerTemperatureCapability)a).getPlayerTemp() >= ((PlayerTemperatureCapability)a).minTemp() && ((PlayerTemperatureCapability)a).getPlayerTemp() <= ((PlayerTemperatureCapability)a).maxTemp() ) {
 						((PlayerTemperatureCapability)a).setPlayerTemp(biomeValue);
@@ -141,8 +147,35 @@ public class TemperatureContainer extends PlayerTemperatureCapability{
 
 				});
 			}
-			
-			
+		}
+
+		 
+		
+		public static void onActivity(PlayerEntity player, World world) {
+
+			player.getCapability(PlayerTemperatureProvider.PlayerTemperature).ifPresent(a -> {
+				if(((PlayerTemperatureCapability)a).getPlayerTemp() >= ((PlayerTemperatureCapability)a).minTemp() && ((PlayerTemperatureCapability)a).getPlayerTemp() <= ((PlayerTemperatureCapability)a).maxTemp() ) {
+					if(player.isSwimming()) {
+						playersActivityTemp -= 1;
+					}
+					if(player.isSprinting()) {
+						playersActivityTemp += 1;
+					}
+					if(player.isBurning()) {
+						playersActivityTemp += 1;
+					}
+					if(player.isInLava()) {
+						playersActivityTemp += 1;
+					}
+					if(player.isInWater()) {
+						playersActivityTemp -= 1;
+					}
+					if(player.isWet()) {
+						playersActivityTemp -= 1;
+					}
+					((PlayerTemperatureCapability)a).setPlayerTemp(playersActivityTemp);
+				}
+			});
 		}
 
 }
