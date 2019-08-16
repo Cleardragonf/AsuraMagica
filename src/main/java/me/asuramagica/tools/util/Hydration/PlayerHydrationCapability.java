@@ -10,7 +10,7 @@ import net.minecraftforge.common.util.LazyOptional;
 
 public class PlayerHydrationCapability implements IPlayerHydrationCapability{
 
-	private static int playersThirst;
+	private static int playersThirst = 99;
 	static int maxThirst = 100;
 	static int minThirst = 0;
 	

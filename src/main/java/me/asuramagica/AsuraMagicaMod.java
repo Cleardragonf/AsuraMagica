@@ -1,5 +1,7 @@
 package me.asuramagica;
 
+import java.awt.Event;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import me.asuramagica.blocks.ModBlocks;
@@ -29,6 +31,7 @@ import me.asuramagica.tools.util.Temperature.PlayerTemperatureProvider;
 import me.asuramagica.world.OreGeneration;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.container.ContainerType;
@@ -45,6 +48,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
@@ -187,56 +191,30 @@ public class AsuraMagicaMod {
 	@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.FORGE)
 	public static class RegisterForgeEvents{
 		public static int i = 0;
+		public static int b = 0;
 		@SubscribeEvent
 	    public static void checkPlayersTemp(TickEvent.PlayerTickEvent event) {
 			if(event.phase == TickEvent.Phase.START) {
 				PlayerEntity player = event.player;
 				World world = event.player.world;
-				
-		        if(i == 60) {
+				if((player.isSprinting() == true )|| (player.isSwimming() == true)) {
+					if(b == 60) {
+						HydrationContainer.onActivity(player, world);	
+						b = 0;
+					}else {
+						b++;
+					}
+								
+				}
+		        if(i == 6000) {
 					HydrationContainer.setThirst(player, world);
 					TemperatureContainer.setTemp(player, world);
 					i = 0;
 		         }else {
 		        	 i++;
 		         }
-		            
-				
-				/*
-				if(i == 20) {
-					PlayerEntity player = event.player;
-					
-					Temperature.temperatureSetings(player);
-					i = 0;
-		         }else {
-		        	 i++;
-		         }
-		         */
+		         
 			}
-
-
-			
-			
-			//if(event.player.getServer().getPlayerList().getPlayers() == null) {
-			//	System.out.println("BROKEN!");
-			//}else {
-			//	for(ServerPlayerEntity serverplayerentity : event.player.getServer().getPlayerList().getPlayers()) {
-			//		System.out.println(serverplayerentity.toString());
-			//	}
-			//}
-
-			
 	    }
 	}
-	
-	
-    /*
-     *   @Override
-  @OnlyIn(Dist.CLIENT)
-  public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
-   // if (stack.hasTag())tooltip.add(new StringTextComponent(stack.getTag().toString()));
-}
-     * 
-     * 
-     */
 }
