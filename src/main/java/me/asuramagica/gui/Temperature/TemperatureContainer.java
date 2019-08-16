@@ -1,4 +1,4 @@
-package me.asuramagica.gui;
+package me.asuramagica.gui.Temperature;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -146,10 +146,55 @@ public class TemperatureContainer extends PlayerTemperatureCapability{
 
 				});
 			}
+			blockLocal(player, world);
 		}
 
-		 
-		
+		private static void blockLocal(PlayerEntity player, World world) {
+
+			int warmBlocks = 0;
+			int coolBlocks =0;
+			try (PooledMutableBlockPos pooledMutableBlockPos = PooledMutableBlockPos.retain()) {
+				final int posX = player.getPosition().getX();
+				final int posY = player.getPosition().getY();
+				final int posZ = player.getPosition().getZ();
+
+				for (int z = -2; z <= 3; ++z) {
+					for (int x = -2; x <= 2; ++x) {
+						for (int y = -2; y <= 2; ++y) {
+							final int dist = (x * x) + (y * y) + (z * z);
+							if (dist > 25) {
+								continue;
+							}
+							if (dist < 1) {
+								continue;
+							}
+							pooledMutableBlockPos.setPos(posX + x, posY + y, posZ + z);
+							final BlockState blockState = world.getBlockState(pooledMutableBlockPos);
+							final IFluidState fluidState = world.getFluidState(pooledMutableBlockPos);
+							final Block block = blockState.getBlock();
+							if (block instanceof FireBlock || block == Blocks.FIRE || (!fluidState.isEmpty() && fluidState.isTagged(FluidTags.LAVA) || block == Blocks.CAMPFIRE)) {
+								++warmBlocks;
+							}else if ((!fluidState.isEmpty() && fluidState.isTagged(FluidTags.WATER))) {
+								if(player.getBlockState().getBlock() == Blocks.WATER) {
+									++coolBlocks;
+								}
+							} else if(block == Blocks.SNOW || block == Blocks.SNOW_BLOCK) {
+								++coolBlocks;
+							}
+						}
+					}
+
+				}
+			}
+			int finalWarmBlocks = warmBlocks;
+			int finalCoolBlocks = coolBlocks;
+			player.getCapability(PlayerTemperatureProvider.PlayerTemperature).ifPresent(h ->{
+				final int surroundingTempBlocks = finalWarmBlocks - finalCoolBlocks;
+				((PlayerTemperatureCapability)h).setPlayerTemp(surroundingTempBlocks);
+				
+			});
+		}
+
 		public static void onActivity(PlayerEntity player, World world) {
 
 			player.getCapability(PlayerTemperatureProvider.PlayerTemperature).ifPresent(a -> {

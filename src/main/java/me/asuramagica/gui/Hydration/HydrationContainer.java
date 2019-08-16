@@ -1,4 +1,4 @@
-package me.asuramagica.gui;
+package me.asuramagica.gui.Hydration;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +25,9 @@ import net.minecraft.world.biome.Biomes;
 public class HydrationContainer extends PlayerHydrationCapability{
 	static Boolean inDesert = false;
 
+	/*
+	 * setThrist() is used to lower the thirst everytime the tick counts...AAAND to check if there's Deset...which increases thirst from 1 to -2
+	 */
 	public static void setThirst(PlayerEntity player, World world) {
 		int desertMultiplier = 0;
 		BlockPos postion = player.getPosition();
@@ -39,11 +42,11 @@ public class HydrationContainer extends PlayerHydrationCapability{
 			}
 		}
 		if(player.world.canBlockSeeSky(player.getPosition())) {
-			if(inDesert = true) {
+			if(inDesert == true) {
 				desertMultiplier = -1;
 			}
 		}
-		int thirstdue = desertMultiplier - 1;
+		int thirstdue = desertMultiplier -1;
 		player.getCapability(PlayerHydrationProvider.PlayerThirst).ifPresent(h -> {
 			if(((PlayerHydrationCapability)h).getPlayersThirst() >= ((PlayerHydrationCapability)h).minThirst() && ((PlayerHydrationCapability)h).getPlayersThirst() <= ((PlayerHydrationCapability)h).maxThirst() ) {
 				((PlayerHydrationCapability)h).setPlayersThirst(thirstdue);

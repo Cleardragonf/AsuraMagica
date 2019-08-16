@@ -14,8 +14,9 @@ import me.asuramagica.blocks.MCM_Block;
 import me.asuramagica.blocks.inventory.MCM_Container;
 import me.asuramagica.blocks.tileentities.MCM_Tile;
 import me.asuramagica.events.BlockBreakEvent;
-import me.asuramagica.gui.HydrationContainer;
-import me.asuramagica.gui.TemperatureContainer;
+import me.asuramagica.events.CustomDrinkEvent;
+import me.asuramagica.gui.Hydration.HydrationContainer;
+import me.asuramagica.gui.Temperature.TemperatureContainer;
 import me.asuramagica.items.ItemCustomAxe;
 import me.asuramagica.items.WardEnscriber;
 import me.asuramagica.items.Food.ItemCustomFood;
@@ -42,6 +43,7 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.UseAction;
 import net.minecraft.tileentity.TileEntityType;
@@ -198,7 +200,6 @@ public class AsuraMagicaMod {
 	public static class RegisterForgeEvents{
 		public static int i = 0;
 		public static int b = 0;
-		private static ICapabilityProvider player;
 		@SubscribeEvent
 	    public static void checkPlayersTemp(TickEvent.PlayerTickEvent event) {
 			if(event.phase == TickEvent.Phase.START) {
@@ -228,15 +229,16 @@ public class AsuraMagicaMod {
 		public static void drink(LivingEntityUseItemEvent.Finish event) {
 
 			if(event.getEntityLiving() instanceof PlayerEntity) {
-				player = (PlayerEntity) event.getEntityLiving();
+				PlayerEntity player = (PlayerEntity) event.getEntityLiving();
+				UseAction test = event.getItem().getUseAction().DRINK;
+				
+				if(event.getItem().getUseAction().equals(test)) {
+					ItemStack send = event.getItem();
+					CustomDrinkEvent drink = new CustomDrinkEvent();
+					drink.drink(send, player);
+				}
 			}
-			UseAction test = event.getItem().getUseAction().DRINK;
-			
-			if(event.getItem().getUseAction().equals(test)) {
-				player.getCapability(PlayerHydrationProvider.PlayerThirst).ifPresent(h ->{
-					((PlayerHydrationCapability)h).setPlayersThirst(5);
-				});
-			}
+
 		}
 	}
 }

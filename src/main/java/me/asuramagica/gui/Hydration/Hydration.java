@@ -1,4 +1,4 @@
-package me.asuramagica.gui;
+package me.asuramagica.gui.Hydration;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 

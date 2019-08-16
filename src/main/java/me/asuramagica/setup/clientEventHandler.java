@@ -3,8 +3,8 @@ package me.asuramagica.setup;
 import java.util.List;
 
 import me.asuramagica.AsuraMagicaMod;
-import me.asuramagica.gui.Hydration;
-import me.asuramagica.gui.Temperature;
+import me.asuramagica.gui.Hydration.Hydration;
+import me.asuramagica.gui.Temperature.Temperature;
 import me.asuramagica.tools.util.MCMValueCapability.MCMValueCapability;
 import me.asuramagica.tools.util.MCMValueCapability.MCMValueStorage;
 import me.asuramagica.tools.util.Temperature.PlayerTemperatureProvider;

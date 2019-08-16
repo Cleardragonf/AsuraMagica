@@ -1,4 +1,4 @@
-package me.asuramagica.gui;
+package me.asuramagica.gui.Temperature;
 
 import me.asuramagica.AsuraMagicaMod;
 import me.asuramagica.tools.customGUI;

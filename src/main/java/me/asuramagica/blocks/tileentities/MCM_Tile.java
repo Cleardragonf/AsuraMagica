@@ -3,7 +3,7 @@ package me.asuramagica.blocks.tileentities;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import me.asuramagica.blocks.tileentities.Mana_StoneTile;
-import me.asuramagica.gui.TemperatureContainer;
+import me.asuramagica.gui.Temperature.TemperatureContainer;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FireBlock;
 import net.minecraft.entity.player.PlayerEntity;
