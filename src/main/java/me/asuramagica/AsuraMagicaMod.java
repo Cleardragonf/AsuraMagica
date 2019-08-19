@@ -1,9 +1,5 @@
 package me.asuramagica;
 
-import java.awt.Event;
-import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import me.asuramagica.blocks.ModBlocks;
@@ -15,7 +11,7 @@ import me.asuramagica.blocks.inventory.MCM_Container;
 import me.asuramagica.blocks.tileentities.MCM_Tile;
 import me.asuramagica.events.BlockBreakEvent;
 import me.asuramagica.events.CustomDrinkEvent;
-import me.asuramagica.gui.Hydration.HydrationContainer;
+import me.asuramagica.events.CustomFoodEvent;
 import me.asuramagica.gui.Temperature.TemperatureContainer;
 import me.asuramagica.items.ItemCustomAxe;
 import me.asuramagica.items.WardEnscriber;
@@ -31,11 +27,12 @@ import me.asuramagica.tools.util.EnergyTypePacketHandler;
 import me.asuramagica.tools.util.Hydration.PlayerHydrationCapability;
 import me.asuramagica.tools.util.Hydration.PlayerHydrationProvider;
 import me.asuramagica.tools.util.MCMValueCapability.MCMValueProvider;
+import me.asuramagica.tools.util.Temperature.PlayerTemperatureCapability;
 import me.asuramagica.tools.util.Temperature.PlayerTemperatureProvider;
 import me.asuramagica.world.OreGeneration;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerAbilities;
+import net.minecraft.client.gui.screen.DeathScreen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.container.ContainerType;
@@ -51,10 +48,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -207,16 +205,14 @@ public class AsuraMagicaMod {
 				World world = event.player.world;
 				if((player.isSprinting() == true )|| (player.isSwimming() == true)) {
 					if(b == 60) {
-						HydrationContainer.onActivity(player, world);	
-						TemperatureContainer.onActivity(player, world);
+						TemperatureContainer.onActivity(player, world);	
 						b = 0;
 					}else {
 						b++;
 					}
 								
 				}
-		        if(i == 6000) {
-					HydrationContainer.setThirst(player, world);
+		        if(i == 60) {
 					TemperatureContainer.setTemp(player, world);
 					i = 0;
 		         }else {
@@ -226,19 +222,39 @@ public class AsuraMagicaMod {
 			}
 	    }
 		@SubscribeEvent
-		public static void drink(LivingEntityUseItemEvent.Finish event) {
+		public static void drinkOrEath(LivingEntityUseItemEvent.Finish event) {
 
 			if(event.getEntityLiving() instanceof PlayerEntity) {
 				PlayerEntity player = (PlayerEntity) event.getEntityLiving();
 				UseAction test = event.getItem().getUseAction().DRINK;
+				UseAction test2 = event.getItem().getUseAction().EAT;
 				
 				if(event.getItem().getUseAction().equals(test)) {
 					ItemStack send = event.getItem();
 					CustomDrinkEvent drink = new CustomDrinkEvent();
 					drink.drink(send, player);
 				}
+				
+				if(event.getItem().getUseAction().equals(test2)) {
+					ItemStack send = event.getItem();
+					CustomFoodEvent food = new CustomFoodEvent();
+					food.eat(send, player);
+					
+				}
 			}
 
+		}
+		@SubscribeEvent
+		public static void onDeath(LivingDeathEvent event) {
+			if(event.getEntity() instanceof PlayerEntity) {
+				PlayerEntity player = (PlayerEntity) event.getEntity();
+				player.getCapability(PlayerTemperatureProvider.PlayerTemperature).ifPresent(a ->{
+					player.getCapability(PlayerHydrationProvider.PlayerThirst).ifPresent(b -> {
+						((PlayerTemperatureCapability)a).setPlayerTemp2(0);;
+						((PlayerHydrationCapability)b).setPlayersThirst(b.maxThirst());
+					});
+				});
+			}
 		}
 	}
 }
