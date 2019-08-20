@@ -38,8 +38,6 @@ public class Mana_StoneScreen extends ContainerScreen<ManaStoneContainer>{
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		this.font.drawString("Mana Essence Collector", 8.0f, 6.0F, 4210752);
-		this.font.drawString("Energy: " + container.getFire().getEnergyStored(), 8, 115, 0xfffff);
-		this.font.drawString("Water: " + container.getWater().getEnergyStored(), 8, 100, 0xfffff);
 		this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0f, 129.0f,4210752);
 		int relX = (this.width - this.xSize) /2;
 		int relY = (this.height - this.ySize) /2;
@@ -73,7 +71,51 @@ public class Mana_StoneScreen extends ContainerScreen<ManaStoneContainer>{
 		
 	}
 	
+	protected void renderHoveredToolTip(int x, int y) {
+		int relX = (this.width - this.xSize) /2;
+		int relY = (this.height - this.ySize) /2;
+		if(trueZone(relX + 111, relY + 29, 11,102,x,y)) {
+			tooltipText("Water: ", x, y);
+		}	
+		if(trueZone(relX + 124, relY + 29, 11,102,x,y)) {
+			tooltipText("Fire: ", x, y);
+		}	
+		if(trueZone(relX + 137, relY + 29, 11,102,x,y)) {
+			tooltipText("Earth: ", x, y);
+		}	
+		if(trueZone(relX + 150, relY + 29, 11,102,x,y)) {
+			tooltipText("Wind: ", x, y);
+		}	
+		super.renderHoveredToolTip(x, y);
+	}
+	
+	public void tooltipText(String string, int x, int y) {
+		switch (string) {
+		case "Water: ":
+			this.renderTooltip("Water: '" + this.container.getWater().getEnergyStored() + "'", x, y);
+			break;
+		case "Fire: ":
+			this.renderTooltip("Fire: '" + this.container.getFire().getEnergyStored() + "'", x, y);
+			break;
+		case "Earth: ":
+			this.renderTooltip("Earth: '" + this.container.getEarth().getEnergyStored() + "'", x, y);
+			break;
+		case "Wind: ":
+			this.renderTooltip("Wind: '" + this.container.getWind().getEnergyStored() + "'", x, y);
+			break;
+		}
+	}
 
+	private boolean trueZone(int OffsX, int OffsY, int Width, int Height, double MouseX, double MouseY) {
+		if(OffsX <= MouseX && MouseX <= OffsX + Width && OffsY <= MouseY && MouseY <= OffsY + Height ){
+			return true;
+		}
+		else{
+			return false;	
+		}
+	}
+	
+	
 
 	protected double getEnergyPercentage1() {
 
