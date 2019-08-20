@@ -3,7 +3,6 @@ package me.asuramagica.blocks.tileentities;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import me.asuramagica.blocks.tileentities.Mana_StoneTile;
-import me.asuramagica.gui.Temperature.TemperatureContainer;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FireBlock;
 import net.minecraft.entity.player.PlayerEntity;
@@ -42,6 +41,7 @@ import me.asuramagica.blocks.inventory.MCM_Container;
 import me.asuramagica.lists.BlockList;
 import me.asuramagica.lists.ItemList;
 import me.asuramagica.tools.CustomEnergyStorage;
+import me.asuramagica.tools.TemperatureContainer;
 import me.asuramagica.tools.util.MCMValueCapability.MCMValueCapability;
 import me.asuramagica.tools.util.MCMValueCapability.MCMValueProvider;
 

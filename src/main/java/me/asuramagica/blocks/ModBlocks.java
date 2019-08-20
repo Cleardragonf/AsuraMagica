@@ -3,7 +3,7 @@ package me.asuramagica.blocks;
 import me.asuramagica.blocks.inventory.ManaStoneContainer;
 import me.asuramagica.blocks.Mana_Stone;
 import me.asuramagica.blocks.tileentities.Mana_StoneTile;
-import me.asuramagica.gui.Temperature.TemperatureContainer;
+import me.asuramagica.tools.TemperatureContainer;
 import me.asuramagica.blocks.MCM_Block;
 import me.asuramagica.blocks.inventory.MCM_Container;
 import me.asuramagica.blocks.tileentities.MCM_Tile;
