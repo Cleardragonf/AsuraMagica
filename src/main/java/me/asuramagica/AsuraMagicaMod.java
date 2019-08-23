@@ -6,6 +6,7 @@ import me.asuramagica.blocks.ModBlocks;
 import me.asuramagica.blocks.inventory.ManaStoneContainer;
 import me.asuramagica.blocks.Mana_Stone;
 import me.asuramagica.blocks.tileentities.Mana_StoneTile;
+import me.asuramagica.config.GeneralConfig;
 import me.asuramagica.blocks.MCM_Block;
 import me.asuramagica.blocks.inventory.MCM_Container;
 import me.asuramagica.blocks.tileentities.MCM_Tile;
@@ -58,10 +59,13 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLPaths;
 
 @Mod("asuramagica")
 public class AsuraMagicaMod {
@@ -71,7 +75,7 @@ public class AsuraMagicaMod {
 		
 	public static AsuraMagicaMod instance;
 	public static final String MODID = "asuramagica";
-	private static final Logger LOGGER = LogManager.getLogger(MODID);
+	public static final Logger LOGGER = LogManager.getLogger(MODID);
 	public static ResourceLocation location(String name){
 		return new ResourceLocation(MODID,name);
 	}
@@ -83,8 +87,14 @@ public class AsuraMagicaMod {
 		
 		instance = this;
 		
+		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, GeneralConfig.server_config);
+		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, GeneralConfig.client_config);
+		
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientRegistries);
+		
+		GeneralConfig.loadConfig(GeneralConfig.client_config, FMLPaths.CONFIGDIR.get().resolve("asuramagica-Client.toml").toString());
+		GeneralConfig.loadConfig(GeneralConfig.server_config, FMLPaths.CONFIGDIR.get().resolve("asuramagica-server.toml").toString());
 		
 		MinecraftForge.EVENT_BUS.register(this);
 		
@@ -198,21 +208,23 @@ public class AsuraMagicaMod {
 	public static class RegisterForgeEvents{
 		public static int i = 0;
 		public static int b = 0;
+		@SuppressWarnings("static-access")
 		@SubscribeEvent
 	    public static void checkPlayersTemp(TickEvent.PlayerTickEvent event) {
 			if(event.phase == TickEvent.Phase.START) {
+				TemperatureContainer container = new TemperatureContainer();
 				PlayerEntity player = event.player;
 				World world = event.player.world;
 				if((player.isSprinting() == true )|| (player.isSwimming() == true)) {
 					if(b == 60) {
-						TemperatureContainer.onActivity(player, world);	
+						container.onActivity(player, world);	
 						b = 0;
 					}else {
 						b++;
 					}
 								
 				}
-		        if(i == 60) {
+		        if(i == 6000) {
 					TemperatureContainer.setTemp(player, world);
 					i = 0;
 		         }else {

@@ -169,7 +169,7 @@ public class TemperatureContainer extends PlayerTemperatureCapability{
 			}
 			//if you're in an undknown situation
 			else {
-				System.out.println("Hmmm");
+				
 			}
 		}
 		tempCheck(player, world);

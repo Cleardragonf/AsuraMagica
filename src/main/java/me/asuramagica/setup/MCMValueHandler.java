@@ -1,6 +1,8 @@
 package me.asuramagica.setup;
 
 import me.asuramagica.AsuraMagicaMod;
+import me.asuramagica.config.GeneralConfig;
+import me.asuramagica.config.MCMValueConfig;
 import me.asuramagica.tools.util.MCMValueCapability.MCMValueCapability;
 import me.asuramagica.tools.util.MCMValueCapability.MCMValueProvider;
 import net.minecraft.util.text.StringTextComponent;
