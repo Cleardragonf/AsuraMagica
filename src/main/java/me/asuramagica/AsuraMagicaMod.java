@@ -225,7 +225,7 @@ public class AsuraMagicaMod {
 								
 				}
 		        if(i == 6000) {
-					TemperatureContainer.setTemp(player, world);
+		        	container.setTemp(player, world);
 					i = 0;
 		         }else {
 		        	 i++;
