@@ -189,7 +189,7 @@ public class TemperatureContainer extends PlayerTemperatureCapability{
 				((PlayerHydrationCapability)h).setPlayersThirst(thirstdue);
 			}else {
 				player.getCapability(PlayerTemperatureProvider.PlayerTemperature).ifPresent(t ->{
-					((PlayerTemperatureCapability)t).setPlayerTemp(thirstdue);
+					((PlayerTemperatureCapability)t).setPlayerTemp(1);
 				});
 			}
 		});
