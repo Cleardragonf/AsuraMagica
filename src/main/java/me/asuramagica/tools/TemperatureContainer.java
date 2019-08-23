@@ -185,8 +185,12 @@ public class TemperatureContainer extends PlayerTemperatureCapability{
 		}
 		int thirstdue = playerActivityHydration;
 		player.getCapability(PlayerHydrationProvider.PlayerThirst).ifPresent(h -> {
-			if(((PlayerHydrationCapability)h).getPlayersThirst() >= ((PlayerHydrationCapability)h).minThirst() && ((PlayerHydrationCapability)h).getPlayersThirst() <= ((PlayerHydrationCapability)h).maxThirst() ) {
+			if(((PlayerHydrationCapability)h).getPlayersThirst() > ((PlayerHydrationCapability)h).minThirst() && ((PlayerHydrationCapability)h).getPlayersThirst() <= ((PlayerHydrationCapability)h).maxThirst() ) {
 				((PlayerHydrationCapability)h).setPlayersThirst(thirstdue);
+			}else {
+				player.getCapability(PlayerTemperatureProvider.PlayerTemperature).ifPresent(t ->{
+					((PlayerTemperatureCapability)t).setPlayerTemp(thirstdue);
+				});
 			}
 		});
 		tempCheck(player, world);
