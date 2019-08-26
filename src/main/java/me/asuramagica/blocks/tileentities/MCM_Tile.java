@@ -13,6 +13,7 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -79,7 +80,7 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 	public int slotBType = 0;
 	public int slotCType = 0;
 	public int slotDType = 0;
-	
+	private CompoundNBT test = new CompoundNBT();
     
 	public MCM_Tile() {
 		super(MCMTILE);
@@ -341,7 +342,6 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
     			energyType.consumeEnergy(h.mcmValue());
             });
         }
-        
     }
 		
 	
@@ -370,5 +370,48 @@ public class MCM_Tile extends TileEntity implements ITickableTileEntity, INamedC
 		return super.getCapability(cap, side);
 	}
 	
+
+	@Override
+
+	public void read(CompoundNBT tag) {
+		super.read(tag);
+		readRestorableNBT(tag);
+		
+	}
+
+
+
+	@Override
+
+	public CompoundNBT write(CompoundNBT tag) {
+		super.write(tag);
+		tag.put("inv", inventory.serializeNBT());
+
+		tag.putInt("slotAType", this.slotAType);
+		
+		tag.putInt("slotBType", this.slotBType);
+		
+		tag.putInt("slotCType", this.slotCType);
+		
+		tag.putInt("slotDType", this.slotDType);
+
+		return tag;
+
+	}
+
+	public void readRestorableNBT(CompoundNBT tag) {
+			this.inventory.deserializeNBT(tag.getCompound("inv"));
+			
+			this.slotAType = tag.getInt("slotAType");
+			
+			this.slotBType = tag.getInt("slotBType");
+			
+			this.slotCType = tag.getInt("slotCType");
+			
+			this.slotDType = tag.getInt("slotDType");
+		
+	}
+
+
 	
 }
