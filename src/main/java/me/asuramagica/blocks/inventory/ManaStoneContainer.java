@@ -96,6 +96,7 @@ public class ManaStoneContainer extends Container{
 	*/
 	@Override
 	public boolean canInteractWith(PlayerEntity playerIn) {
+		
 		return isWithinUsableDistance(IWorldPosCallable.of(world , pos), playerEntity, ModBlocks.ManaStone);
 	} 
 

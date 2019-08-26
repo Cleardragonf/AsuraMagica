@@ -106,6 +106,8 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 
 	private final LazyOptional<ItemStackHandler> inventoryExternalCapability = LazyOptional.of(() -> this.inventory);
 
+	private CompoundNBT tag = new CompoundNBT();
+
 //	private final LazyOptional<CustomEnergyStorage> fireExternalCapability = LazyOptional.of(() -> this.fireEnergy);
 
 //	private final LazyOptional<CustomEnergyStorage> waterExternalCapability = LazyOptional.of(() -> this.waterEnergy);
@@ -139,8 +141,6 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 			return;
 
 		}
-
-
 
 		int fireryBlocksFound = 0;
 
@@ -275,6 +275,7 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 		}else {
 				((CustomEnergyStorage)fireEnergy).addEnergy(fireryBlocksFound * 1);
 				needsSave = true;
+				write(tag);
 		}
 	
 	//Create a Tick Ratio for Water Manna Collection
@@ -283,6 +284,7 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 		}else {
 			((CustomEnergyStorage)waterEnergy).addEnergy(wateryBlocksFound * 1);
 			needsSave = true;
+			write(tag);
 		}
 	
 		if(this.earthEnergy.getEnergyStored() >= 100000) {
@@ -290,6 +292,7 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 		}else {				
 				((CustomEnergyStorage)earthEnergy).addEnergy(earthyBlocksFound * 1);
 				needsSave = true;
+				write(tag);
 		}
 	
 		if(this.windEnergy.getEnergyStored() >= 100000) {
@@ -297,6 +300,7 @@ public class Mana_StoneTile extends TileEntity implements ITickableTileEntity, I
 		}else {
 				((CustomEnergyStorage)windEnergy).addEnergy(windyBlocksFound * 1);
 				needsSave = true;
+				write(tag);
 		}
 
 

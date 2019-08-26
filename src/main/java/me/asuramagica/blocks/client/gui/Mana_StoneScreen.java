@@ -10,6 +10,7 @@ import me.asuramagica.tools.util.EnergyTypePacketHandler;
 import me.asuramagica.tools.util.Packets.ManaStone.ManaEnergyPacket;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.dimension.DimensionType;

@@ -28,6 +28,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.Constants;
 //pimport net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -96,6 +97,7 @@ public class Mana_Stone extends Block {
     		CompoundNBT tag = stack.getTag();
     		if(tag != null) {
     			((Mana_StoneTile)tileEntity).readRestorableNBT(tag);
+    			worldIn.notifyBlockUpdate(pos, getDefaultState(), getDefaultState(), Constants.BlockFlags.DEFAULT);
     		}
     	}
     }
