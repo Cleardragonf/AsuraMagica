@@ -35,8 +35,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import afu.org.checkerframework.checker.javari.qual.ThisMutable;
-import afu.org.checkerframework.checker.regex.qual.Var;
 import me.asuramagica.blocks.Mana_Stone;
 import me.asuramagica.blocks.inventory.MCM_Container;
 import me.asuramagica.lists.BlockList;

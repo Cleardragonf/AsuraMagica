@@ -61,6 +61,7 @@ public class TemperatureContainer extends PlayerTemperatureCapability{
 		if(isThisShelter == true) {
 			
 		}else {
+
 			BlockPos postion = player.getPosition();
 			Biome location = player.world.getBiome(postion);
 			HashMap<Biome, Integer> map = new HashMap<Biome, Integer>();
@@ -150,9 +151,11 @@ public class TemperatureContainer extends PlayerTemperatureCapability{
 				if(player.getFoodStats().getFoodLevel() == 0) {
 					player.getCapability(PlayerTemperatureProvider.PlayerTemperature).ifPresent(h ->{
 						((PlayerTemperatureCapability)h).setPlayerTemp(biomeValue);
+						checkWeather(player, world, "cold");
 					});
 				}else {
 					player.getFoodStats().setFoodLevel(player.getFoodStats().getFoodLevel() - 1);
+					
 				}
 			}
 			//checking to seee if you're in a warm situation
@@ -161,6 +164,7 @@ public class TemperatureContainer extends PlayerTemperatureCapability{
 					if(h.playersThirst() == 0) {
 						player.getCapability(PlayerTemperatureProvider.PlayerTemperature).ifPresent(b ->{
 							((PlayerTemperatureCapability)b).setPlayerTemp(biomeValue);
+							checkWeather(player, world, "warm");
 						});
 					}else {
 						((PlayerHydrationCapability)h).setPlayersThirst(-biomeValue);
@@ -173,6 +177,10 @@ public class TemperatureContainer extends PlayerTemperatureCapability{
 			}
 		}
 		tempCheck(player, world);
+	}
+	
+	private static void checkWeather(PlayerEntity player, World world, String biomeType) {
+		
 	}
 	
 	public static void onActivity(PlayerEntity player, World world) {

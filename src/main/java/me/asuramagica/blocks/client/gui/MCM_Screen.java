@@ -19,6 +19,7 @@ import me.asuramagica.tools.util.Packets.MCM.EnergyTypePacketC;
 import me.asuramagica.tools.util.Packets.MCM.EnergyTypePacketD;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;

@@ -2,17 +2,22 @@ package me.asuramagica;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import me.asuramagica.blocks.ModBlocks;
-import me.asuramagica.blocks.inventory.ManaStoneContainer;
+
+import me.asuramagica.blocks.FirstBlock;
+import me.asuramagica.blocks.MCM_Block;
 import me.asuramagica.blocks.Mana_Stone;
+import me.asuramagica.blocks.ModBlocks;
+import me.asuramagica.blocks.inventory.FirstBlockContainer;
+import me.asuramagica.blocks.inventory.MCM_Container;
+import me.asuramagica.blocks.inventory.ManaStoneContainer;
+import me.asuramagica.blocks.tileentities.FirstBlockTile;
+import me.asuramagica.blocks.tileentities.MCM_Tile;
 import me.asuramagica.blocks.tileentities.Mana_StoneTile;
 import me.asuramagica.config.GeneralConfig;
-import me.asuramagica.blocks.MCM_Block;
-import me.asuramagica.blocks.inventory.MCM_Container;
-import me.asuramagica.blocks.tileentities.MCM_Tile;
 import me.asuramagica.events.BlockBreakEvent;
 import me.asuramagica.events.CustomDrinkEvent;
 import me.asuramagica.events.CustomFoodEvent;
+import me.asuramagica.items.FirstItem;
 import me.asuramagica.items.ItemCustomAxe;
 import me.asuramagica.items.WardEnscriber;
 import me.asuramagica.items.Food.ItemCustomFood;
@@ -33,7 +38,6 @@ import me.asuramagica.tools.util.Temperature.PlayerTemperatureProvider;
 import me.asuramagica.world.OreGeneration;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.gui.screen.DeathScreen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.container.ContainerType;
@@ -52,10 +56,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
@@ -117,7 +119,11 @@ public class AsuraMagicaMod {
 		
 		@SubscribeEvent
 		public static void registerItems(final RegistryEvent.Register<Item> event){
+			Item.Properties properties = new Item.Properties()
+					.group(ASURAMAGICA);
 			
+			event.getRegistry().register(new FirstItem().setRegistryName(location("firstitem")));
+			event.getRegistry().register(new BlockItem(ModBlocks.FIRSTBLOCK, properties).setRegistryName(location("firstblock")));
 			event.getRegistry().registerAll(
 					ItemList.mana = new Item(new Item.Properties().group(ASURAMAGICA)).setRegistryName(location("mana")),
 							ItemList.ward_enscriber = new WardEnscriber(new Item.Properties().group(ASURAMAGICA)).setRegistryName(location("ward_enscriber")),
@@ -156,7 +162,6 @@ public class AsuraMagicaMod {
 		
 		@SubscribeEvent
 		public static void registerBlocks(final RegistryEvent.Register<Block> event){
-			
 			event.getRegistry().registerAll(
 					//BlockList.mana_stone = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0f, 3.0f).lightValue(10).sound(SoundType.METAL)).setRegistryName(location("mana_stone")),
 					BlockList.mana_stone = (Mana_Stone) new Mana_Stone(Block.Properties.create(Material.IRON).hardnessAndResistance(1.0f,1.0f)).setRegistryName(location("mana_stone")),
@@ -165,8 +170,8 @@ public class AsuraMagicaMod {
 					BlockList.earth_mana_ore = new Block(Block.Properties.create(Material.EARTH).hardnessAndResistance(1.0f,6.0f)).setRegistryName(location("earth_mana_ore")),
 					BlockList.wind_mana_ore = new Block(Block.Properties.create(Material.EARTH).hardnessAndResistance(1.0f,6.0f)).setRegistryName(location("wind_mana_ore")),
 					BlockList.mana_foci_crystal = new Block(Block.Properties.create(Material.GLASS).hardnessAndResistance(1.0f, 10.0f)).setRegistryName(location("mana_foci_crystal")),
-					BlockList.mcmblock = (MCM_Block) new MCM_Block(Block.Properties.create(Material.GLASS).hardnessAndResistance(1.0f, 10.0f)).setRegistryName(location("mcmblock"))
-					
+					BlockList.mcmblock = (MCM_Block) new MCM_Block(Block.Properties.create(Material.GLASS).hardnessAndResistance(1.0f, 10.0f)).setRegistryName(location("mcmblock")),
+					BlockList.firstblock = (FirstBlock) new FirstBlock().setRegistryName(location("firstblock"))
 					);
 			
 			
@@ -177,6 +182,8 @@ public class AsuraMagicaMod {
 		public static void registerTileEntities(final RegistryEvent.Register<TileEntityType<?>> event) {
 			event.getRegistry().register(TileEntityType.Builder.create(Mana_StoneTile::new, ModBlocks.ManaStone).build(null).setRegistryName(location("mana_stone")));
 			event.getRegistry().register(TileEntityType.Builder.create(MCM_Tile::new, ModBlocks.MCMBlock).build(null).setRegistryName(location("mcmblock")));
+			event.getRegistry().register(TileEntityType.Builder.create(FirstBlockTile::new, ModBlocks.FIRSTBLOCK).build(null).setRegistryName(location("firstblock")));		
+			
 		}
 		
 		@SubscribeEvent
@@ -191,7 +198,10 @@ public class AsuraMagicaMod {
 				return new MCM_Container(windowId, AsuraMagicaMod.proxy.getClientWorld(), pos, inv, AsuraMagicaMod.proxy.getClientPlayer());
 			}).setRegistryName(location("mcmblock")));
 			
-			
+			event.getRegistry().register(IForgeContainerType.create((windowId, inv, data) ->{
+				BlockPos pos = data.readBlockPos();
+				return new FirstBlockContainer(windowId, AsuraMagicaMod.proxy.getClientWorld(), pos, inv, AsuraMagicaMod.proxy.getClientPlayer());
+			}).setRegistryName(location("firstblock")));
 		}
 		
 	}

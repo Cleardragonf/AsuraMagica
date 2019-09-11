@@ -1,0 +1,10 @@
+{
+    "variants": {
+		"facing=north": { "model":"asuramagica:block/firstblock"},
+		"facing=south": { "model":"asuramagica:block/firstblock", "y": 180 },
+		"facing=west": { "model":"asuramagica:block/firstblock", "y": 270 },
+		"facing=east": { "model":"asuramagica:block/firstblock", "y": 90 },
+		"facing=up": { "model":"asuramagica:block/firstblock", "x": -90 },
+		"facing=down": { "model":"asuramagica:block/firstblock", "x": 90 }		        
+    }
+}

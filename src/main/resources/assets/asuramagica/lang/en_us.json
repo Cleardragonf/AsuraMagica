@@ -5,6 +5,7 @@
 	"item.asuramagica.mana_pickaxe": "Mana Tier 1 PickAxe",
 	
 	"item.asuramagica.ritual_dagger": "Ritual Dagger",
+	"item.asuramagica.firstitem": "First Item",
 	
 	"item.asuramagica.mana_helmet": "Mana Tier 1 Helmet",
 	"item.asuramagica.mana_chestplate": "Mana Tier 1 Chestplate",
@@ -15,6 +16,7 @@
 	"block.asuramagica.mana_stone": "Ward Stone",
 	"block.asuramagica.mana_foci_crystal": "Magical Essence Foci",
 	"block.asuramagica.mcmblock": "Matter Conversion Block",
+	"block.asuramagica.firstblock": "First Block",
 	
 	"block.asuramagica.fire_mana_ore": "Entombed Fire Mana",
 	"block.asuramagica.water_mana_ore": "Entombed Water Mana",
