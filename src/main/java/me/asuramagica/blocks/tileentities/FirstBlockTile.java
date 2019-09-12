@@ -27,7 +27,6 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class FirstBlockTile extends TileEntity implements ITickableTileEntity, INamedContainerProvider{
 
-	private LazyOptional<IItemHandler> handler = LazyOptional.of(this::createHandler);
 	
 	public FirstBlockTile() {
 		super(FIRSTBLOCKTILE);
@@ -43,13 +42,13 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity, I
 	@Override
 	public void read(CompoundNBT tag) {
 		CompoundNBT inv = tag.getCompound("inv");
-		handler.ifPresent(h -> ((INBTSerializable<CompoundNBT>)h).deserializeNBT(inv));
+		inventoryOptional.ifPresent(h -> ((INBTSerializable<CompoundNBT>)h).deserializeNBT(inv));
 		super.read(tag);
 	}
 	
 	@Override
 	public CompoundNBT write(CompoundNBT tag) {
-		handler.ifPresent(h -> {
+		inventoryOptional.ifPresent(h -> {
 			@SuppressWarnings("unchecked")
 			CompoundNBT compound = ((INBTSerializable<CompoundNBT>)h).serializeNBT();
 			tag.put("inv", compound);
@@ -69,7 +68,7 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity, I
 				if(stack.getItem() != Items.DIAMOND) {
 					return stack;
 				}
-				return super.insertItem(0, stack, simulate);
+				return super.insertItem(slot, stack, simulate);
 			}
 		};
 	}
@@ -78,7 +77,8 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity, I
 	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
 		// TODO Auto-generated method stub
 		if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-			return handler.cast();
+			//return handler.cast();
+			return inventoryOptional.cast();
 		}
 		return super.getCapability(cap, side);
 	}
@@ -91,4 +91,29 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity, I
 	public Container createMenu(int i, PlayerInventory inv, PlayerEntity player) {
 		return new FirstBlockContainer(i, world, pos, inv, player);
 	}
+
+	public final LazyOptional<IItemHandler> inventoryOptional = LazyOptional.of(() -> this.inventory).cast();
+	public final ItemStackHandler inventory = new ItemStackHandler(300) {
+
+
+		@Override
+		public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+			if (stack.getItem() == null) {
+				return stack;
+			}
+			return super.insertItem(slot, stack, simulate);
+		}
+
+		@Override
+		public boolean isItemValid(int slot, ItemStack stack) {
+			return stack.getItem() != null;
+		}
+
+		@Override
+		protected void onContentsChanged(int slot) {
+			FirstBlockTile.this.markDirty();
+		}
+	};	
+	
+
 }

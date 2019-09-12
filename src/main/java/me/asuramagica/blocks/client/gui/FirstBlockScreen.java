@@ -36,7 +36,7 @@ public class FirstBlockScreen extends ContainerScreen<FirstBlockContainer>{
 		this.minecraft.getTextureManager().bindTexture(GUI);
 		int relX = (this.width - this.xSize) /2;
 		int relY = (this.height - this.ySize) /2;
-		this.blit(relX, relY, 0,0,256, 256);
+		this.blit(relX, relY, 0,0,205, 256);
 		
 	}
 }

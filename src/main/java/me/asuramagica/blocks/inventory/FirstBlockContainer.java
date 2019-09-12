@@ -32,11 +32,11 @@ public class FirstBlockContainer extends Container{
 		this.playerEntity = player;
 		this.playerInventory = new InvWrapper(inv);
 		FirstBlockTile test = (FirstBlockTile) tileEntity;
-
-		//tiles inventory
-
-			addSlot(new SlotItemHandler(test.createHandler(), 0, 17, 17));
-			addSlot(new SlotItemHandler(test.createHandler(), 1, 30, 17));
+			
+		addSlot(new SlotItemHandler(test.inventory,0,17,17));
+		addSlot(new SlotItemHandler(test.inventory,1,61,17));
+		addSlot(new SlotItemHandler(test.inventory,2,100,17));
+		addSlot(new SlotItemHandler(test.inventory,3,142,17));
 
 		
 		//players inventory
@@ -74,6 +74,10 @@ public class FirstBlockContainer extends Container{
 		
 		topRow += 58;
 		addSlotRange(playerInventory, 0, leftCol, topRow, 9,18);
+	}
+	
+	private void layoutTEInventorySlots(int lefCol, int topRow) {
+		
 	}
 	
 	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
