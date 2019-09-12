@@ -3,9 +3,13 @@ package me.asuramagica.blocks.inventory;
 import static me.asuramagica.blocks.ModBlocks.FIRSTBLOCK_CONTAINER;
 
 import me.asuramagica.blocks.ModBlocks;
+import me.asuramagica.blocks.tileentities.FirstBlockTile;
+import me.asuramagica.lists.ItemList;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.math.BlockPos;
@@ -27,11 +31,13 @@ public class FirstBlockContainer extends Container{
 		tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
 		this.playerEntity = player;
 		this.playerInventory = new InvWrapper(inv);
+		FirstBlockTile test = (FirstBlockTile) tileEntity;
 
 		//tiles inventory
-		tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
-			addSlot(new SlotItemHandler(h, 0, 8, 17));
-		});
+
+			addSlot(new SlotItemHandler(test.createHandler(), 0, 17, 17));
+			addSlot(new SlotItemHandler(test.createHandler(), 1, 30, 17));
+
 		
 		//players inventory
 		LayoutPlayerEnventorySlots(8, 174);
@@ -70,5 +76,44 @@ public class FirstBlockContainer extends Container{
 		addSlotRange(playerInventory, 0, leftCol, topRow, 9,18);
 	}
 	
-
+	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+		ItemStack itemstack = ItemStack.EMPTY;
+		Slot slot = this.inventorySlots.get(index);
+		if(slot != null && slot.getHasStack()) {
+			ItemStack stack = slot.getStack();
+			itemstack = stack.copy();
+			if(index == 0) {
+				if(!this.mergeItemStack(stack, 1, 37, true)) {
+					return ItemStack.EMPTY;
+				}
+				slot.onSlotChange(stack, itemstack);
+			}else {
+				if(stack.getItem() == ItemList.fire_mana_ore) {
+					if(!this.mergeItemStack(stack, 0, 1, false)) {
+						return ItemStack.EMPTY;
+					}else if(index < 28) {
+						if(!this.mergeItemStack(stack, 28, 37, false)) {
+							return ItemStack.EMPTY;
+						}
+					}else if(index  <37 && !this.mergeItemStack(stack, 1, 28, false)) {
+						return ItemStack.EMPTY;
+					}
+				}
+			}
+			if(stack.isEmpty()) {
+				slot.putStack(ItemStack.EMPTY);
+			}else {
+				slot.onSlotChanged();
+			}
+			
+			if(stack.getCount() == itemstack.getCount()) {
+				return ItemStack.EMPTY;
+			}
+			
+			slot.onTake(playerIn, stack);
+		}
+		return itemstack;
+	}
+	
+	
 }

@@ -57,8 +57,8 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity, I
 		return super.write(tag);
 	}
 	
-	private IItemHandler createHandler() {
-		return  new ItemStackHandler(1) {
+	public IItemHandler createHandler() {
+		return  new ItemStackHandler(300) {
 			@Override
 			public boolean isItemValid(int slot, ItemStack stack) {
 				return stack.getItem() == Items.DIAMOND;
@@ -69,7 +69,7 @@ public class FirstBlockTile extends TileEntity implements ITickableTileEntity, I
 				if(stack.getItem() != Items.DIAMOND) {
 					return stack;
 				}
-				return super.insertItem(slot, stack, simulate);
+				return super.insertItem(0, stack, simulate);
 			}
 		};
 	}
