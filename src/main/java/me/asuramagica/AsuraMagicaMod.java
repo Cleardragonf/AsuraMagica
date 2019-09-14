@@ -13,7 +13,7 @@ import me.asuramagica.blocks.inventory.ManaStoneContainer;
 import me.asuramagica.blocks.tileentities.FirstBlockTile;
 import me.asuramagica.blocks.tileentities.MCM_Tile;
 import me.asuramagica.blocks.tileentities.Mana_StoneTile;
-import me.asuramagica.config.GeneralConfig;
+import me.asuramagica.config.Config;
 import me.asuramagica.events.BlockBreakEvent;
 import me.asuramagica.events.CustomDrinkEvent;
 import me.asuramagica.events.CustomFoodEvent;
@@ -87,16 +87,17 @@ public class AsuraMagicaMod {
 	
 	public AsuraMagicaMod(){
 		
-		instance = this;
+		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_CONFIG);
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG);
 		
-		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, GeneralConfig.server_config);
-		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, GeneralConfig.client_config);
+		instance = this;
 		
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientRegistries);
 		
-		GeneralConfig.loadConfig(GeneralConfig.client_config, FMLPaths.CONFIGDIR.get().resolve("asuramagica-Client.toml").toString());
-		GeneralConfig.loadConfig(GeneralConfig.server_config, FMLPaths.CONFIGDIR.get().resolve("asuramagica-server.toml").toString());
+		Config.loadConfig(Config.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve("asuramagica-client.toml"));
+		Config.loadConfig(Config.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve("asuramagica-common.toml"));
+		
 		
 		MinecraftForge.EVENT_BUS.register(this);
 		
