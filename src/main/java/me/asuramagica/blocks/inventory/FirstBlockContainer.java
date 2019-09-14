@@ -4,6 +4,8 @@ import static me.asuramagica.blocks.ModBlocks.FIRSTBLOCK_CONTAINER;
 
 import me.asuramagica.blocks.ModBlocks;
 import me.asuramagica.blocks.tileentities.FirstBlockTile;
+import me.asuramagica.blocks.tileentities.Mana_StoneTile;
+import me.asuramagica.blocks.tileentities.FirstBlockTile.CustomEnergyStorage;
 import me.asuramagica.lists.ItemList;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -13,7 +15,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.World;import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -37,11 +41,20 @@ public class FirstBlockContainer extends Container{
 		addSlot(new SlotItemHandler(test.inventory,1,61,17));
 		addSlot(new SlotItemHandler(test.inventory,2,100,17));
 		addSlot(new SlotItemHandler(test.inventory,3,142,17));
+		
+		//TE's Inventory
+		layoutTEInventorySlots(8, 92);
 
 		
 		//players inventory
 		LayoutPlayerEnventorySlots(8, 174);
 	}
+	
+	public IEnergyStorage getEarth() {
+		FirstBlockTile test = (FirstBlockTile) tileEntity;
+		return test.earthEnergy;
+	}
+	
 	
 	@Override
 	public boolean canInteractWith(PlayerEntity playerIn) {
@@ -76,8 +89,9 @@ public class FirstBlockContainer extends Container{
 		addSlotRange(playerInventory, 0, leftCol, topRow, 9,18);
 	}
 	
-	private void layoutTEInventorySlots(int lefCol, int topRow) {
-		
+	private void layoutTEInventorySlots(int leftCol, int topRow) {
+		FirstBlockTile test = (FirstBlockTile) tileEntity;
+		addSlotBox(test.inventory, 4, leftCol, topRow, 9,18,4,18);
 	}
 	
 	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
@@ -92,7 +106,6 @@ public class FirstBlockContainer extends Container{
 				}
 				slot.onSlotChange(stack, itemstack);
 			}else {
-				if(stack.getItem() == ItemList.fire_mana_ore) {
 					if(!this.mergeItemStack(stack, 0, 1, false)) {
 						return ItemStack.EMPTY;
 					}else if(index < 28) {
@@ -102,7 +115,6 @@ public class FirstBlockContainer extends Container{
 					}else if(index  <37 && !this.mergeItemStack(stack, 1, 28, false)) {
 						return ItemStack.EMPTY;
 					}
-				}
 			}
 			if(stack.isEmpty()) {
 				slot.putStack(ItemStack.EMPTY);
