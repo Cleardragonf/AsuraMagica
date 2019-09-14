@@ -20,25 +20,27 @@ public class Config {
 	
 	private static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
 	private static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
+	private static final ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
 	
 	public static ForgeConfigSpec COMMON_CONFIG;
 	public static ForgeConfigSpec CLIENT_CONFIG;
+	public static ForgeConfigSpec SERVER_CONFIG;
 	
 	public static Map<ResourceLocation, ForgeConfigSpec.IntValue> MCM_VALUE = new HashMap<ResourceLocation, ForgeConfigSpec.IntValue>();
 	
 	static {
 			for(Item item : ForgeRegistries.ITEMS) {
-					COMMON_BUILDER.push(item.getRegistryName().toString());
+				SERVER_BUILDER.push(item.getRegistryName().toString());
 					
-					ForgeConfigSpec.IntValue mcm = COMMON_BUILDER
+					ForgeConfigSpec.IntValue mcm = SERVER_BUILDER
 							.comment("Value")
 							.defineInRange("onlyMCM", 100000, 0, Integer.MAX_VALUE);
 					MCM_VALUE.put(item.getRegistryName(), mcm);
 					
-					COMMON_BUILDER.pop();
+					SERVER_BUILDER.pop();
 			}
 		
-		
+		SERVER_CONFIG = SERVER_BUILDER.build();
 		COMMON_CONFIG = COMMON_BUILDER.build();
 		CLIENT_CONFIG = CLIENT_BUILDER.build();
 	}

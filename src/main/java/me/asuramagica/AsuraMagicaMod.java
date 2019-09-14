@@ -86,9 +86,11 @@ public class AsuraMagicaMod {
 
 	
 	public AsuraMagicaMod(){
+		MinecraftForge.EVENT_BUS.register(this);
 		
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_CONFIG);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG);
+		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SERVER_CONFIG);
 		
 		instance = this;
 		
@@ -96,10 +98,9 @@ public class AsuraMagicaMod {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientRegistries);
 		
 		Config.loadConfig(Config.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve("asuramagica-client.toml"));
-		Config.loadConfig(Config.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve("asuramagica-common.toml"));
+		Config.loadConfig(Config.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve("asuramagica-common.toml"));		
 		
-		
-		MinecraftForge.EVENT_BUS.register(this);
+
 		
 	}
 	private void setup(final FMLCommonSetupEvent event){
